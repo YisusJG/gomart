@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/ConnectionToGomart/bloc/gomartApi/validate_ip_gomart_event.dart';
 import 'package:gomart/ConnectionToGomart/bloc/gomartApi/validate_ip_gomart_state.dart';
-import 'package:gomart/Menu/users/ui/screen/user_screen.dart';
-
+import 'package:gomart/Login/ui/screen/login_screen.dart';
 import '../../../Constants/app_colors.dart';
 import '../../../Helpers/get_color_hexadecimal.dart';
 import '../../bloc/gomartApi/validate_ip_gomart_bloc.dart';
@@ -33,7 +32,7 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
             backgroundColor: Color(getColorHexadecimal(secondaryColor)),
             body: Column(
               children: [
-                const Padding(padding: EdgeInsets.only(top: 60)),
+                const Padding(padding: EdgeInsets.only(top: 90)),
                 SizedBox(
                   width: 250,
                   child: Column(
@@ -73,7 +72,7 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                     if(stateGomartListener is LoadValidateIpGomartState){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const UserScreen()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                       //messagesSnackBar("carga completa ${stateGomartListener.branch?.toJson()}");
 
@@ -86,8 +85,8 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                         alignment: Alignment.centerRight,
                         children: [
                           CustomPaint(
-                            size: Size(MediaQuery.of(context).size.width / 1,
-                                MediaQuery.of(context).size.height / 1),
+                            size: Size(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height),
                             painter: TriangleBottom(),
                           ),
                           Padding(
