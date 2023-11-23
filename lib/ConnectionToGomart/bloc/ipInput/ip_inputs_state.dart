@@ -14,9 +14,9 @@ abstract class IpInputsState {
 
 class OctetsState extends IpInputsState{
   OctetsState({
-    required  String octetOne,
-    required  String octetTwo,
-    required  String octetThree,
-    required  String octetFour,
-  }) : super(octetOne: octetOne, octetTwo: octetTwo,octetThree: octetThree,octetFour: octetFour);
+    required  super.octetOne,
+    required  super.octetTwo,
+    required  super.octetThree,
+    required  super.octetFour,
+  });
 }

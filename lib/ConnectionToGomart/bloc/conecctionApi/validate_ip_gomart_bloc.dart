@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gomart/ConnectionToGomart/bloc/gomartApi/validate_ip_gomart_event.dart';
-import 'package:gomart/ConnectionToGomart/bloc/gomartApi/validate_ip_gomart_state.dart';
+import 'package:gomart/ConnectionToGomart/bloc/conecctionApi/validate_ip_gomart_event.dart';
+import 'package:gomart/ConnectionToGomart/bloc/conecctionApi/validate_ip_gomart_state.dart';
 import 'package:gomart/ConnectionToGomart/repository/connection_to_gomart_repository.dart';
 
 class ValidateIpGomartBloc extends Bloc<LoadValidateIpGomartEven,ValidateIpGomartState>{

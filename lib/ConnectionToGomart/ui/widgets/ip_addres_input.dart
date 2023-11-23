@@ -5,6 +5,8 @@ import '../../bloc/ipInput/ip_inputs_bloc.dart';
 import '../../bloc/ipInput/ip_inputs_event.dart';
 
 class IpAddressInput extends StatefulWidget {
+  const IpAddressInput({super.key});
+
   @override
   _IpAddressInputState createState() => _IpAddressInputState();
 }

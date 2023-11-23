@@ -1,4 +1,5 @@
 class EmployeeModel{
+  late int id;
   late String employeeNumber;
   late String name;
   late String lastName;
@@ -7,6 +8,7 @@ class EmployeeModel{
   late String corporateEmail;
 
   EmployeeModel({
+    this.id = 0,
     this.employeeNumber = "",
     this.name = "",
     this.lastName = "",
@@ -17,17 +19,19 @@ class EmployeeModel{
 
   factory EmployeeModel.fromJson(Map<String, dynamic> map){
     return EmployeeModel(
+      id: map['id'],
       employeeNumber: map['employeeNumber'],
       name: map['name'],
       lastName: map['lastName'],
       mothersLastName: map['mothersLastName'],
       photo: map['photo'],
-      corporateEmail: map['corporateEmail']
+      corporateEmail: map['corporateEmail'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['employeeNumber'] = employeeNumber;
     data['name'] = name;
     data['lastName'] = lastName;

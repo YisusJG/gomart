@@ -1,4 +1,4 @@
-import 'package:gomart/Login/models/employee_model.dart';
+import '../../models/employee_model.dart';
 
 abstract class ValidateLoginState {
   EmployeeModel? employeeModel;
@@ -10,11 +10,11 @@ abstract class ValidateLoginState {
 }
 
 class StartValidateLogin extends ValidateLoginState{
-  StartValidateLogin({required EmployeeModel? employeeModel}) : super(employeeModel: employeeModel);
+  StartValidateLogin({required super.employeeModel});
 }
 
-class LoadValidateLogin extends ValidateLoginState{
-  LoadValidateLogin({required EmployeeModel? employeeModel}) : super(employeeModel: employeeModel);
+class LoadValidateLoginState extends ValidateLoginState{
+  LoadValidateLoginState({required super.employeeModel});
 }
 
 class ErrorLoadValidateLogin extends ValidateLoginState{
