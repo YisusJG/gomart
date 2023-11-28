@@ -95,20 +95,20 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                               padding: const EdgeInsets.only(top: 160),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  contextGomart.read<ValidateIpGomartBloc>().add(
-                                      LoadValidateIpGomartEven(ipGomart: "10.4.137.11"));
-                                  // if(stateInput.octetOne.isEmpty){
-                                  //   messagesSnackBar("Favor de llenar el campo uno");
-                                  // }else if(stateInput.octetTwo.isEmpty){
-                                  //   messagesSnackBar("Favor de llenar el campo dos");
-                                  // }else if(stateInput.octetThree.isEmpty){
-                                  //   messagesSnackBar("Favor de llenar el campo tres");
-                                  // }else if(stateInput.octetFour.isEmpty){
-                                  //   messagesSnackBar("Favor de llenar el campo cuatro");
-                                  // }else{
-                                  //   contextGomart.read<ValidateIpGomartBloc>().add(
-                                  //       LoadValidateIpGomartEven(ipGomart:"${stateInput.octetOne}.${stateInput.octetTwo}.${stateInput.octetThree}.${stateInput.octetFour}"));
-                                  // }
+                                  // contextGomart.read<ValidateIpGomartBloc>().add(
+                                  //     LoadValidateIpGomartEven(ipGomart: "10.4.137.11"));
+                                  if(stateInput.octetOne.isEmpty){
+                                    messagesSnackBar("Favor de llenar el campo uno");
+                                  }else if(stateInput.octetTwo.isEmpty){
+                                    messagesSnackBar("Favor de llenar el campo dos");
+                                  }else if(stateInput.octetThree.isEmpty){
+                                    messagesSnackBar("Favor de llenar el campo tres");
+                                  }else if(stateInput.octetFour.isEmpty){
+                                    messagesSnackBar("Favor de llenar el campo cuatro");
+                                  }else{
+                                    contextGomart.read<ValidateIpGomartBloc>().add(
+                                        LoadValidateIpGomartEven(ipGomart:"${stateInput.octetOne}.${stateInput.octetTwo}.${stateInput.octetThree}.${stateInput.octetFour}"));
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Color(getColorHexadecimal(secondaryColor)),

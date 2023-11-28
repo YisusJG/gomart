@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 
 class Options{
+
+  int id;
+  String title;
+  Color bacgroundColor, textColor;
+  IconData icon;
+
   Options({
-    this.id,
+    this.id=0,
     this.title = "",
     this.bacgroundColor = Colors.black,
     this.textColor = Colors.white,
     this.icon = Icons.access_alarm,
 });
 
-  UniqueKey? id = UniqueKey();
-  String title;
-  Color bacgroundColor, textColor;
-  IconData icon;
+
 
   static List<Options> menu = [
     Options(
+      id: 1,
       title: "Recepción",
       bacgroundColor: Colors.black,
       textColor: Colors.white,
       icon: Icons.add_business
     ),
     Options(
+        id: 2,
         title: "Inventarios",
         bacgroundColor: Colors.black,
         textColor: Colors.white,

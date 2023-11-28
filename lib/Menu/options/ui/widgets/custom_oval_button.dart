@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomart/Menu/purchaseOrder/ui/screen/purchase_orders_screen.dart';
 
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
@@ -6,9 +7,8 @@ import '../../models/options.dart';
 
 
 class CustomOvalButton extends StatefulWidget {
-  const CustomOvalButton({super.key, required this.menu});
-
   final Options menu;
+  const CustomOvalButton({super.key, required this.menu});
 
   @override
   State<CustomOvalButton> createState() => _CustomOvalButtonState();
@@ -33,7 +33,7 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
         padding: const EdgeInsets.all(10),
         child: InkWell(
           onTap: () {
-
+           selectedOption(widget.menu.id);
           },
           child: Column(
             children: [
@@ -46,12 +46,30 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
                 widget.menu.title,
                 style: TextStyle(
                     color: Color(getColorHexadecimal(secondaryColor)),
-                    fontSize: 20),
+                    fontSize: 18),
               )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void selectedOption(int option){
+    if(option == 1){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PurchaseOrdersScreen()),
+      );
+    }if(option ==2){
+      messagesSnackBar("En desarrollo");
+    }
+  }
+
+  void messagesSnackBar(String message){
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

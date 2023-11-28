@@ -21,7 +21,7 @@ class TriangleBottom extends CustomPainter {
     final Path path = Path()
       ..moveTo(size.width, size.height)
       ..lineTo(size.width - 600, size.height)
-      ..lineTo(size.width, 90)
+      ..lineTo(size.width, 5)
       ..close();
 
     canvas.drawPath(path, paint);

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gomart/DataBase/entities/branch_entity.dart';
 
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
 
 class CustomGomartName extends StatelessWidget {
-  const CustomGomartName({super.key});
+  final BranchEntity? branchEntity;
+  const CustomGomartName({super.key, required this.branchEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class CustomGomartName extends StatelessWidget {
           color: Color(getColorHexadecimal(primaryColor)),
           borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40) )
       ),
-      child: Text("REFORMA 155 - G137",style: TextStyle(
+      child: Text("${branchEntity!.description} - ${branchEntity!.branchNumber}",style: TextStyle(
           color: Color(getColorHexadecimal(secondaryColor)),
           fontSize: 25,
           fontWeight: FontWeight.bold

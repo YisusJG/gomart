@@ -60,96 +60,100 @@ class _LoginScreenState extends State<LoginScreen> {
       child: BlocBuilder<LoginInputBloc, LoginInputState>(builder:(contextInput,stateInput){
         return Scaffold(
           backgroundColor: Color(getColorHexadecimal(secondaryColor)),
-          body: Column(
-            children: [
-              const Padding(padding: EdgeInsets.only(top: 90)),
-              SizedBox(
-                width: 250,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Image.asset('assets/logos/synergo1024.png',
-                        width: 250,
-                        height: 40,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text("Gomart",
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontStyle: FontStyle.italic,
-                            color: Color(getColorHexadecimal(primaryColor))
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Padding(padding: EdgeInsets.only(top: 90)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width/1.5,
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/logos/synergo1024.png',
+                          width: 250,
+                          height: 40,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(padding:  EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-                child: LoginInput(),
-              ),
-              Expanded(
-                child: BlocBuilder<ConfigurationLocalBloc,ConfigurationLocalState>(builder: (contextDB, stateDB){
-                  return BlocListener<ValidateLoginBloc,ValidateLoginState>(listener:(contextLoginListener, stateLoginListener) async{
-                    if(stateLoginListener is LoadValidateLoginState){
-                      _onSavedEmployeeBranch(contextDB, stateLoginListener.employeeModel!);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const OptionsScreen()),
-                      );
-                      messagesSnackBar("carga completa ${stateLoginListener.employeeModel?.toJson()}");
-
-                    }else if (stateLoginListener is ErrorLoadValidateLogin){
-                      messagesSnackBar(stateLoginListener.errorApi);
-                    }
-                  },
-                    child: BlocBuilder<ValidateLoginBloc,ValidateLoginState>(builder:(contextLogin,stateLogin){
-                      return Stack(
+                      Align(
                         alignment: Alignment.centerRight,
-                        children: [
-                          CustomPaint(
-                            size: Size(MediaQuery.of(context).size.width,
-                                MediaQuery.of(context).size.height),
-                            painter: TriangleBottom(),
+                        child: Text("Gomart",
+                          style: TextStyle(
+                              fontSize: 40,
+                              fontStyle: FontStyle.italic,
+                              color: Color(getColorHexadecimal(primaryColor))
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 160),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if(stateInput.user.isEmpty){
-                                  messagesSnackBar("Favor de agregar un numero de usuario");
-                                }else if(stateInput.password.isEmpty){
-                                  messagesSnackBar("Favor de agregar una contraseña");
-                                }else{
-                                  contextLogin.read<ValidateLoginBloc>().add(LoadValidateLoginEvent(user: stateInput.user, password: stateInput.password));
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(getColorHexadecimal(secondaryColor)),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30.0),
-                                    bottomLeft: Radius.circular(30.0),
-                                    topRight: Radius.zero,
-                                    bottomRight: Radius.zero,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(padding:  EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+                  child: LoginInput(),
+                ),
+                const SizedBox(height: 20,),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height/1.824,
+                  child: BlocBuilder<ConfigurationLocalBloc,ConfigurationLocalState>(builder: (contextDB, stateDB){
+                    return BlocListener<ValidateLoginBloc,ValidateLoginState>(listener:(contextLoginListener, stateLoginListener) async{
+                      if(stateLoginListener is LoadValidateLoginState){
+                        _onSavedEmployeeBranch(contextDB, stateLoginListener.employeeModel!);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const OptionsScreen()),
+                        );
+                        messagesSnackBar("carga completa ${stateLoginListener.employeeModel?.toJson()}");
+
+                      }else if (stateLoginListener is ErrorLoadValidateLogin){
+                        messagesSnackBar(stateLoginListener.errorApi);
+                      }
+                    },
+                      child: BlocBuilder<ValidateLoginBloc,ValidateLoginState>(builder:(contextLogin,stateLogin){
+                        return Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            CustomPaint(
+                              size: Size(MediaQuery.of(context).size.width,
+                                  MediaQuery.of(context).size.height),
+                              painter: TriangleBottom(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if(stateInput.user.isEmpty){
+                                    messagesSnackBar("Favor de agregar un numero de usuario");
+                                  }else if(stateInput.password.isEmpty){
+                                    messagesSnackBar("Favor de agregar una contraseña");
+                                  }else{
+                                    contextLogin.read<ValidateLoginBloc>().add(LoadValidateLoginEvent(user: stateInput.user, password: stateInput.password));
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(getColorHexadecimal(secondaryColor)),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.0),
+                                      bottomLeft: Radius.circular(30.0),
+                                      topRight: Radius.zero,
+                                      bottomRight: Radius.zero,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: const Text('Aceptar',
-                                style: TextStyle(fontSize: 22,color: Colors.black),
-                              ),
+                                child: const Text('Aceptar',
+                                  style: TextStyle(fontSize: 22,color: Colors.black),
+                                ),
 
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    }),
-                  );
-                }),
-              ),
-            ],
+                          ],
+                        );
+                      }),
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         );
       }),
