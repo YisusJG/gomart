@@ -33,7 +33,6 @@ class MainActivity: FlutterActivity(), EMDKListener, DataListener, StatusListene
     private var emdkManager: EMDKManager? = null
     private var barcodeManager: BarcodeManager? = null
     private var scanner: Scanner? = null
-    private var textViewData: TextView? = null
     private var deviceList: List<ScannerInfo>? = null
     private var scannerIndex = 0 // Keep the selected scanner
     private var dataLength = 0
@@ -60,18 +59,6 @@ class MainActivity: FlutterActivity(), EMDKListener, DataListener, StatusListene
                         prueba()
                         result.success(null)
                     }
-//                    "close" -> {
-//                        closePrinter()
-//                        result.success(null)
-//                    }
-//                    "startBarcodeScan" -> {
-//                        startBarcodeScan()
-//                        result.success(null)
-//                    }
-//                    "stopBarcodeScan" -> {
-//                        stopBarcodeScan()
-//                        result.success(null)
-//                    }
                     else -> result.notImplemented()
                 }
 
@@ -81,8 +68,7 @@ class MainActivity: FlutterActivity(), EMDKListener, DataListener, StatusListene
 
 
     private fun prueba() {
-        // Lógica para cerrar la impresora
-        println("Llego a prueba")
+        //println("Llego a prueba")
     }
 
 
@@ -311,11 +297,11 @@ class MainActivity: FlutterActivity(), EMDKListener, DataListener, StatusListene
         runOnUiThread {
             if (result != null) {
                 if (dataLength++ > 100) { //Clear the cache after 100 scans
-                    textViewData!!.text = ""
+
                     dataLength = 0
                 }
-                textViewData!!.append(Html.fromHtml(result))
-                textViewData!!.append("\n")
+                val methodChannel = MethodChannel(flutterEngine!!.dartExecutor.binaryMessenger, CHANNEL)
+                methodChannel.invokeMethod("scanBarcode", result)
 //                (findViewById<View>(R.id.scrollViewData) as View).post {
 //                    (findViewById<View>(
 //                        R.id.scrollViewData
