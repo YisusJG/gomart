@@ -23,9 +23,9 @@ class LoginRepository{
 
       try {
       if (response.statusCode == 200) {
-        print("DataApi ${response.body}");
+       // print("DataApi ${response.body}");
         final data = EmployeeModel.fromJson(json.decode(response.body));
-        print("DataApi $data");
+       // print("DataApi $data");
         return data;
       } else if (response.statusCode == 500) {
         throw ("Usuario no registrado");

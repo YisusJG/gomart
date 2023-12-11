@@ -17,7 +17,7 @@ class _SplahsScreenState extends State<SplahsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SplahsLocalBloc,SplahsLocalState>(listener: (contextEmployeeListener, stateEmployeeListener){
-        print("LLegan DESDE DB ${stateEmployeeListener.isLocalEmployee}");
+        //print("LLegan DESDE DB ${stateEmployeeListener.isLocalEmployee}");
         if(!stateEmployeeListener.isLocalEmployee){
           print("entro");
           Navigator.push(

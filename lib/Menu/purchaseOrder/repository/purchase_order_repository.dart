@@ -15,7 +15,7 @@ class PurchaseOrderRepository{
       final List<dynamic> jsonData = json.decode(response.body);
       List<PurchaseOrderModel> data = jsonData.map((map) => PurchaseOrderModel.fromJson(map)).toList();
       //print("Data orders ${data.map((e) => e.toJson())}");
-      print("data ${data.length}");
+      //print("data ${data.length}");
       return data;
     }else if(response.statusCode == 500){
       throw ("Error con el servidor");

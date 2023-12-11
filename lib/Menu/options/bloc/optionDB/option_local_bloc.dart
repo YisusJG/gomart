@@ -13,7 +13,6 @@ class OptionLocalBloc extends Bloc<OptionLocalEvent, OptionLocalState>{
 
   void _getBranch(OptionLocalEvent event,Emitter<OptionLocalState> emmit)async{
     final branch = await optionsRepository.getBranch();
-    print("Sucursal ${branch!.first.zoneName}");
-    emmit(LocalBranchLoadingState(branchEntity: branch.first));
+    emmit(LocalBranchLoadingState(branchEntity: branch?.first));
   }
 }

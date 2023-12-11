@@ -29,13 +29,13 @@ class _PurchaseOrdersScreenState extends State<PurchaseOrdersScreen> {
             if(statePurchaseOrder.purchaseOrderModel != null){ //Descomentar este if para cuando quieras pintar un loading
               return Scaffold(
                 appBar: AppBar(
-                  title:  Text("Ordes de compra",style: TextStyle(color: Color(getColorHexadecimal(secondaryColor))),),
+                  title:  Text("Ordeness de compra",style: TextStyle(color: Color(getColorHexadecimal(secondaryColor))),),
                   iconTheme: IconThemeData(color: Color(getColorHexadecimal(secondaryColor))),
                   backgroundColor: Color(getColorHexadecimal(primaryColor)),
                 ),
-                body: Stack(
+                body: const Stack(
                   children: [
-                    CardListPurchaseOrders(purchaseOrderModel: statePurchaseOrder.purchaseOrderModel!),
+                    CardListPurchaseOrders(),
                   ],
                 ),
               );

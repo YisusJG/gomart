@@ -128,7 +128,7 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
                           onTap: (){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const PurchaseOrderDetail()),
+                              MaterialPageRoute(builder: (context) => PurchaseOrderDetail(purchaseOrderId: widget.purchaseOrderModel[widget.index].id,)),
                             );
                             //messagesSnackBar("Aqui se mostrara el detalle");
                           },
@@ -149,8 +149,8 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("Detalle", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
-                                const SizedBox(width: 10,),
+                                Text("Recepcion", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
+                                const SizedBox(width: 2,),
                                 Icon(Icons.arrow_forward_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
                               ],
                             ),
@@ -167,6 +167,7 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
     );
   }
 
+  // descomentar esto en caso de que solo querramos recuperar el boton de la recepcion
   // bool _isInsideDetailArea(Offset globalPosition) {
   //
   //   RenderBox box = context.findRenderObject() as RenderBox;

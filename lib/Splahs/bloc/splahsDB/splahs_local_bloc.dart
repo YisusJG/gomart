@@ -14,8 +14,8 @@ class SplahsLocalBloc extends Bloc<SplahsLocalEvent,SplahsLocalState>{
   void _validateEmployee(SplahsLocalEvent event, Emitter<SplahsLocalState> emmit) async{
     late bool? isEmployeeLocal;
     final employee = await splahsRepository.validateEmployee();
-    print("Datos empleado ${employee!.length}");
-    if(employee.isNotEmpty){
+    //print("Datos empleado ${employee!.length}");
+    if(employee!.isNotEmpty){
       isEmployeeLocal = true;
     }else{
       isEmployeeLocal = false;
