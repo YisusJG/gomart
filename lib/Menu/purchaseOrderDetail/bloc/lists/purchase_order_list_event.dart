@@ -1,6 +1,6 @@
 import 'package:gomart/Menu/purchaseOrderDetail/models/purchase_order_detail_model.dart';
 
-abstract class PurchaseOrderListEvent{
+class PurchaseOrderListEvent{
   const PurchaseOrderListEvent();
 }
 
@@ -26,3 +26,4 @@ class SumOrderTotalsEvent extends PurchaseOrderListEvent{
     this.total = 0.0,
   });
 }
+

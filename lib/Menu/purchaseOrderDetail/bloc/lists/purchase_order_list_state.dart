@@ -1,7 +1,7 @@
 import '../../models/purchase_order_detail_model.dart';
 
-abstract class PurchaseOrderListState{
-  final List<PurchaseOrderDetailModel>? orderList;
+class PurchaseOrderListState{
+  final List<PurchaseOrderDetailModel>? orderList;  //separar el list de las otras variables
   final int totalQuantity;
   final double ieps;
   final double iva;
@@ -34,3 +34,4 @@ class SumOrderTotalsState extends PurchaseOrderListState{
     required super.total,
   });
 }
+

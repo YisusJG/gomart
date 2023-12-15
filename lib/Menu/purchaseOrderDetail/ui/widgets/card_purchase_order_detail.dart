@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gomart/Widgets/type_dialog.dart';
+import 'package:gomart/Helpers/dialogs/type_dialog.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/purchase_order_detail_model.dart';
@@ -109,10 +109,5 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void showDialogInfoInput(){
-    TypeDialog dialogs = TypeDialog(context: context);
-    dialogs.showDialogInfoInput();
   }
 }

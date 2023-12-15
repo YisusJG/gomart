@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/Helpers/dialogs/purchase_detail_dialog.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/ui/widgets/card_purchase_order_detail.dart';
 import '../../../../Helpers/scan_barcode_channel.dart';
-import '../../../../Widgets/type_dialog.dart';
+import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../bloc/barcode/order_barcode_event.dart';
 import '../../bloc/inputs/purchase_order_detail_inputs_bloc.dart';
 import '../../bloc/lists/purchase_order_list_bloc.dart';
@@ -27,6 +28,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   static const MethodChannel scannerChannel = MethodChannel('barcode_channel');
   String barcode = '';
   final ScrollController _scrollController = ScrollController();
+  late int countFinishOrder= 0;
   @override
   void initState() {
     super.initState();
@@ -50,46 +52,79 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
         targetProduct.unitCost = stateInputProduc.productCost;
         targetProduct.amountReceived = stateInputProduc.amountReceived;
+
+       // print("Mi orden de compra anterior ${widget.lstPurchaseOrderDetail.length}");
         context.read<PurchaseOrderListBloc>().add(OrderListEvent(orderList: widget.lstPurchaseOrderDetail));
         _scrollToEditedCard(stateInputProduc.id);
+
+
 
       }
       return BlocListener<OrderBarcodeBloc, OrderBarcodeState>(listener: (contextBarcodeListener,stateBarcodeListener){
         var productName = widget.lstPurchaseOrderDetail.where((x) => x.barcode == stateBarcodeListener.barcode);
         if(productName.isNotEmpty){
-          showDialogInfoInput(productName.first);
+         // print('amount: ${productName.first.amountReceived} qauntity: ${productName.first.unitCost}');
+          if(productName.first.amountReceived > 0 || productName.first.unitCost > 0){
+            messagesSnackBar("Este producto ya lo has recepcionado");
+          }else{
+            showDialogInfoInput(productName.first);
+          }
+
 
         }else{
           messagesSnackBar("El producto no se encuentra en la orden de compra");
         }
       },
-        child: BlocBuilder<PurchaseOrderListBloc,PurchaseOrderListState>(builder: (contextOrderList, stateOrderList){
-          if(stateOrderList.orderList != null){
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: stateOrderList.orderList!.length,
-                itemBuilder: (context,index) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height/2.8,
-                    child: CardPurchaseOrderDetail(lstPurchaseOrderDetail: stateOrderList.orderList!, index: index,),
-                  );
-                }
-            );
+        child: BlocListener<PurchaseOrderListBloc,PurchaseOrderListState>(listener: (contextOrderListListener, stateOrderListListener){
+          final orderList = stateOrderListListener.orderList;
+          if(orderList != null){
+            final completePurchaseOrder = orderList.where((element) => element.amountReceived == 0);
+            if(completePurchaseOrder.isEmpty){
+              countFinishOrder++;
+              if(countFinishOrder == 1){
+                showDialogConfirm("Orden de compra completada",'Favor de enviar la recepcion');
+              }
+
+            }
           }
-          return Container();
-        })
+        },
+          child: BlocBuilder<PurchaseOrderListBloc,PurchaseOrderListState>(builder: (contextOrderList, stateOrderList){
+            if(stateOrderList.orderList != null){
+              return ListView.builder(
+                  controller: _scrollController,
+                  itemCount: stateOrderList.orderList!.length,
+                  itemBuilder: (context,index) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height/2.8,
+                      child: CardPurchaseOrderDetail(lstPurchaseOrderDetail: stateOrderList.orderList!, index: index,),
+                    );
+                  }
+              );
+            }
+            return Container();
+          }),
+        ),
       );
     });
 
   }
 
   void showDialogInfoInput(PurchaseOrderDetailModel purchaseOrderDetailModel){
-    TypeDialog dialogs = TypeDialog(context: context, purchaseOrderDetail: purchaseOrderDetailModel);
-    dialogs.showDialogInfoInput();
+    PurchaseDetailDialog dialog = PurchaseDetailDialog(context: context);
+    dialog.showDialogInfoInput(purchaseOrderDetailModel);
   }
 
-  void closingDialog(){
-    Navigator.pop(context);
+  void showDialogConfirm(String title,String description){
+    TypeDialog dialog =
+    TypeDialog(
+        context: context,
+        title: title,
+        description: description,
+        onOk: (){
+
+        }
+    );
+    dialog.showDialogConfirm();
   }
 
   void messagesSnackBar(String message){
@@ -100,13 +135,11 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   }
 
   void _scrollToEditedCard(int editedCardId) {
-    // Encuentra el índice de la tarjeta editada en la lista
     int editedCardIndex = widget.lstPurchaseOrderDetail.indexWhere((product) => product.id == editedCardId);
 
     if (editedCardIndex != -1) {
-      // Desplazarse hacia el índice de la tarjeta editada
       _scrollController.animateTo(
-        editedCardIndex * (MediaQuery.of(context).size.height / 2.8), // Ajusta según el tamaño de tus tarjetas
+        editedCardIndex * (MediaQuery.of(context).size.height / 2.8),
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );

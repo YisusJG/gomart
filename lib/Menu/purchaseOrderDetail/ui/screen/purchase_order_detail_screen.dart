@@ -5,6 +5,7 @@ import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_b
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/repository/purchase_order_datail_repository.dart';
@@ -24,8 +25,11 @@ class PurchaseOrderDetail extends StatefulWidget {
 }
 
 class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
-  late int total = 0;
+  late int totalQuantity = 0;
   late double subTotal = 0;
+  late double iva = 0;
+  late double ieps = 0;
+  late double total = 0;
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -76,8 +80,11 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                               horizontal: 8, vertical: 4),
                           child: BlocBuilder<PurchaseOrderListBloc, PurchaseOrderListState>(builder: (contextSumOrders, stateSumOrders){
                             if(stateSumOrders.totalQuantity > 0){
-                              total = total + stateSumOrders.totalQuantity;
-                              subTotal = subTotal + stateSumOrders.subTotal;
+                              totalQuantity += stateSumOrders.totalQuantity;
+                              subTotal += stateSumOrders.subTotal;
+                              iva += stateSumOrders.iva;
+                              ieps += stateSumOrders.ieps;
+                              total = subTotal + iva + ieps;
                             }
 
                             return Column(
@@ -88,7 +95,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                                     Row(
                                         children:[
                                           Container(width: 80, alignment: Alignment.centerRight,child: const Text('CANTIDAD: ', style: TextStyle(color: Colors.white,),),),
-                                          Text('$total',
+                                          Text('$totalQuantity',
                                             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
                                         ]
                                     ),
@@ -105,13 +112,13 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                                     Row(
                                         children:[
                                           Container(width: 80, alignment: Alignment.centerRight, child: const Text('IEPS: ', style: TextStyle(color: Colors.white,),),),
-                                          const Text('\$0.00', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
+                                          Text(formatCurrency(ieps), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
                                         ]
                                     ),
                                     Row(children: [
                                       const Text('IVA: ', style: TextStyle(color: Colors.white),),
                                       Container(width: 90, alignment: Alignment.centerRight,
-                                        child: const Text('\$0.00', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
+                                        child: Text(formatCurrency(iva), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
 
                                     ])
                                   ],
@@ -123,7 +130,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                                     children: [
                                       const Text('TOTAL: ', style: TextStyle(color: Colors.white),),
                                       Container(width: 90, alignment: Alignment.centerRight,
-                                        child: const Text('\$0.00', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
+                                        child: Text(formatCurrency(total), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
                                     ],
                                   ),
                                 )
