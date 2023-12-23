@@ -2,15 +2,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:gomart/Menu/purchaseOrderDetail/models/note_model.dart';
 import '../../Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_bloc.dart';
 import '../../Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_event.dart';
 import '../../Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_state.dart';
 import '../../Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_bloc.dart';
 import '../../Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_event.dart';
-import '../../Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_bloc.dart';
-import '../../Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_event.dart';
-import '../../Menu/purchaseOrderDetail/models/purchase_order_detail_model.dart';
+import '../../Menu/purchaseOrderDetail/bloc/reception/purchase_order_list_bloc.dart';
+import '../../Menu/purchaseOrderDetail/bloc/reception/purchase_order_list_event.dart';
+import '../../Menu/purchaseOrderDetail/models/reception_detail_model.dart';
 
 class PurchaseDetailDialog {
   final BuildContext context;
@@ -19,7 +19,7 @@ class PurchaseDetailDialog {
   final String? description;
   final VoidCallback? onCancel;
   final VoidCallback? onOk;
-  final PurchaseOrderDetailModel purchaseOrderDetailModel;
+  //final PurchaseOrderDetailModel purchaseOrderDetailModel;
 
   PurchaseDetailDialog(
       {
@@ -28,12 +28,15 @@ class PurchaseDetailDialog {
         this.description,
         this.onCancel,
         this.onOk,
-        PurchaseOrderDetailModel? purchaseOrderDetail,
-      }) : purchaseOrderDetailModel = purchaseOrderDetail ?? PurchaseOrderDetailModel();
+        //PurchaseOrderDetailModel? purchaseOrderDetail,
+      }); //: purchaseOrderDetailModel = purchaseOrderDetail ?? PurchaseOrderDetailModel();
 
-  void showDialogInfoInput(PurchaseOrderDetailModel purchaseOrderDetailModel) {
+  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel) {
     TextEditingController productCostController = TextEditingController();
     TextEditingController amountReceivedController = TextEditingController();
+    List<NoteModel> dropdownItems = NoteModel.notes;
+    NoteModel? selectedOption;
+    String typeNote = '';
     AwesomeDialog(
       context: context,
       dialogType: DialogType.infoReverse,
@@ -47,7 +50,7 @@ class PurchaseDetailDialog {
               contextDialog = contextDialogInput;
               return Column(
                 children: [
-                  Text(purchaseOrderDetailModel.name!,
+                  Text(receptionDetailModel.productName,
                       style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black26)),
                   TextField(
                     controller: productCostController,
@@ -55,7 +58,7 @@ class PurchaseDetailDialog {
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       hintText: 'Costo del producto',
-                      border: const OutlineInputBorder(),
+                      border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
                       contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                       errorText: stateDialogInput.isvalidateCost
                           ? 'Por favor, ingrese el costo del producto'
@@ -81,7 +84,7 @@ class PurchaseDetailDialog {
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       hintText: 'Cantidad recepcionada',
-                      border: const OutlineInputBorder(),
+                      border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
                       contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                       errorText: stateDialogInput.isValidateAmount
                           ? 'Por favor, ingrese una cantidad'
@@ -100,6 +103,36 @@ class PurchaseDetailDialog {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10,),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 1),
+                        borderRadius: BorderRadius.circular(15)
+                    ),
+                    child:DropdownButtonFormField<NoteModel>(
+                      hint: const Text('Tipo de nota'),
+                      value: selectedOption,
+                      isExpanded: true,
+                      padding: const EdgeInsets.only(left: 8),
+                      alignment: Alignment.center,
+                      //underline: const SizedBox(),
+                      borderRadius: BorderRadius.circular(10),
+                      items: dropdownItems.map((NoteModel value){
+                        return DropdownMenuItem<NoteModel>(
+                            value: value,
+                            child: Text(value.description));
+                      }).toList(),
+                      onChanged: (NoteModel? newValue){
+                        typeNote = newValue?.description ?? '';
+                        selectedOption = newValue;
+                        //print("Valor del tipeDocument ${selectedOption!.id}");
+                      },
+                      decoration: const InputDecoration(
+                          border: InputBorder.none
+                      ),
+                    ),
+                  )
+
                 ],
               );
             })
@@ -115,17 +148,17 @@ class PurchaseDetailDialog {
         }if(amountReceived.isEmpty){
           contextDialog.read<DialogInputBloc>().add(ValidateInputDialogEvent(isValidaAmount: true, isvalidateCost: false));
           return;
-        }if(purchaseOrderDetailModel.quantity < int.parse(amountReceived)){
+        }if(receptionDetailModel.poquantity < int.parse(amountReceived)){
           Navigator.of(context).pop();
           messageSnackBar("No puedes recibir más de la cantidad solicitada");
           return;
         }
         else{
           context.read<PurchaseOrderDatailInputsBloc>().add(
-            InputProductCostEvent(productCost: double.parse(producstCost),id: purchaseOrderDetailModel.id,amountreceived: int.parse(amountReceived)),
+            InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived), note:typeNote),
           );
           double subtotal = double.parse(producstCost) * int.parse(amountReceived);
-          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: purchaseOrderDetailModel.ieps, iva: purchaseOrderDetailModel.iva,subTotal: subtotal,total: 0)); //aquoe es una probabilidad de que vaya
+          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps, iva: receptionDetailModel.iva,subTotal: subtotal,total: 0)); //aquoe es una probabilidad de que vaya
           Navigator.of(context).pop();
         }
       },

@@ -1,21 +1,21 @@
-import '../../models/purchase_order_detail_model.dart';
+import '../../models/reception_detail_model.dart';
 
-abstract class PurchaseOrderDetailState{
-  List<PurchaseOrderDetailModel>? purchaseOrderDetailModel;
+class PurchaseOrderDetailState{
+  List<ReceptionDetailModel>? receptionDetail;
   String errorApi;
 
   PurchaseOrderDetailState({
-    this.purchaseOrderDetailModel,
+    this.receptionDetail,
     this.errorApi = ""
   });
 }
 
 class StartingPurchaseOrderDetail extends PurchaseOrderDetailState{
-  StartingPurchaseOrderDetail({required super.purchaseOrderDetailModel});
+  StartingPurchaseOrderDetail({required super.receptionDetail});
 }
 
 class LoadPurchaseOrderDetail extends PurchaseOrderDetailState{
-  LoadPurchaseOrderDetail({required super.purchaseOrderDetailModel});
+  LoadPurchaseOrderDetail({required super.receptionDetail});
 }
 
 class ErrorPurchaseOrderDetail extends PurchaseOrderDetailState{

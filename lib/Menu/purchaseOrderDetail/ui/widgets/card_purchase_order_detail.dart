@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gomart/Helpers/dialogs/type_dialog.dart';
 import 'package:intl/intl.dart';
-
-import '../../models/purchase_order_detail_model.dart';
+import '../../models/reception_detail_model.dart';
 
 class CardPurchaseOrderDetail extends StatefulWidget {
-  final List<PurchaseOrderDetailModel> lstPurchaseOrderDetail;
+  final List<ReceptionDetailModel> lstReceptionDetail;
   final int index;
-  const CardPurchaseOrderDetail({super.key, required this.lstPurchaseOrderDetail, required this.index});
+  const CardPurchaseOrderDetail({super.key, required this.lstReceptionDetail, required this.index});
 
   @override
   State<CardPurchaseOrderDetail> createState() => _CardPurchaseOrderDetailState();
@@ -25,7 +23,7 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color:widget.lstPurchaseOrderDetail[widget.index].amountReceived == 0  || widget.lstPurchaseOrderDetail[widget.index].amountReceived == 0.0? Colors.white : Colors.lightGreenAccent,
+                color:widget.lstReceptionDetail[widget.index].quantity == 0 ? Colors.white : Colors.lightGreenAccent,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -40,32 +38,32 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                     Row(
+                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
+                        Row(
                           children: [
                             Text("Cad. Minima: ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
                             Text('25/03/2023',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
                           ],
                         ),
-                        InkWell(
-                          onTap: (){
-                            messageSnackBar("Aqui abre el catalogo");
-                            //showDialogInfoInput();
-                          },
-                          child: const Icon(Icons.note_add),
-                        )
+                        // InkWell(
+                        //   onTap: (){
+                        //     messageSnackBar("Aqui abre el catalogo");
+                        //     //showDialogInfoInput();
+                        //   },
+                        //   child: const Icon(Icons.note_add),
+                        // )
 
                       ],
                     ),
-                    Align(alignment: Alignment.center,child: Text(widget.lstPurchaseOrderDetail[widget.index].name!,
+                    Align(alignment: Alignment.center,child: Text(widget.lstReceptionDetail[widget.index].productName,
                       style:const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black26),),),
                     const SizedBox(height: 10,),
-                    _buildARowInt('Cant. Solicitada:', widget.lstPurchaseOrderDetail[widget.index].quantity),
-                    _buildARowInt('Cant. Recepcionada:', widget.lstPurchaseOrderDetail[widget.index].amountReceived),
-                    _buildARowDouble('Costo unitario orden:', widget.lstPurchaseOrderDetail[widget.index].unitPrice),
-                    _buildARowDouble('Costo unitario:', widget.lstPurchaseOrderDetail[widget.index].unitCost),
+                    _buildARowInt('Cant. Solicitada:', widget.lstReceptionDetail[widget.index].poquantity),
+                    _buildARowInt('Cant. Recepcionada:', widget.lstReceptionDetail[widget.index].quantity),
+                    _buildARowDouble('Costo unitario orden:', widget.lstReceptionDetail[widget.index].pounitPrice),
+                    _buildARowDouble('Costo unitario:', widget.lstReceptionDetail[widget.index].unitPrice),
                   ],
                 )
             )

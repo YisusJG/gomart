@@ -5,20 +5,20 @@ import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_b
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
-import 'package:gomart/Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_bloc.dart';
-import 'package:gomart/Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_bloc.dart';
-import 'package:gomart/Menu/purchaseOrderDetail/bloc/lists/purchase_order_list_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/repository/purchase_order_datail_repository.dart';
 import 'package:intl/intl.dart';
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
+import '../../../purchaseOrder/models/reference_order_model.dart';
 import '../../bloc/inputs/purchase_order_detail_inputs_bloc.dart';
+import '../../bloc/reception/purchase_order_list_bloc.dart';
+import '../../bloc/reception/purchase_order_list_state.dart';
 import '../widgets/card_list_purchase_order_detail.dart';
 
 class PurchaseOrderDetail extends StatefulWidget {
-  final int purchaseOrderId;
+  final ReferenceOrderModel referenceOrderModel;
 
-  const PurchaseOrderDetail({super.key, required this.purchaseOrderId});
+  const PurchaseOrderDetail({super.key, required this.referenceOrderModel});
 
   @override
   State<PurchaseOrderDetail> createState() => _PurchaseOrderDetailState();
@@ -49,11 +49,11 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                     RepositoryProvider.of<PurchaseOrderDetailRepository>(
                         context))
                   ..add(LoadOrderDetailEvent(
-                      purchaseOrderId: widget.purchaseOrderId)))
+                      purchaseOrderId: widget.referenceOrderModel.orderId)))
           ],
           child: BlocBuilder<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(
               builder: (contextOrderDetail, stateOrderDetail) {
-            if (stateOrderDetail.purchaseOrderDetailModel != null) {
+            if (stateOrderDetail.receptionDetail != null) {
               return Scaffold(
                   appBar: AppBar(
                     title: Text(
@@ -68,8 +68,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetail> {
                   body: Stack(
                     children: [
                       CardListPurchaseOrderDetail(
-                          lstPurchaseOrderDetail:
-                              stateOrderDetail.purchaseOrderDetailModel!),
+                          lstReceptionDetail:
+                              stateOrderDetail.receptionDetail!, referenceOrderModel: widget.referenceOrderModel),
                       Positioned(
                         bottom: 0,
                         child: Container(

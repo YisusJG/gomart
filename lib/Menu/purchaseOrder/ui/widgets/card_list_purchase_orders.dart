@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/api/purchase_order_bloc.dart';
-import '../../bloc/api/purchase_order_state.dart';
+import '../../bloc/api/order/purchase_order_bloc.dart';
+import '../../bloc/api/order/purchase_order_state.dart';
 import 'card_purchase_order.dart';
 
 class CardListPurchaseOrders extends StatefulWidget {

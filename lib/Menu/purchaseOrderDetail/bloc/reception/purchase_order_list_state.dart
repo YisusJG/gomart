@@ -1,7 +1,7 @@
-import '../../models/purchase_order_detail_model.dart';
+import '../../models/reception_detail_model.dart';
 
 class PurchaseOrderListState{
-  final List<PurchaseOrderDetailModel>? orderList;  //separar el list de las otras variables
+  final List<ReceptionDetailModel>? receptionDetail;  //separar el list de las otras variables
   final int totalQuantity;
   final double ieps;
   final double iva;
@@ -10,7 +10,7 @@ class PurchaseOrderListState{
 
 
   PurchaseOrderListState({
-    this.orderList,
+    this.receptionDetail,
     this.totalQuantity = 0,
     this.ieps = 0,
     this.iva = 0,
@@ -21,7 +21,7 @@ class PurchaseOrderListState{
 
 class OrderListState extends PurchaseOrderListState{
   OrderListState({
-    required super.orderList
+    required super.receptionDetail
   });
 }
 

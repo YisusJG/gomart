@@ -1,13 +1,13 @@
-import 'package:gomart/Menu/purchaseOrderDetail/models/purchase_order_detail_model.dart';
+import '../../models/reception_detail_model.dart';
 
-class PurchaseOrderListEvent{
+class PurchaseOrderListEvent{  //cambiar orderlist por receptionList
   const PurchaseOrderListEvent();
 }
 
 class OrderListEvent extends PurchaseOrderListEvent{
-  final List<PurchaseOrderDetailModel>? orderList;
+  final List<ReceptionDetailModel>? receptionDetail;
   OrderListEvent({
-    this.orderList
+    this.receptionDetail
   });
 }
 

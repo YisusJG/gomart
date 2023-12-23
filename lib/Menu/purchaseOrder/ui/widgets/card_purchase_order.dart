@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/Helpers/dialogs/purchase_order_dialog.dart';
+import 'package:gomart/Menu/purchaseOrder/bloc/api/catDocumentReception/cat_type_document_reception_state.dart';
+import 'package:gomart/Menu/purchaseOrder/models/reference_order_model.dart';
+import 'package:gomart/Menu/purchaseOrder/models/type_document_reception_model.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/ui/screen/purchase_order_detail_screen.dart';
 
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
+import '../../bloc/api/catDocumentReception/cat_type_document_reception_bloc.dart';
 import '../../models/purchase_order_model.dart';
 
 class CardPurchaseOrder extends StatefulWidget {
@@ -15,15 +21,20 @@ class CardPurchaseOrder extends StatefulWidget {
 }
 
 class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
+  late PurchaseOrderDialog dialog;
+  TextEditingController  providerReferenceController = TextEditingController();
+  TextEditingController typeDocumentController = TextEditingController();
+  bool isValid = true;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (TapDownDetails details){
-        // if (!_isInsideDetailArea(details.globalPosition)) {
-
-        // }else{
-          messagesSnackBar("Aqui validar el proceso de recepcion");
-       // }
+        //DESCOMENTAR EN CASO DE QUE SE LE QUEIRA DAR CLIK A AL CARD
+       //  // if (!_isInsideDetailArea(details.globalPosition)) {
+       //
+       //  // }else{
+       //    messagesSnackBar("Aqui validar el proceso de recepcion");
+       // // }
       },
       child: Stack(
         children: [
@@ -122,41 +133,42 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
                       ],
                     ),
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => PurchaseOrderDetail(purchaseOrderId: widget.purchaseOrderModel[widget.index].id,)),
-                            );
-                            //messagesSnackBar("Aqui se mostrara el detalle");
-                          },
-                          child: Container(
-                            height: 30,
-                            width: 100,
-                            //color: Color(getColorHexadecimal(primaryColor)),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20.0),
-                                topRight: Radius.zero,
-                                bottomLeft: Radius.zero,
-                                bottomRight: Radius.circular(10.0),
+                    BlocBuilder<CatTypeDocumentReceptionBloc, CatTypeDocumentReceptionState>(builder: (contextDocumentReception,stateDocumentReception){
+                      return Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: (){
+                              showPurchaseOrderDialog(stateDocumentReception.typeDocument!);
+                              //messagesSnackBar("Aqui se mostrara el detalle");
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 100,
+                              //color: Color(getColorHexadecimal(primaryColor)),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.zero,
+                                  bottomLeft: Radius.zero,
+                                  bottomRight: Radius.circular(10.0),
+                                ),
+                                color: Color(getColorHexadecimal(primaryColor)),
                               ),
-                              color: Color(getColorHexadecimal(primaryColor)),
+                              //color: Color(getColorHexadecimal(primaryColor)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text("Recepcion", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
+                                  const SizedBox(width: 2,),
+                                  Icon(Icons.arrow_forward_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
+                                ],
+                              ),
                             ),
-                            //color: Color(getColorHexadecimal(primaryColor)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text("Recepcion", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
-                                const SizedBox(width: 2,),
-                                Icon(Icons.arrow_forward_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
-                              ],
-                            ),
-                          ),
-                        )
-                    ),
+                          )
+                      );
+
+                    }),
+
                   ],
                 ),
               ),
@@ -184,11 +196,51 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
   //       localPosition.dy <= detailAreaBottom;
   // }
 
+
+  void showPurchaseOrderDialog(List<TypeDocumentReceptionModel> documentReception){
+    //print("que llega document ${documentReception.length}");
+    dialog =
+    PurchaseOrderDialog(
+        context: context,
+        onCancel: (){
+          closingDialog();
+        },
+        onOk: (){
+          if(providerReferenceController.text.isEmpty || typeDocumentController.text.isEmpty){
+            messagesSnackBar("Para continuar debes de agregar una referencia del provedor y un tipo de documento");
+            closingDialog();
+          }else{
+            ReferenceOrderModel referenceOrderModel =
+            ReferenceOrderModel(
+              orderId: widget.purchaseOrderModel[widget.index].id,
+              branchId: widget.purchaseOrderModel[widget.index].branchId,
+              typeDocumentId: int.parse(typeDocumentController.text),
+              sapCode: widget.purchaseOrderModel[widget.index].sapCode,
+              providerReference: providerReferenceController.text,
+            );
+            //print("Datos referencia ${referenceOrderModel.typeDocumentId}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PurchaseOrderDetail(referenceOrderModel: referenceOrderModel,)),
+            );
+
+          }
+        },
+      providerCpntroller: providerReferenceController,
+      typeDocumentController: typeDocumentController,
+    );
+    dialog.showPurchaseReferenceDialog(documentReception);
+  }
+
   void messagesSnackBar(String message){
     final snackBar = SnackBar(
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void closingDialog(){
+    Navigator.pop(context);
   }
 }
 

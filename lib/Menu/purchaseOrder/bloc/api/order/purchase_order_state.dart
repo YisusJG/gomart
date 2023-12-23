@@ -1,6 +1,6 @@
 import 'package:gomart/Menu/purchaseOrder/models/purchase_order_model.dart';
 
-abstract class PurchaseOrderState{
+class PurchaseOrderState{
   List<PurchaseOrderModel>? purchaseOrderModel;
   String errorApi;
 
