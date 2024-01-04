@@ -7,6 +7,7 @@ class PurchaseOrderListState{
   final double iva;
   final double subTotal;
   final double total;
+  final double discount;
 
 
   PurchaseOrderListState({
@@ -16,6 +17,7 @@ class PurchaseOrderListState{
     this.iva = 0,
     this.subTotal = 0,
     this.total = 0,
+    this.discount = 0,
   });
 }
 
@@ -32,6 +34,7 @@ class SumOrderTotalsState extends PurchaseOrderListState{
     required super.iva,
     required super.subTotal,
     required super.total,
+    required super.discount
   });
 }
 

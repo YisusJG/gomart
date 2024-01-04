@@ -13,6 +13,7 @@ class PurchaseOrderDetailModel {
   double ieps;
   double iva;
   double roundingValue;
+  int expiration;
 
   PurchaseOrderDetailModel(
       {
@@ -29,7 +30,8 @@ class PurchaseOrderDetailModel {
         this.description,
         this.ieps = 0.0,
         this.iva = 0.0,
-        this.roundingValue = 0.0
+        this.roundingValue = 0.0,
+        this.expiration = 0,
       });
 
   factory PurchaseOrderDetailModel.fromJson(Map<String, dynamic> json) {
@@ -48,8 +50,10 @@ class PurchaseOrderDetailModel {
       ieps: json['ieps'],
       iva: json['iva'],
       roundingValue: json['roundingValue'],
+      expiration: json['expiration'],
     );
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -67,6 +71,7 @@ class PurchaseOrderDetailModel {
     data['ieps'] = ieps;
     data['iva'] = iva;
     data['roundingValue'] = roundingValue;
+    data['expiration'] = expiration;
     return data;
   }
 

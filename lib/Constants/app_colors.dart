@@ -6,8 +6,10 @@ const String primaryColor2 = "#26336b";
 const String primaryColor3 = "#5770db";
 const String primaryColor4 = "#273274";
 
+const String colorCancel = "#FC3005";
+
 class TColor {
-  static Color get primary => const Color(0xffFC6011);
+  static Color get primary => const Color(0xffd5030a);
   static Color get primaryText => const Color(0xff4A4B4D);
   static Color get secondaryText => const Color(0xff7C7D7E);
   static Color get textField => const Color(0xffF2F2F2);

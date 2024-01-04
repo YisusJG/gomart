@@ -36,7 +36,7 @@ class PurchaseDetailDialog {
     TextEditingController amountReceivedController = TextEditingController();
     List<NoteModel> dropdownItems = NoteModel.notes;
     NoteModel? selectedOption;
-    String typeNote = '';
+    String typeNoteDescription = '';
     AwesomeDialog(
       context: context,
       dialogType: DialogType.infoReverse,
@@ -104,6 +104,17 @@ class PurchaseDetailDialog {
                     ),
                   ),
                   const SizedBox(height: 10,),
+                  // TextField(
+                  //   controller: dicountController,
+                  //   keyboardType: TextInputType.number,
+                  //   textAlign: TextAlign.center,
+                  //   decoration: InputDecoration(
+                  //     hintText: 'Descuento',
+                  //     border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
+                  //     contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 10,),
                   Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey, width: 1),
@@ -123,7 +134,7 @@ class PurchaseDetailDialog {
                             child: Text(value.description));
                       }).toList(),
                       onChanged: (NoteModel? newValue){
-                        typeNote = newValue?.description ?? '';
+                        typeNoteDescription = newValue?.description ?? '';
                         selectedOption = newValue;
                         //print("Valor del tipeDocument ${selectedOption!.id}");
                       },
@@ -142,6 +153,7 @@ class PurchaseDetailDialog {
       btnOkOnPress: () {
         var producstCost = productCostController.text;
         var amountReceived = amountReceivedController.text;
+        //var discount = dicountController.text;
         if(producstCost.isEmpty){
           contextDialog.read<DialogInputBloc>().add(ValidateInputDialogEvent(isvalidateCost: true, isValidaAmount: false));
           return;
@@ -154,11 +166,22 @@ class PurchaseDetailDialog {
           return;
         }
         else{
-          context.read<PurchaseOrderDatailInputsBloc>().add(
-            InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived), note:typeNote),
-          );
           double subtotal = double.parse(producstCost) * int.parse(amountReceived);
-          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps, iva: receptionDetailModel.iva,subTotal: subtotal,total: 0)); //aquoe es una probabilidad de que vaya
+          DateTime now = DateTime.now();
+          String insertDate = now.toIso8601String();
+          //if(discount.isNotEmpty) discountProduct = double.parse(discount);
+          double total = subtotal + receptionDetailModel.iva + receptionDetailModel.ieps;   //- discountProduct;
+          // context.read<PurchaseOrderDatailInputsBloc>().add(
+          //   InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived),
+          //       note:typeNoteDescription,subTotal: subtotal,discount: discount.isEmpty ? 0.0: double.parse(discount),inserDate: insertDate,total: total),
+          // );
+          context.read<PurchaseOrderDatailInputsBloc>().add(
+            InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived),
+                note:typeNoteDescription,subTotal: subtotal,discount: 0,inserDate: insertDate,total: total),
+          );
+
+          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps,
+              iva: receptionDetailModel.iva,subTotal: subtotal,total: 0,discount: 0));
           Navigator.of(context).pop();
         }
       },

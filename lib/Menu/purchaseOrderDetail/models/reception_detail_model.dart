@@ -19,6 +19,9 @@ class ReceptionDetailModel {
   double pounitPrice;
   String productName;
   String? barcode;
+  String insertDate;
+  bool visible;
+  int expiration;
 
   ReceptionDetailModel(
       {
@@ -39,7 +42,10 @@ class ReceptionDetailModel {
         this.insertUserId = 1,
         this.pounitPrice = 0.0,
         this.productName = "",
-        this.barcode
+        this.barcode,
+        this.insertDate = "",
+        this.visible = true,
+        this.expiration = 0,
       });
 
   factory ReceptionDetailModel.fromJson(Map<String, dynamic> map) {
@@ -60,6 +66,8 @@ class ReceptionDetailModel {
         branchId: map['branchId'],
         insertUserId: map['insertUserId'],
         pounitPrice: map['pounitPrice'],
+        insertDate: map['insertDate'],
+        visible: map['visible'],
     );
   }
 
@@ -81,6 +89,8 @@ class ReceptionDetailModel {
     data['branchId'] = branchId;
     data['insertUserId'] = insertUserId;
     data['pounitPrice'] = pounitPrice;
+    data['insertDate'] = insertDate;
+    data['visible'] = visible;
     return data;
   }
 

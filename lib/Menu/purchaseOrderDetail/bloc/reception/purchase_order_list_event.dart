@@ -17,6 +17,7 @@ class SumOrderTotalsEvent extends PurchaseOrderListEvent{
   final double iva;
   final double subTotal;
   final double total;
+  final double discount;
 
   SumOrderTotalsEvent({
     this.totalQuantity = 0,
@@ -24,6 +25,7 @@ class SumOrderTotalsEvent extends PurchaseOrderListEvent{
     this.iva = 0.0,
     this.subTotal = 0.0,
     this.total = 0.0,
+    this.discount = 0.0
   });
 }
 

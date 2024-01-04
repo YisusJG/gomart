@@ -9,6 +9,8 @@ class PurchaseOrderDialog{
   final VoidCallback? onOk;
   final TextEditingController providerReferenceController;
   final TextEditingController typeDocumentController;
+  final TextEditingController descriptionController;
+  final TextEditingController reasonForCancellationController;
 
   PurchaseOrderDialog(
       {required this.context,
@@ -16,9 +18,13 @@ class PurchaseOrderDialog{
         this.onOk,
         TextEditingController? providerCpntroller,
         TextEditingController? typeDocumentController,
+        TextEditingController? descriptionController,
+        TextEditingController? reasonForCancellationController,
       })
       : providerReferenceController = providerCpntroller ?? TextEditingController()
-      , typeDocumentController = typeDocumentController ?? TextEditingController();
+      , typeDocumentController = typeDocumentController ?? TextEditingController()
+      , descriptionController = descriptionController ?? TextEditingController()
+      , reasonForCancellationController = reasonForCancellationController ?? TextEditingController();
 
   void showPurchaseReferenceDialog(List<TypeDocumentReceptionModel> dropdownItems){
     TypeDocumentReceptionModel? selectedOption;
@@ -105,6 +111,44 @@ class PurchaseOrderDialog{
       onDismissCallback:(dismissType){
 
       },
+    ).show();
+  }
+
+
+  void cancelPurchaseOrderDialog(){
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.leftSlide,
+      showCloseIcon: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      body:  Center(
+        child: Column(
+          children: [
+            // const Text("por favor ingresa una observación",
+            //     style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+            const SizedBox(height: 10,),
+            TextField(
+              controller: descriptionController,
+              keyboardType: TextInputType.multiline,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                hintText: 'Observaciones',
+                border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
+                contentPadding:  const EdgeInsets.symmetric(vertical: 15.0),
+              ),
+            ),
+
+          ],
+        ),
+      ),
+      btnCancelOnPress: onCancel,
+      btnCancelText: "Cancelar",
+      btnCancelIcon: Icons.cancel,
+      btnOkOnPress: onOk,
+      btnOkText: "Aceptar",
+      btnOkIcon: Icons.check_circle_rounded,
     ).show();
   }
 }

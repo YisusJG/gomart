@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Helpers/dialogs/purchase_detail_dialog.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_bloc.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/ui/widgets/card_purchase_order_detail.dart';
 import '../../../../Helpers/scan_barcode_channel.dart';
 import '../../../../Helpers/dialogs/type_dialog.dart';
+import '../../../options/ui/screen/options_screen.dart';
 import '../../../purchaseOrder/models/reference_order_model.dart';
+import '../../bloc/api/reception/reception_state.dart';
 import '../../bloc/barcode/order_barcode_event.dart';
 import '../../bloc/inputs/purchase_order_detail_inputs_bloc.dart';
 import '../../bloc/reception/purchase_order_list_bloc.dart';
@@ -33,6 +37,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   final ScrollController _scrollController = ScrollController();
   late int countFinishOrder= 0;
   late TypeDialog dialog;
+  TextEditingController observationsController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -57,6 +62,14 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
         targetProduct.unitPrice = stateInputProduc.productCost;
         targetProduct.quantity = stateInputProduc.amountReceived;
+        targetProduct.subtotal = stateInputProduc.subtotal;
+        targetProduct.lessQuantityNotes = stateInputProduc.note;
+        targetProduct.discount = stateInputProduc.discount;
+        targetProduct.insertDate = stateInputProduc.inserDate;
+        targetProduct.branchId = widget.referenceOrderModel.branchId;
+        targetProduct.total = stateInputProduc.total;
+        //targetProduct.insertUserId = 1; //Hacerlo dinamico aqui
+
 
        // print("Mi orden de compra anterior ${widget.lstPurchaseOrderDetail.length}");
         context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
@@ -73,6 +86,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
             showDialogInfoInput(productName.first);
+            //showDialogConfirm();
           }
 
 
@@ -87,27 +101,50 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
             if(completePurchaseOrder.isEmpty){
               countFinishOrder++;
               if(countFinishOrder == 1){
-                showDialogConfirm("Orden de compra completada",'Favor de enviar la recepcion');
+                showDialogConfirm();
               }
 
             }
           }
         },
-          child: BlocBuilder<PurchaseOrderListBloc,PurchaseOrderListState>(builder: (contextOrderList, stateOrderList){
-            if(stateOrderList.receptionDetail != null){
-              return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: stateOrderList.receptionDetail!.length,
-                  itemBuilder: (context,index) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height/2.8,
-                      child: CardPurchaseOrderDetail(lstReceptionDetail: stateOrderList.receptionDetail!, index: index,),
-                    );
-                  }
-              );
+          child: BlocListener<ReceptionBloc,ReceptionState>(listener: (contextReception, stateReception){
+            if(stateReception is SaveReceptionState){
+              //print("receptionId ${stateReception.receptionObj?.receptionId}");
+              for (var e in widget.lstReceptionDetail) {
+                e.receptionId = stateReception.receptionObj!.receptionId;
+              }
+              //print("receptionDetail ${widget.lstReceptionDetail.map((e) => e.toJson())}");
+              context.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.lstReceptionDetail));
+
+            }else if(stateReception is ErrorSaveReception){
+              messagesSnackBar(stateReception.errorApi);
             }
-            return Container();
-          }),
+          },
+          child: BlocListener<ReceptionBloc, ReceptionState>(listener: (contextReceptionDetail, stateReceptionDetail){
+            if(stateReceptionDetail is SaveReceptionDetailsState){
+              showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
+            }else if(stateReceptionDetail is ErrorSaveReceptionDetails){
+              messagesSnackBar(stateReceptionDetail.errorApi);
+            }
+          },
+            child: BlocBuilder<PurchaseOrderListBloc,PurchaseOrderListState>(builder: (contextOrderList, stateOrderList){
+              if(stateOrderList.receptionDetail != null){
+                return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: stateOrderList.receptionDetail!.length,
+                    itemBuilder: (context,index) {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height/2.8,
+                        child: CardPurchaseOrderDetail(lstReceptionDetail: stateOrderList.receptionDetail!, index: index,),
+                      );
+                    }
+                );
+              }
+              return Container();
+            }
+            ),
+           ),
+          ),
         ),
       );
     });
@@ -119,28 +156,64 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
     dialog.showDialogInfoInput(receptionDetailModel);
   }
 
-  void showDialogConfirm(String title,String description){
+  void showDialogUpluading(String description){
+     dialog = TypeDialog(
+         context: context,
+         description:description
+     );
+    dialog.showDialogUploading();
+  }
+
+  void showDialogConfirm(){
     dialog =
     TypeDialog(
         context: context,
-        title: title,
-        description: description,
         onOk: (){
           ReceptionModel reception = ReceptionModel(
             receptionTypeId: 1,
             receptionStatusId: 1,
-            purchaseOrderId: widget.referenceOrderModel.orderId
+            purchaseOrderId: widget.referenceOrderModel.orderId,
+            subtotal: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal),
+            iva: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.iva),
+            ieps: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.ieps),
+            discount: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.discount),
+            total: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal + x.iva + x.ieps - x.discount),
+            totalQuantity: widget.lstReceptionDetail.fold(0, (int sum , ReceptionDetailModel x) => sum + x.quantity),
+            notes: observationsController.text,
+            branchId: widget.referenceOrderModel.branchId,
+            //wsapCode: //widget.referenceOrderModel.sapCode, // descomentar cuando ya tengamos el sapcode
+            insertUserId: 1, //Cambiar esto que sea dinamicoa
+            providerReference: widget.referenceOrderModel.providerReference,
+            typeDocumentsReceptionId: widget.referenceOrderModel.typeDocumentId,
           );
-          //int totalQuantity = widget.lstPurchaseOrderDetail.fold(0, (int sum , PurchaseOrderDetailModel x) => sum + x.quantity);
-          //double subtotal = widget.lstPurchaseOrderDetail.fold(0, (double sum , PurchaseOrderDetailModel x) => sum + x.);
-          //double iva = widget.lstPurchaseOrderDetail.fold(0, (double sum , PurchaseOrderDetailModel x) => sum + x.iva);
-          //double ieps = widget.lstPurchaseOrderDetail.fold(0, (double sum , PurchaseOrderDetailModel x) => sum + x.ieps);
-          messagesSnackBar("totalQuantity ${reception.toJson()}");
+          //context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
+          context.read<ReceptionBloc>().add(SaveReceptionEvent(receptionModel: reception));
+          showDialogUpluading("Guardando orden de compra");
+         // messagesSnackBar("reception ${reception.toJson()}");
 
 
-        }
+
+        },
+        observationsController: observationsController
     );
-    dialog.showDialogConfirm();
+    dialog.showDialogConfirmBody();
+  }
+
+  void showDialogSucces(String title, String description) {
+    dialog = TypeDialog(
+      context: context,
+      title: title,
+      description: description,
+      onOk: (){
+        print("Entra a cerrar");
+        //closingDialog();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OptionsScreen()),
+        );
+      }
+    );
+    dialog.showDialogSucces();
   }
 
   void messagesSnackBar(String message){
@@ -150,12 +223,16 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void closingDialog(){
+    Navigator.pop(context);
+  }
+
   void _scrollToEditedCard(int editedCardId) {
     int editedCardIndex = widget.lstReceptionDetail.indexWhere((product) => product.productId == editedCardId);
 
     if (editedCardIndex != -1) {
       _scrollController.animateTo(
-        editedCardIndex * (MediaQuery.of(context).size.height / 2.8),
+        editedCardIndex * (MediaQuery.of(context).size.height/2.8),
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );

@@ -5,11 +5,19 @@ class InputProductCostEvent extends PurchaseOrderDetailInputsEvent{
   final double productCost;
   final int amountreceived;
   final String note;
+  final double subTotal;
+  final double discount;
+  final String inserDate;
+  final double total;
 
   InputProductCostEvent({
     this.id = 0,
     this.productCost = 0.0,
     this.amountreceived = 0,
     this.note = '',
+    this.subTotal = 0.0,
+    this.discount = 0.0,
+    this.inserDate = "",
+    this.total = 0.0,
   });
 }

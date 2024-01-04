@@ -14,6 +14,9 @@ class CardPurchaseOrderDetail extends StatefulWidget {
 class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+    DateTime futureDate = currentDate.add(Duration(days: widget.lstReceptionDetail[widget.index].expiration));
+    String formattedDate = DateFormat('dd/MM/yyyy').format(futureDate);
     return Stack(
       children: [
         Positioned(
@@ -38,13 +41,13 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                     const Row(
+                      Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Text("Cad. Minima: ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
-                            Text('25/03/2023',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
+                            const Text("Cad. Minima: ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+                            Text(formattedDate,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
                           ],
                         ),
                         // InkWell(
@@ -67,7 +70,7 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                   ],
                 )
             )
-        )
+          )
         )
       ],
     );

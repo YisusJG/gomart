@@ -95,83 +95,124 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
                   ),
                 ],
               ),
-              child:  Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10),
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.end,
-                  //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(padding: const EdgeInsets.only(right: 10),
-                      child: Align(alignment: Alignment.centerRight, child:Text(widget.purchaseOrderModel[widget.index].insertDate,
+              child:  Column(
+                children: [
+                  Padding(padding: const EdgeInsets.only(right: 10),
+                    child: Align(alignment: Alignment.centerRight, child:Text(widget.purchaseOrderModel[widget.index].insertDate,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),),
+                  ),
+                  const SizedBox(height: 10,),
+                  Padding(padding: const EdgeInsets.only(right: 10,left: 10),
+                  child: Row(
+                    children: [
+                      const Text('Estatus:  ',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      Text(widget.purchaseOrderModel[widget.index].namePurchaseOrderStatus,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
+                    ],
+                  ),
+                  ),
+                  Padding(padding:  const EdgeInsets.only(right: 10,left: 10),
+                  child: Row(
+                    children: [
+                      const Text('Provedor:  ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                      Expanded(child:  Text(widget.purchaseOrderModel[widget.index].nameProvider,
                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),),
-                    ),
-                    const SizedBox(height: 10,),
-                    Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text('Estatus:  ',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        Text(widget.purchaseOrderModel[widget.index].namePurchaseOrderStatus,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
-                      ],
-                    ),
-                    Row(
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text('Provedor:  ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                        Expanded(child:  Text(widget.purchaseOrderModel[widget.index].nameProvider,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),),
 
-                      ],
-                    ),
-                    Row(
-                      //crossAxisAlignment: CrossAxisAlignment.spaceAround,
-                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text('Tipo de orden:  ',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        Text(widget.purchaseOrderModel[widget.index].namePurchaseOrderType,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
-                      ],
-                    ),
-                    BlocBuilder<CatTypeDocumentReceptionBloc, CatTypeDocumentReceptionState>(builder: (contextDocumentReception,stateDocumentReception){
-                      return Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: (){
-                              showPurchaseOrderDialog(stateDocumentReception.typeDocument!);
-                              //messagesSnackBar("Aqui se mostrara el detalle");
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 100,
-                              //color: Color(getColorHexadecimal(primaryColor)),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.zero,
-                                  bottomLeft: Radius.zero,
-                                  bottomRight: Radius.circular(10.0),
-                                ),
-                                color: Color(getColorHexadecimal(primaryColor)),
-                              ),
-                              //color: Color(getColorHexadecimal(primaryColor)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("Recepcion", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
-                                  const SizedBox(width: 2,),
-                                  Icon(Icons.arrow_forward_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
-                                ],
-                              ),
+                    ],
+                  ),
+                  ),
+                  Padding(padding:  const EdgeInsets.only(right: 10,left: 10),
+                  child:Row(
+                    children: [
+                      const Text('Tipo de orden:  ',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                      Text(widget.purchaseOrderModel[widget.index].namePurchaseOrderType,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
+                    ],
+                  ),
+                  ),
+                  const SizedBox(height: 5,),
+                  BlocBuilder<CatTypeDocumentReceptionBloc, CatTypeDocumentReceptionState>(builder: (contextDocumentReception,stateDocumentReception){
+                    return  Padding(padding: const EdgeInsets.only(right: 0,left: 0),
+                        child:Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                                onTap: (){
+                                  //showPurchaseOrderDialog(stateDocumentReception.typeDocument!);
+                                  showCancelPurchaseOrder();
+                                  //messagesSnackBar("Aqui se va hacer la cancelacion");
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 100,
+                                      //color: Color(getColorHexadecimal(primaryColor)),
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.zero,
+                                          topRight: Radius.circular(20.0),
+                                          bottomLeft: Radius.circular(10.0),
+                                          bottomRight: Radius.zero,
+                                        ),
+                                        color: Color(getColorHexadecimal(colorCancel)),
+                                      ),
+                                      //color: Color(getColorHexadecimal(primaryColor)),
+                                      child: Row(
+                                        //mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Icon(Icons.arrow_back_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
+                                          const SizedBox(width: 2,),
+                                          Text("Cancelar", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
+
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
                             ),
-                          )
-                      );
+                            InkWell(
+                                onTap: (){
+                                  showPurchaseOrderDialog(stateDocumentReception.typeDocument!);
+                                  //messagesSnackBar("Aqui se mostrara el detalle");
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 100,
+                                      //color: Color(getColorHexadecimal(primaryColor)),
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(20.0),
+                                          topRight: Radius.zero,
+                                          bottomLeft: Radius.zero,
+                                          bottomRight: Radius.circular(10.0),
+                                        ),
+                                        color: Color(getColorHexadecimal(primaryColor)),
+                                      ),
+                                      //color: Color(getColorHexadecimal(primaryColor)),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text("Recepcion", style: TextStyle(fontSize: 14, color: Color(getColorHexadecimal(secondaryColor)))),
+                                          const SizedBox(width: 2,),
+                                          Icon(Icons.arrow_forward_ios_sharp,color: Color(getColorHexadecimal(secondaryColor))),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            )
+                          ],
+                        )
 
-                    }),
-
-                  ],
-                ),
-              ),
+                    );
+                  }),
+                ],
+              )
             ),
           ),
         ],
@@ -219,9 +260,10 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
               providerReference: providerReferenceController.text,
             );
             //print("Datos referencia ${referenceOrderModel.typeDocumentId}");
+            closingDialog();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PurchaseOrderDetail(referenceOrderModel: referenceOrderModel,)),
+              MaterialPageRoute(builder: (context) => PurchaseOrderDetailScreen(referenceOrderModel: referenceOrderModel,)),
             );
 
           }
@@ -230,6 +272,11 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
       typeDocumentController: typeDocumentController,
     );
     dialog.showPurchaseReferenceDialog(documentReception);
+  }
+
+  void showCancelPurchaseOrder(){
+    dialog = PurchaseOrderDialog(context: context);
+    dialog.cancelPurchaseOrderDialog();
   }
 
   void messagesSnackBar(String message){

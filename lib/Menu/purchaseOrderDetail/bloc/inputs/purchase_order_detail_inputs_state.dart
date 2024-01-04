@@ -4,11 +4,20 @@ class PurchaseOrderDetailInputsState{
   double productCost;
   int amountReceived;
   String note;
+  double subtotal;
+  double discount;
+  String inserDate;
+  double total;
+
   PurchaseOrderDetailInputsState({
     this.id = 0,
     this.productCost = 0.0,
     this.amountReceived = 0,
     this.note = "",
+    this.subtotal = 0.0,
+    this.discount = 0.0,
+    this.inserDate = "",
+    this.total = 0.0,
   });
 
 }
@@ -19,5 +28,9 @@ class InputProductCostState extends PurchaseOrderDetailInputsState{
     required super.productCost,
     required super.amountReceived,
     required super.note,
+    required super.subtotal,
+    required super.discount,
+    required super.inserDate,
+    required super.total
   });
 }

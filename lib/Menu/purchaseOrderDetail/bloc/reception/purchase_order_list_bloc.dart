@@ -17,6 +17,6 @@ class PurchaseOrderListBloc extends Bloc<PurchaseOrderListEvent, PurchaseOrderLi
 
   void _sumOrderTotalsEvent(SumOrderTotalsEvent event, Emitter<PurchaseOrderListState> emit){
     //print("Cantidad ${event.totalQuantity}");
-    emit(SumOrderTotalsState(totalQuantity: event.totalQuantity, ieps: event.ieps, iva: event.iva, subTotal: event.subTotal, total: event.total));
+    emit(SumOrderTotalsState(totalQuantity: event.totalQuantity, ieps: event.ieps, iva: event.iva, subTotal: event.subTotal, total: event.total, discount: event.discount));
   }
 }
