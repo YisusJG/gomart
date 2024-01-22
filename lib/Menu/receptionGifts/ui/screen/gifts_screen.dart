@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_event.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_state.dart';
-import 'package:gomart/Menu/receptionGifts/bloc/buton/click_button_bloc.dart';
+import 'package:gomart/Menu/receptionGifts/bloc/button/click_button_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/list/gifts_list_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/ui/widgets/card_list_gifts.dart';
 
@@ -15,7 +15,7 @@ import '../../../purchaseOrderDetail/models/reception_detail_model.dart';
 import '../../../purchaseOrderDetail/models/reception_model.dart';
 import '../../../purchaseOrderDetail/repository/purchase_order_datail_repository.dart';
 import '../../bloc/barcode/gifts_barcode_bloc.dart';
-import '../../bloc/buton/click_button_event.dart';
+import '../../bloc/button/click_button_event.dart';
 import '../../bloc/list/gifts_list_event.dart';
 import '../../repository/gifts_repository.dart';
 

@@ -1,13 +1,11 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/gifts/gifts_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/gifts/gifts_event.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/barcode/gifts_barcode_state.dart';
-import 'package:gomart/Menu/receptionGifts/bloc/buton/click_button_bloc.dart';
-import 'package:gomart/Menu/receptionGifts/bloc/buton/click_button_state.dart';
+import 'package:gomart/Menu/receptionGifts/bloc/button/click_button_bloc.dart';
+import 'package:gomart/Menu/receptionGifts/bloc/button/click_button_state.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/list/gifts_list_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/list/gifts_list_state.dart';
 import 'package:gomart/Menu/receptionGifts/ui/widgets/card_gifts.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomart/Menu/inventory/ui/screen/inventory_screen.dart';
 import 'package:gomart/Menu/purchaseOrder/ui/screen/purchase_orders_screen.dart';
 
 import '../../../../Constants/app_colors.dart';
@@ -62,7 +63,10 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
         MaterialPageRoute(builder: (context) => const PurchaseOrdersScreen()),
       );
     }if(option ==2){
-      messagesSnackBar("En desarrollo");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const InventoryScreen()),
+      );
     }
   }
 

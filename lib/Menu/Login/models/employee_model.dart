@@ -15,7 +15,7 @@ class EmployeeModel{
     this.mothersLastName = "",
     this.photo = "",
     this.corporateEmail = "",
-});
+  });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> map){
     return EmployeeModel(

@@ -33,7 +33,7 @@ class PurchaseOrderDetailRepository{
     }
   }
 
-  Future<ReceptionObj>saveReception({required ReceptionModel receptionModel}) async{
+  Future<ReceptionObj> saveReception({required ReceptionModel receptionModel}) async{
     final urlApi = "${Environment().apiGomart}Purchases/save/reception";
     var body = jsonEncode(receptionModel);
     final response = await _api.sendPost(urlApi,body);

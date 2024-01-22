@@ -51,7 +51,7 @@ class _CardPurchaseOrderState extends State<CardPurchaseOrder> {
             right: 100,
             left: 100,
             child: Container(
-              height: 50.0,
+              height: 150.0,
               width: 120,
               decoration: BoxDecoration(
                 color:
