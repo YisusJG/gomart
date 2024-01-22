@@ -22,6 +22,7 @@ class ReceptionDetailModel {
   String insertDate;
   bool visible;
   int expiration;
+  bool isReceived;
 
   ReceptionDetailModel(
       {
@@ -46,6 +47,7 @@ class ReceptionDetailModel {
         this.insertDate = "",
         this.visible = true,
         this.expiration = 0,
+        this.isReceived = false,
       });
 
   factory ReceptionDetailModel.fromJson(Map<String, dynamic> map) {

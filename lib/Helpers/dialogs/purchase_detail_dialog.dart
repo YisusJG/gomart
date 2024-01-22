@@ -177,11 +177,11 @@ class PurchaseDetailDialog {
           // );
           context.read<PurchaseOrderDatailInputsBloc>().add(
             InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived),
-                note:typeNoteDescription,subTotal: subtotal,discount: 0,inserDate: insertDate,total: total),
+                note:typeNoteDescription,subTotal: subtotal,discount: 0,inserDate: insertDate,total: total, isReceived: true),
           );
 
-          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps,
-              iva: receptionDetailModel.iva,subTotal: subtotal,total: 0,discount: 0));
+          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps * int.parse(amountReceived),
+              iva: receptionDetailModel.iva * int.parse(amountReceived),subTotal: subtotal,total: 0,discount: 0));
           Navigator.of(context).pop();
         }
       },

@@ -8,6 +8,7 @@ class PurchaseOrderDetailInputsState{
   double discount;
   String inserDate;
   double total;
+  bool isReceived;
 
   PurchaseOrderDetailInputsState({
     this.id = 0,
@@ -18,6 +19,7 @@ class PurchaseOrderDetailInputsState{
     this.discount = 0.0,
     this.inserDate = "",
     this.total = 0.0,
+    this.isReceived = false,
   });
 
 }
@@ -31,6 +33,7 @@ class InputProductCostState extends PurchaseOrderDetailInputsState{
     required super.subtotal,
     required super.discount,
     required super.inserDate,
-    required super.total
+    required super.total,
+    required super.isReceived
   });
 }

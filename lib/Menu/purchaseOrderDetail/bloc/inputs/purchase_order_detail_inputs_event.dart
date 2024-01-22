@@ -9,6 +9,7 @@ class InputProductCostEvent extends PurchaseOrderDetailInputsEvent{
   final double discount;
   final String inserDate;
   final double total;
+  final bool isReceived;
 
   InputProductCostEvent({
     this.id = 0,
@@ -19,5 +20,6 @@ class InputProductCostEvent extends PurchaseOrderDetailInputsEvent{
     this.discount = 0.0,
     this.inserDate = "",
     this.total = 0.0,
+    this.isReceived = false,
   });
 }

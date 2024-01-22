@@ -26,7 +26,7 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color:widget.lstReceptionDetail[widget.index].quantity == 0 ? Colors.white : Colors.lightGreenAccent,
+                color:!widget.lstReceptionDetail[widget.index].isReceived ? Colors.white : Colors.lightGreenAccent,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(

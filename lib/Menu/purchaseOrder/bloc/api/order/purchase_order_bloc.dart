@@ -11,11 +11,12 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
 
   PurchaseOrderBloc(this.purchaseOrderRepository) :super(PurchaseOrderState()){
     on<LoadPurchaseOrdersEvent>(_purchaseOrderEvent);
+
   }
 
   void _purchaseOrderEvent(LoadPurchaseOrdersEvent event, Emitter<PurchaseOrderState> emit)async{
     try{
-      print('Recupera ordenes');
+     // print('Recupera ordenes');
       emit(StartingPurchaseOrders(purchaseOrderModel: purchaseOrderModel));
       final purchaseOrders = await purchaseOrderRepository.getAllPurchaseOrders();
       emit(LoadPurchaseOrderState(purchaseOrderModel: purchaseOrders));
@@ -23,5 +24,4 @@ class PurchaseOrderBloc extends Bloc<PurchaseOrderEvent, PurchaseOrderState> {
       emit(ErrorLoadingPurchaseOrder(errorApi: e.toString()));
     }
   }
-
 }

@@ -10,6 +10,7 @@ class TypeDialog {
   final VoidCallback? onCancel;
   final VoidCallback? onOk;
   final TextEditingController observationsController;
+  final TextEditingController amounController;
 
   TypeDialog(
       {required this.context,
@@ -18,7 +19,9 @@ class TypeDialog {
         this.onCancel,
         this.onOk,
         TextEditingController? observationsController,
-      }) : observationsController = observationsController ?? TextEditingController();
+        TextEditingController? amountController,
+      }) : observationsController = observationsController ?? TextEditingController()
+         , amounController = amountController ?? TextEditingController();
 
   void showDialogConfirm() {
     AwesomeDialog(
@@ -147,7 +150,7 @@ class TypeDialog {
     ).show();
   }
 
-  void showDialogQuestion() {
+  void showDialogQuestion(String textBtnOk, String textBtnCancel) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.question,
@@ -158,11 +161,65 @@ class TypeDialog {
       title: title,
       desc: description,
       btnCancelOnPress: onCancel,
-      btnCancelText: "Cancelar",
+      btnCancelText: textBtnCancel,
      // btnCancelIcon: Icons.cancel,
       btnOkOnPress: onOk,
-      btnOkText: "Aceptar",
+      btnOkText: textBtnOk,
       //btnOkIcon: Icons.check_circle_rounded,
     ).show();
   }
+
+  void showInputBasicDialog(String productName, String hindText,String btnTextOk, String btnTextCancel) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.leftSlide,
+      showCloseIcon: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      body:  Center(
+        child: Column(
+          children: [
+              Text(productName,
+                 style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black,),textAlign: TextAlign.center,),
+            const SizedBox(height: 10,),
+            TextField(
+              controller: amounController,
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                hintText: '${hindText}s',
+                border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
+                contentPadding:  const EdgeInsets.symmetric(vertical: 15.0),
+              ),
+            ),
+
+          ],
+        ),
+      ),
+      btnCancelOnPress: onCancel,
+      btnCancelText: btnTextCancel,
+      //btnCancelIcon: Icons.cancel,
+      btnOkOnPress: onOk,
+      btnOkText: btnTextOk,
+      //btnOkIcon: Icons.check_circle_rounded,
+    ).show();
+  }
+
+  void showDialogWarning() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      showCloseIcon: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      title: title,
+      desc: description,
+      btnOkIcon: Icons.check_circle_rounded,
+      btnOkText: "Aceptar",
+      btnOkOnPress: () {},
+    ).show();
+  }
+
 }

@@ -10,6 +10,7 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
   ReceptionBloc(this.orderDetailRepository): super (ReceptionState()){
     on<SaveReceptionEvent>(_saveReceptionEvent);
     on<SaveReceptionDetailsEvent>(_saveReceptionDetailsEvent);
+
   }
 
   void _saveReceptionEvent(SaveReceptionEvent event, Emitter<ReceptionState> emit)async{
@@ -33,8 +34,7 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
       //print("ReceptionId ${reception.receptionId}");
 
     }catch(e){
-      emit(ErrorSaveReception(errorApi: e.toString()));
+      emit(ErrorSaveReceptionDetails(errorApi: e.toString()));
     }
   }
-
 }

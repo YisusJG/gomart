@@ -9,8 +9,8 @@ class PurchaseOrderDialog{
   final VoidCallback? onOk;
   final TextEditingController providerReferenceController;
   final TextEditingController typeDocumentController;
-  final TextEditingController descriptionController;
-  final TextEditingController reasonForCancellationController;
+  final TextEditingController descriptionDController;
+  final TextEditingController reasonForCancelDlationController;
 
   PurchaseOrderDialog(
       {required this.context,
@@ -23,8 +23,8 @@ class PurchaseOrderDialog{
       })
       : providerReferenceController = providerCpntroller ?? TextEditingController()
       , typeDocumentController = typeDocumentController ?? TextEditingController()
-      , descriptionController = descriptionController ?? TextEditingController()
-      , reasonForCancellationController = reasonForCancellationController ?? TextEditingController();
+      , descriptionDController = descriptionController ?? TextEditingController()
+      , reasonForCancelDlationController = reasonForCancellationController ?? TextEditingController();
 
   void showPurchaseReferenceDialog(List<TypeDocumentReceptionModel> dropdownItems){
     TypeDocumentReceptionModel? selectedOption;
@@ -118,23 +118,34 @@ class PurchaseOrderDialog{
   void cancelPurchaseOrderDialog(){
     AwesomeDialog(
       context: context,
-      dialogType: DialogType.infoReverse,
+      dialogType: DialogType.warning,
       animType: AnimType.leftSlide,
-      showCloseIcon: false,
+      showCloseIcon: true,
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,
       body:  Center(
         child: Column(
           children: [
-            // const Text("por favor ingresa una observación",
-            //     style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+            const Text("CANCELACION DE LA ORDEN",
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
             const SizedBox(height: 10,),
             TextField(
-              controller: descriptionController,
+              controller: descriptionDController,
               keyboardType: TextInputType.multiline,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 hintText: 'Observaciones',
+                border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
+                contentPadding:  const EdgeInsets.symmetric(vertical: 15.0),
+              ),
+            ),
+            const SizedBox(height: 10,),
+            TextField(
+              controller: reasonForCancelDlationController,
+              keyboardType: TextInputType.multiline,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                hintText: 'Razon de la cancelacion',
                 border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
                 contentPadding:  const EdgeInsets.symmetric(vertical: 15.0),
               ),
@@ -145,7 +156,7 @@ class PurchaseOrderDialog{
       ),
       btnCancelOnPress: onCancel,
       btnCancelText: "Cancelar",
-      btnCancelIcon: Icons.cancel,
+      //btnCancelIcon: Icons.cancel,
       btnOkOnPress: onOk,
       btnOkText: "Aceptar",
       btnOkIcon: Icons.check_circle_rounded,

@@ -194,7 +194,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
           closingDialog();
         }
     );
-    dialog.showDialogQuestion();
+    dialog.showDialogQuestion("Aceptar","Cancelar");
 
   }
 

@@ -7,8 +7,9 @@ import 'package:gomart/Menu/purchaseOrder/bloc/api/order/purchase_order_event.da
 import 'package:gomart/Menu/purchaseOrder/bloc/api/order/purchase_order_state.dart';
 import 'package:gomart/Menu/purchaseOrder/repository/purchase_order_repository.dart';
 import '../../../../Constants/app_colors.dart';
+import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
-import '../../bloc/api/catDocumentReception/cat_type_document_reception_state.dart';
+import '../../bloc/api/cancel/purchase_order_cancel_bloc.dart';
 import '../widgets/card_list_purchase_orders.dart';
 
 class PurchaseOrdersScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class PurchaseOrdersScreen extends StatefulWidget {
 }
 
 class _PurchaseOrdersScreenState extends State<PurchaseOrdersScreen> {
+  late TypeDialog genericDialog;
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -27,30 +29,42 @@ class _PurchaseOrdersScreenState extends State<PurchaseOrdersScreen> {
           providers: [
             BlocProvider<CatTypeDocumentReceptionBloc>(create: (context) => CatTypeDocumentReceptionBloc(RepositoryProvider.of<PurchaseOrderRepository>(context))..add(LoadDocumentReception())),
             BlocProvider<PurchaseOrderBloc>(create: (context) => PurchaseOrderBloc(RepositoryProvider.of<PurchaseOrderRepository>(context))..add(LoadPurchaseOrdersEvent())),
+            BlocProvider<PurchaseOrderCancelBloc>(create: (context) => PurchaseOrderCancelBloc(RepositoryProvider.of<PurchaseOrderRepository>(context)))
           ],
           child: BlocBuilder<PurchaseOrderBloc, PurchaseOrderState>(builder: (contextPurchaseOrder, statePurchaseOrder) {
             if(statePurchaseOrder.purchaseOrderModel != null){ //Descomentar este if para cuando quieras pintar un loading
-              return BlocListener<CatTypeDocumentReceptionBloc, CatTypeDocumentReceptionState>(listener: (contextDocumentReceptionListener, stateDocumentReceptionListener){
-
-              },
-              child: Scaffold(
+              //closingDialog();
+              return Scaffold(
                 appBar: AppBar(
                   title:  Text("Ordeness de compra",style: TextStyle(color: Color(getColorHexadecimal(secondaryColor))),),
                   iconTheme: IconThemeData(color: Color(getColorHexadecimal(secondaryColor))),
                   backgroundColor: Color(getColorHexadecimal(primaryColor)),
                 ),
-                body: const Stack(
+                body: Stack(
                   children: [
-                    CardListPurchaseOrders(),
+                    CardListPurchaseOrders(purchaseOrderModel: statePurchaseOrder.purchaseOrderModel!,),
                   ],
                 ),
-              ),
               );
             }
+           // showDialogUpluading("Cargando ordenes de compra");
+            //return const Placeholder();
             return const CircularProgressIndicator();
 
           })
       ),
     );
+  }
+
+  void showDialogUpluading(String description){
+    genericDialog = TypeDialog(
+        context: context,
+        description:description
+    );
+    genericDialog.showDialogUploading();
+  }
+
+  void closingDialog(){
+    Navigator.pop(context);
   }
 }

@@ -15,3 +15,4 @@ class SaveReceptionDetailsEvent extends ReceptionEvent{
 
   SaveReceptionDetailsEvent({required this.details});
 }
+

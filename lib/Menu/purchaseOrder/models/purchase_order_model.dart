@@ -1,5 +1,6 @@
 class PurchaseOrderModel {
   int id;
+  int providerId;
   int branchId;
   String namePurchaseOrderType;
   String namePurchaseOrderStatus;
@@ -12,6 +13,7 @@ class PurchaseOrderModel {
   PurchaseOrderModel(
       {
         this.id = 0,
+        this.providerId = 0,
         this.branchId = 0,
         this.namePurchaseOrderType ='',
         this.namePurchaseOrderStatus ='',
@@ -25,6 +27,7 @@ class PurchaseOrderModel {
   factory PurchaseOrderModel.fromJson(Map<String, dynamic> map) {
     return PurchaseOrderModel(
     id: map['id'],
+    providerId: map['providerId'],
     branchId: map['branchId'],
     namePurchaseOrderType: map['namePurchaseOrderType'],
     namePurchaseOrderStatus: map['namePurchaseOrderStatus'],
@@ -39,6 +42,7 @@ class PurchaseOrderModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['providerId'] = providerId;
     data['branchId'] = branchId;
     data['namePurchaseOrderType'] = namePurchaseOrderType;
     data['namePurchaseOrderStatus'] = namePurchaseOrderStatus;

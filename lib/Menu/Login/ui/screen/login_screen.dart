@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(builder: (context) => const OptionsScreen()),
                         );
-                        messagesSnackBar("carga completa ${stateLoginListener.employeeModel?.toJson()}");
+                        //messagesSnackBar("carga completa ${stateLoginListener.employeeModel?.toJson()}");
 
                       }else if (stateLoginListener is ErrorLoadValidateLogin){
                         messagesSnackBar(stateLoginListener.errorApi);

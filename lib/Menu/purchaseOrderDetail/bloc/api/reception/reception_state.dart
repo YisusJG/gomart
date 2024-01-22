@@ -22,3 +22,4 @@ class SaveReceptionDetailsState extends ReceptionState{
 class ErrorSaveReceptionDetails extends ReceptionState{
   ErrorSaveReceptionDetails({required super.errorApi});
 }
+

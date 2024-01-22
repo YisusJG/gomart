@@ -21,3 +21,4 @@ class LoadPurchaseOrderState extends PurchaseOrderState{
 class ErrorLoadingPurchaseOrder extends PurchaseOrderState{
   ErrorLoadingPurchaseOrder({required super.errorApi});
 }
+

@@ -10,6 +10,6 @@ class PurchaseOrderDatailInputsBloc extends Bloc<PurchaseOrderDetailInputsEvent,
 
   void _onInputAmountReceivedEvent(InputProductCostEvent event, Emitter<PurchaseOrderDetailInputsState> emit){
     emit(InputProductCostState(productCost: event.productCost, id: event.id, amountReceived: event.amountreceived,
-        note: event.note, subtotal: event.subTotal,discount: event.discount, inserDate: event.inserDate, total: event.total,));
+        note: event.note, subtotal: event.subTotal,discount: event.discount, inserDate: event.inserDate, total: event.total, isReceived: event.isReceived,));
   }
 }

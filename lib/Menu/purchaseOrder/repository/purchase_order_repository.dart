@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:gomart/Api/common_api.dart';
 
 import '../../../Environments/environment.dart';
+import '../../Login/models/error_messaje.dart';
+import '../../purchaseOrderDetail/models/reception_model.dart';
 import '../models/purchase_order_model.dart';
 import '../models/type_document_reception_model.dart';
 
@@ -36,7 +38,7 @@ class PurchaseOrderRepository{
   Future<List<TypeDocumentReceptionModel>>getAllTypeDocumentReceptions() async {
 
     final urlApi = "${Environment().apiGomart}TypeDocumentReception/getAllTypeDocumentReception";
-    print(urlApi);
+   // print(urlApi);
 
     final response = await _api.sendGet(urlApi);
 
@@ -51,6 +53,28 @@ class PurchaseOrderRepository{
       throw ("Error con el servidor");
     } else {
       throw ("${response.reasonPhrase}");
+    }
+  }
+
+  Future<ErrorMessaje>cancelReception({required ReceptionModel receptionModel}) async{
+    final urlApi = "${Environment().apiGomart}Purchases/cancel/reception";
+    var body = jsonEncode(receptionModel);
+    final response = await _api.sendPost(urlApi,body);
+    try {
+      if (response.statusCode == 200){
+        final data = ErrorMessaje.fromJson(json.decode(response.body));
+        //print("DataApi $data");
+        return data;
+      }else if (response.statusCode == 500) {
+        throw ("Error con el servidor");
+      } else if (response.statusCode == 204) {
+        throw ("No existen datos");
+      } else {
+        throw ("${response.reasonPhrase}");
+      }
+    }catch (e) {
+      final data = ErrorMessaje.fromJson(json.decode(response.body));
+      throw (data.messaje);
     }
   }
 }

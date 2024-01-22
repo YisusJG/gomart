@@ -3,6 +3,7 @@ import '../../models/reception_detail_model.dart';
 class PurchaseOrderListState{
   final List<ReceptionDetailModel>? receptionDetail;  //separar el list de las otras variables
   final int totalQuantity;
+  // a qui crear una variable para la cantidad y multiplicacrlo por los ivas
   final double ieps;
   final double iva;
   final double subTotal;

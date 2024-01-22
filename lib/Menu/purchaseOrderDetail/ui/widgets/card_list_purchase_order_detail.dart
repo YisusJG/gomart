@@ -8,6 +8,7 @@ import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/ui/widgets/card_purchase_order_detail.dart';
+import 'package:gomart/Menu/receptionGifts/ui/screen/gifts_screen.dart';
 import '../../../../Helpers/scan_barcode_channel.dart';
 import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../../options/ui/screen/options_screen.dart';
@@ -56,7 +57,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   Widget build(BuildContext context) {
     return BlocBuilder<PurchaseOrderDatailInputsBloc,PurchaseOrderDetailInputsState>(builder: (contextInputProduct,stateInputProduc){
       if(stateInputProduc.id >0){
-        print("hay nota ${stateInputProduc.note}");
+        //print("hay nota ${stateInputProduc.note}");
         ReceptionDetailModel targetProduct = widget.lstReceptionDetail
             .firstWhere((product) => product.productId == stateInputProduc.id);
 
@@ -68,6 +69,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
         targetProduct.insertDate = stateInputProduc.inserDate;
         targetProduct.branchId = widget.referenceOrderModel.branchId;
         targetProduct.total = stateInputProduc.total;
+        targetProduct.isReceived = stateInputProduc.isReceived;
         //targetProduct.insertUserId = 1; //Hacerlo dinamico aqui
 
 
@@ -82,7 +84,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
         var productName = widget.lstReceptionDetail.where((x) => x.barcode == stateBarcodeListener.barcode);
         if(productName.isNotEmpty){
          // print('amount: ${productName.first.amountReceived} qauntity: ${productName.first.unitCost}');
-          if(productName.first.quantity > 0 || productName.first.unitPrice > 0){
+          if(productName.first.isReceived){
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
             showDialogInfoInput(productName.first);
@@ -101,7 +103,8 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
             if(completePurchaseOrder.isEmpty){
               countFinishOrder++;
               if(countFinishOrder == 1){
-                showDialogConfirm();
+                showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
+                //showDialogConfirm();
               }
 
             }
@@ -169,23 +172,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
     TypeDialog(
         context: context,
         onOk: (){
-          ReceptionModel reception = ReceptionModel(
-            receptionTypeId: 1,
-            receptionStatusId: 1,
-            purchaseOrderId: widget.referenceOrderModel.orderId,
-            subtotal: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal),
-            iva: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.iva),
-            ieps: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.ieps),
-            discount: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.discount),
-            total: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal + x.iva + x.ieps - x.discount),
-            totalQuantity: widget.lstReceptionDetail.fold(0, (int sum , ReceptionDetailModel x) => sum + x.quantity),
-            notes: observationsController.text,
-            branchId: widget.referenceOrderModel.branchId,
-            //wsapCode: //widget.referenceOrderModel.sapCode, // descomentar cuando ya tengamos el sapcode
-            insertUserId: 1, //Cambiar esto que sea dinamicoa
-            providerReference: widget.referenceOrderModel.providerReference,
-            typeDocumentsReceptionId: widget.referenceOrderModel.typeDocumentId,
-          );
+          ReceptionModel reception = addPurchaseReception();
           //context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
           context.read<ReceptionBloc>().add(SaveReceptionEvent(receptionModel: reception));
           showDialogUpluading("Guardando orden de compra");
@@ -199,14 +186,33 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
     dialog.showDialogConfirmBody();
   }
 
+  ReceptionModel addPurchaseReception(){
+    ReceptionModel reception = ReceptionModel(
+      receptionTypeId: 1,
+      receptionStatusId: 1,
+      purchaseOrderId: widget.referenceOrderModel.orderId,
+      subtotal: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal),
+      iva: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.iva),
+      ieps: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.ieps),
+      discount: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.discount),
+      total: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal + x.iva + x.ieps - x.discount),
+      totalQuantity: widget.lstReceptionDetail.fold(0, (int sum , ReceptionDetailModel x) => sum + x.quantity),
+      notes: observationsController.text,
+      branchId: widget.referenceOrderModel.branchId,
+      //wsapCode: //widget.referenceOrderModel.sapCode, // descomentar cuando ya tengamos el sapcode
+      insertUserId: 1, //Cambiar esto que sea dinamicoa
+      providerReference: widget.referenceOrderModel.providerReference,
+      typeDocumentsReceptionId: widget.referenceOrderModel.typeDocumentId,
+    );
+    return reception;
+  }
+
   void showDialogSucces(String title, String description) {
     dialog = TypeDialog(
       context: context,
       title: title,
       description: description,
       onOk: (){
-        print("Entra a cerrar");
-        //closingDialog();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const OptionsScreen()),
@@ -221,6 +227,27 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showDialogQuestion(String title, String description){
+    dialog = TypeDialog(
+        context: context,
+        title: title,
+        description: description,
+        onCancel: (){
+          showDialogConfirm();
+        },
+        onOk: (){
+          ReceptionModel purchaseReception = addPurchaseReception();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GiftsScreen(providerId: widget.referenceOrderModel.providerId, purchaseReception: purchaseReception,purchaseReceptionDetail: widget.lstReceptionDetail,)),
+          );
+          //closingDialog();
+        }
+    );
+    dialog.showDialogQuestion("Si","No");
+
   }
 
   void closingDialog(){

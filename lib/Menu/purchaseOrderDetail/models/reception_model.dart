@@ -16,6 +16,7 @@ class ReceptionModel {
   String providerReference;
   int typeDocumentsReceptionId;
   int receptionIncidenceStatusId;
+  String? cancellationReason;
 
   ReceptionModel(
       {
@@ -36,6 +37,7 @@ class ReceptionModel {
         this.providerReference = '',
         this.typeDocumentsReceptionId = 1,
         this.receptionIncidenceStatusId = 0,
+        this.cancellationReason,
       });
 
   factory ReceptionModel.fromJson(Map<String, dynamic> map) {
@@ -57,6 +59,7 @@ class ReceptionModel {
         providerReference: map['providerReference'],
         typeDocumentsReceptionId: map['typeDocumentsReceptionId'],
         receptionIncidenceStatusId: map['receptionIncidenceStatusId'],
+        cancellationReason: map['cancellationReason'],
     );
 
   }
@@ -80,6 +83,7 @@ class ReceptionModel {
     data['providerReference'] = providerReference;
     data['typeDocumentsReceptionId'] = typeDocumentsReceptionId;
     data['receptionIncidenceStatusId'] = receptionIncidenceStatusId;
+    data['cancellationReason'] = cancellationReason;
     return data;
   }
 }
