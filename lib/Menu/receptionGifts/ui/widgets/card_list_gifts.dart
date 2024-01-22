@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/Menu/receptionGifts/bloc/api/gifts/gifts_bloc.dart';
+import 'package:gomart/Menu/receptionGifts/bloc/api/gifts/gifts_event.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/barcode/gifts_barcode_state.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/buton/click_button_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/buton/click_button_state.dart';
@@ -54,12 +56,15 @@ class _CardListGiftsState extends State<CardListGifts> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ReceptionBloc>(create: (context) => ReceptionBloc(RepositoryProvider.of(context)),
+    return MultiBlocProvider(providers:[
+    BlocProvider<ReceptionBloc>(create: (context) => ReceptionBloc(RepositoryProvider.of(context))),
+    BlocProvider<GiftsBloc>(create: (context) => GiftsBloc(RepositoryProvider.of(context))),
+    ],
       child: BlocBuilder<GiftsListBloc,GiftsListState>(builder: (contextGifts, stateGifts){
       if(stateGifts is ListState){
         print("Entra 1");
         return BlocListener<ClickButtonBloc, ClickButtonState>(listener: (contextClick,stateClick){
-          if (stateGifts.receptionGifts!.any((gift) => gift.quantity > 0)) {
+          if (stateGifts.receptionGifts.any((gift) => gift.quantity > 0)) {
             showDialogQuestion(contextClick,"¿Estas seguro de enviar la recepcion?","Recuerda que una ves enviado, ya no se mostrara la orden de compra");
           } else {
             showAlert("Aviso", "Agrega por lo menos un regalo para continuar");
@@ -68,35 +73,39 @@ class _CardListGiftsState extends State<CardListGifts> {
         },
             child: BlocListener<ReceptionBloc,ReceptionState>(listener: (contextReception, stateReception){
               if(stateReception is SaveReceptionState){
+                final giftslist = stateGifts.receptionGifts.where((element) => element.quantity>0).toList();
                 for (var e in widget.purchaseReceptionDetail) {
+                  e.receptionId = stateReception.receptionObj!.receptionId;
+                }
+                print("Regalos ${giftslist.length}");
+                for (var e in giftslist) {
                   e.receptionId = stateReception.receptionObj!.receptionId;
                 }
                 //print("receptionDetail ${widget.lstReceptionDetail.map((e) => e.toJson())}");
                 contextGifts.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.purchaseReceptionDetail));
-
+                contextGifts.read<GiftsBloc>().add(SaveGiftsEvent(receptionGiftsModel: giftslist));
               }else if(stateReception is ErrorSaveReception){
                 messagesSnackBar(stateReception.errorApi);
               }
             },
               child: BlocListener<ReceptionBloc, ReceptionState>(listener: (contextReceptionDetail, stateReceptionDetail){
-                if(stateReceptionDetail is SaveReceptionDetailsState){
-
-                  //showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
+                if(stateReceptionDetail is SaveReceptionDetailsState){  // cambiar esto por el del regalo
+                  showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
                 }else if(stateReceptionDetail is ErrorSaveReceptionDetails){
                   messagesSnackBar(stateReceptionDetail.errorApi);
                 }
               },
                 child: BlocListener<GiftsBarcodeBloc, GiftsBarcodeState>(listener: (contextBarcode,stateBarcode){
                   print("Entra solo al scaner");
-                  showInputBasicDialog(stateGifts.receptionGifts!, stateBarcode.barcode);
+                  showInputBasicDialog(stateGifts.receptionGifts, stateBarcode.barcode);
                 },
                   child: ListView.builder(
                       controller: _scrollController,
-                      itemCount: stateGifts.receptionGifts!.length,
+                      itemCount: stateGifts.receptionGifts.length,
                       itemBuilder: (context,index) {
                         return SizedBox(
                           height: MediaQuery.of(context).size.height/5.5,
-                          child: CardGifts(lsReceptionGifts: stateGifts.receptionGifts!, index: index,),
+                          child: CardGifts(lsReceptionGifts: stateGifts.receptionGifts, index: index,),
                         );
                       }
                   ),
@@ -114,8 +123,13 @@ class _CardListGiftsState extends State<CardListGifts> {
     dialog = TypeDialog(
       context: context,
       onOk:(){
+        DateTime now = DateTime.now();
+        String insertDate = now.toIso8601String();
         if (productIndex != -1) {
           listGift[productIndex].quantity = int.parse(amounController.text);
+          listGift[productIndex].branchId = widget.purchaseReception.branchId;
+          listGift[productIndex].insertDate = insertDate;
+          listGift[productIndex].insertUserId = 1;
           context.read<GiftsListBloc>().add(ListEvent(receptionGifts: listGift));
           _scrollToEditedBarcode(productIndex);
         }

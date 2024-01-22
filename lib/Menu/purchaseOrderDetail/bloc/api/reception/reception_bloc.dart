@@ -28,7 +28,7 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
   void _saveReceptionDetailsEvent(SaveReceptionDetailsEvent event, Emitter<ReceptionState> emit)async{
     try{
       //print("ReceptionDeatils ${event.details.length}");
-      print("receptionDetail ${event.details.map((e) => e.toJson())}");
+      //print("receptionDetail ${event.details.map((e) => e.toJson())}");
       final messageDetails = await orderDetailRepository.saveReceptionDetails(receptionDetail: event.details);
       emit(SaveReceptionDetailsState(message: messageDetails.messaje));
       //print("ReceptionId ${reception.receptionId}");

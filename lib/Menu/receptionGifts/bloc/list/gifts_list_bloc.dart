@@ -4,7 +4,7 @@ import 'package:gomart/Menu/receptionGifts/bloc/list/gifts_list_state.dart';
 
 class GiftsListBloc extends Bloc<GiftsListEvent, GiftsListState>{
 
-  GiftsListBloc():super(GiftsListState()){
+  GiftsListBloc():super(GiftsListState(receptionGifts: [])){
     on<ListEvent>(_listEvent);
   }
 
