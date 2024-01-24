@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:gomart/Api/common_api.dart';
 
 import '../../../Environments/environment.dart';
@@ -26,9 +27,16 @@ class PurchaseOrderRepository{
       //print("data ${data.length}");
       return data;
     }else if(response.statusCode == 500){
+      debugPrint("Error con el servidor para las ordenes si");
       throw ("Error con el servidor");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      debugPrint(response.body);
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      debugPrint(response.body);
+      throw (response.body);
     }
     else {
       throw ("${response.reasonPhrase}");

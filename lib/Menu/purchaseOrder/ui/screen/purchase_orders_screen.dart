@@ -9,6 +9,7 @@ import 'package:gomart/Menu/purchaseOrder/repository/purchase_order_repository.d
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
+import '../../../options/ui/screen/options_screen.dart';
 import '../../bloc/api/cancel/purchase_order_cancel_bloc.dart';
 import '../widgets/card_list_purchase_orders.dart';
 
@@ -31,40 +32,45 @@ class _PurchaseOrdersScreenState extends State<PurchaseOrdersScreen> {
             BlocProvider<PurchaseOrderBloc>(create: (context) => PurchaseOrderBloc(RepositoryProvider.of<PurchaseOrderRepository>(context))..add(LoadPurchaseOrdersEvent())),
             BlocProvider<PurchaseOrderCancelBloc>(create: (context) => PurchaseOrderCancelBloc(RepositoryProvider.of<PurchaseOrderRepository>(context)))
           ],
-          child: BlocBuilder<PurchaseOrderBloc, PurchaseOrderState>(builder: (contextPurchaseOrder, statePurchaseOrder) {
-            if(statePurchaseOrder.purchaseOrderModel != null){ //Descomentar este if para cuando quieras pintar un loading
-              //closingDialog();
-              return Scaffold(
-                appBar: AppBar(
-                  title:  Text("Ordeness de compra",style: TextStyle(color: Color(getColorHexadecimal(secondaryColor))),),
-                  iconTheme: IconThemeData(color: Color(getColorHexadecimal(secondaryColor))),
-                  backgroundColor: Color(getColorHexadecimal(primaryColor)),
-                ),
-                body: Stack(
-                  children: [
-                    CardListPurchaseOrders(purchaseOrderModel: statePurchaseOrder.purchaseOrderModel!,),
-                  ],
-                ),
-              );
+          child: BlocListener<PurchaseOrderBloc, PurchaseOrderState>(listener: (contextPurchase, statePurchase){
+           if (statePurchase is ErrorLoadingPurchaseOrder){
+             //debugPrint("desde ordenes ${statePurchase.errorApi}");
+             messagesSnackBar(statePurchase.errorApi);
+             onBack();
             }
-           // showDialogUpluading("Cargando ordenes de compra");
-            //return const Placeholder();
-            return const CircularProgressIndicator();
+          },
+            child: BlocBuilder<PurchaseOrderBloc, PurchaseOrderState>(builder: (contextPurchaseOrder, statePurchaseOrder) {
+              if(statePurchaseOrder is LoadPurchaseOrderState){
+                //closingDialog();
+                return Scaffold(
+                  appBar: AppBar(
+                    title:  Text("Ordeness de compra",style: TextStyle(color: Color(getColorHexadecimal(secondaryColor))),),
+                    iconTheme: IconThemeData(color: Color(getColorHexadecimal(secondaryColor))),
+                    backgroundColor: Color(getColorHexadecimal(primaryColor)),
+                  ),
+                  body: Stack(
+                    children: [
+                      CardListPurchaseOrders(purchaseOrderModel: statePurchaseOrder.purchaseOrderModel!,),
+                    ],
+                  ),
+                );
+              }
+              return const CircularProgressIndicator();
 
-          })
+            })
+          )
       ),
     );
   }
 
-  void showDialogUpluading(String description){
-    genericDialog = TypeDialog(
-        context: context,
-        description:description
-    );
-    genericDialog.showDialogUploading();
+  void onBack(){
+    Navigator.pop(context);
   }
 
-  void closingDialog(){
-    Navigator.pop(context);
+  void messagesSnackBar(String message){
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -222,4 +222,20 @@ class TypeDialog {
     ).show();
   }
 
+  void showDialogError() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.bottomSlide,
+      showCloseIcon: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      title: title,
+      desc: description,
+      btnOkIcon: Icons.check_circle_rounded,
+      btnOkText: "Aceptar",
+      btnOkOnPress: () {},
+    ).show();
+  }
+
 }

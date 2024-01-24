@@ -60,14 +60,14 @@ class _CardListGiftsState extends State<CardListGifts> {
     ],
       child: BlocBuilder<GiftsListBloc,GiftsListState>(builder: (contextGifts, stateGifts){
       if(stateGifts is ListState){
-        print("Entra 1");
+       // print("Entra 1");
         return BlocListener<ClickButtonBloc, ClickButtonState>(listener: (contextClick,stateClick){
           if (stateGifts.receptionGifts.any((gift) => gift.quantity > 0)) {
             showDialogQuestion(contextClick,"¿Estas seguro de enviar la recepcion?","Recuerda que una ves enviado, ya no se mostrara la orden de compra");
           } else {
             showAlert("Aviso", "Agrega por lo menos un regalo para continuar");
           }
-          print("Entra solo al click");
+          //print("Entra solo al click");
         },
             child: BlocListener<ReceptionBloc,ReceptionState>(listener: (contextReception, stateReception){
               if(stateReception is SaveReceptionState){
@@ -83,14 +83,16 @@ class _CardListGiftsState extends State<CardListGifts> {
                 contextGifts.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.purchaseReceptionDetail));
                 contextGifts.read<GiftsBloc>().add(SaveGiftsEvent(receptionGiftsModel: giftslist));
               }else if(stateReception is ErrorSaveReception){
-                messagesSnackBar(stateReception.errorApi);
+                showError("Error", stateReception.errorApi);
+                //messagesSnackBar(stateReception.errorApi);
               }
             },
               child: BlocListener<ReceptionBloc, ReceptionState>(listener: (contextReceptionDetail, stateReceptionDetail){
                 if(stateReceptionDetail is SaveReceptionDetailsState){  // cambiar esto por el del regalo
                   showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
                 }else if(stateReceptionDetail is ErrorSaveReceptionDetails){
-                  messagesSnackBar(stateReceptionDetail.errorApi);
+                  showAlert("Error", stateReceptionDetail.errorApi);
+                  //messagesSnackBar(stateReceptionDetail.errorApi);
                 }
               },
                 child: BlocListener<GiftsBarcodeBloc, GiftsBarcodeState>(listener: (contextBarcode,stateBarcode){
@@ -213,5 +215,11 @@ class _CardListGiftsState extends State<CardListGifts> {
         }
     );
     dialog.showDialogSucces();
+  }
+
+  void showError(String title, String description){
+    dialog  = TypeDialog(context: context, title: title, description: description);
+    dialog.showDialogError();
+
   }
 }

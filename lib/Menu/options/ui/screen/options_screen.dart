@@ -23,8 +23,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
   Widget build(BuildContext context) {
     return RepositoryProvider(create: (context) => OptionsRepository(),
       child: MultiBlocProvider(providers: [
-        BlocProvider<OptionLocalBloc>(create: (context)=> OptionLocalBloc(RepositoryProvider.of<OptionsRepository>(context))..add(GetBranchEvent(branchEntity: null)),
-        )
+        BlocProvider<OptionLocalBloc>(create: (context)=> OptionLocalBloc(RepositoryProvider.of<OptionsRepository>(context))..add(GetBranchEvent(branchEntity: null)))
       ],
           child: BlocBuilder<OptionLocalBloc,OptionLocalState>(builder: (contextOption,stateOption){
             return PopScope(
