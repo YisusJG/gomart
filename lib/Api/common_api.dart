@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'package:gomart/Menu/Login/models/error_messaje.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -26,15 +28,28 @@ class CommonApi {
       if (_token != null) {
         final response = await http.post(url, headers: {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'},
             body: body).timeout(_timeoutDuration,);
+        try{
+          ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
+          return http.Response(messageApi.messaje,1010);
+        }catch(e){
+          e.toString();
+        }
         return response;
       } else {
         final response = await http.post(url, headers: {'Content-Type': 'application/json'}, body: body).timeout(_timeoutDuration);
+        try{
+          ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
+          return http.Response(messageApi.messaje,1010);
+        }catch(e){
+          e.toString();
+        }
         return response;
       }
     }on TimeoutException{
       return http.Response("No es posible obtener datos. Por favor conectate a una red de gomart", 1000);
     }on SocketException catch (e) {
-      return http.Response("En este momento no tienes conexion", 1001);
+      e.toString();
+      return http.Response("En este momento no tienes internet", 1001);
     } catch(e){
       return http.Response(e.toString(), 500);
     }
@@ -48,15 +63,28 @@ class CommonApi {
       if (_token != null) {
         final response = await http.post(url, headers: {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'})
             .timeout(_timeoutDuration);
+        try{
+          ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
+          return http.Response(messageApi.messaje,1010);
+        }catch(e){
+          e.toString();
+        }
         return response;
       } else {
         final response = await http.get(url, headers: {'Content-Type': 'application/json'}).timeout(_timeoutDuration);
+        try{
+          ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
+          return http.Response(messageApi.messaje,1010);
+        }catch(e){
+          e.toString();
+        }
         return response;
       }
     }on TimeoutException{
       return http.Response("No es posible obtener datos. Por favor conectate a una red de gomart", 1000);
     }on SocketException catch (e) {
-      return http.Response("En este momento no tienes conexion", 1001);
+      e.toString();
+      return http.Response("En este momento no tienes internet", 1001);
     } on HttpException catch (e) {
       return http.Response(e.toString(), 1002);
     } catch(e){

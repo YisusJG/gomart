@@ -56,7 +56,14 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                       purchaseOrderId: widget.referenceOrderModel.orderId))),
             BlocProvider<ReceptionBloc>(create: (context) => ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context)))
           ],
-          child: BlocBuilder<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(
+          child: BlocListener<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(listener: (contextOrderDetail, stateOrderDetail){
+            if (stateOrderDetail is ErrorPurchaseOrderDetail){
+              //debugPrint("desde ordenes ${statePurchase.errorApi}");
+              messagesSnackBar(stateOrderDetail.errorApi);
+              onBack();
+            }
+
+          }, child: BlocBuilder<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(
               builder: (contextOrderDetail, stateOrderDetail) {
             if (stateOrderDetail.receptionDetail != null) {
               return PopScope(
@@ -160,7 +167,9 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
               );
             }
             return const CircularProgressIndicator();
-          })),
+          })
+      ),
+    )
     );
   }
 
@@ -199,6 +208,9 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
   }
 
   void closingDialog(){
+    Navigator.pop(context);
+  }
+  void onBack(){
     Navigator.pop(context);
   }
 }

@@ -83,8 +83,9 @@ class _CardListGiftsState extends State<CardListGifts> {
                 contextGifts.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.purchaseReceptionDetail));
                 contextGifts.read<GiftsBloc>().add(SaveGiftsEvent(receptionGiftsModel: giftslist));
               }else if(stateReception is ErrorSaveReception){
-                showError("Error", stateReception.errorApi);
-                //messagesSnackBar(stateReception.errorApi);
+                messagesSnackBar(stateReception.errorApi);
+                closingDialog();
+                showDialogConfirm(contextGifts);
               }
             },
               child: BlocListener<ReceptionBloc, ReceptionState>(listener: (contextReceptionDetail, stateReceptionDetail){
@@ -221,5 +222,9 @@ class _CardListGiftsState extends State<CardListGifts> {
     dialog  = TypeDialog(context: context, title: title, description: description);
     dialog.showDialogError();
 
+  }
+
+  void closingDialog(){
+    Navigator.pop(context);
   }
 }

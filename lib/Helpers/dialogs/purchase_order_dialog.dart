@@ -45,6 +45,35 @@ class PurchaseOrderDialog{
             const Text("REFERENCIA DE LA ORDEN",
                 style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black26)),
             const SizedBox(height: 20,),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 1),
+                  borderRadius: BorderRadius.circular(15)
+              ),
+              child: DropdownButtonFormField<TypeDocumentReceptionModel>(
+                hint: const Text('Tipo de documento'),
+                value: selectedOption,
+                isExpanded: true,
+                padding: const EdgeInsets.only(left: 8),
+                alignment: Alignment.center,
+                //underline: const SizedBox(),
+                borderRadius: BorderRadius.circular(10),
+                items: dropdownItems.map((TypeDocumentReceptionModel value){
+                  return DropdownMenuItem<TypeDocumentReceptionModel>(
+                      value: value,
+                      child: Text(value.name));
+                }).toList(),
+                onChanged: (TypeDocumentReceptionModel? newValue){
+                  typeDocumentController.text = newValue?.id.toString() ?? '';
+                  selectedOption = newValue;
+                  //print("Valor del tipeDocument ${selectedOption!.id}");
+                },
+                decoration: const InputDecoration(
+                    border: InputBorder.none
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
             TextField(
               controller: providerReferenceController,
               keyboardType: TextInputType.text,
@@ -68,38 +97,6 @@ class PurchaseOrderDialog{
                 // ),
               ),
             ),
-            const SizedBox(height: 10,),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 1),
-                borderRadius: BorderRadius.circular(15)
-              ),
-              child: DropdownButtonFormField<TypeDocumentReceptionModel>(
-                  hint: const Text('Tipo de documento'),
-                  value: selectedOption,
-                  isExpanded: true,
-                  padding: const EdgeInsets.only(left: 8),
-                  alignment: Alignment.center,
-                  //underline: const SizedBox(),
-                  borderRadius: BorderRadius.circular(10),
-                  items: dropdownItems.map((TypeDocumentReceptionModel value){
-                    return DropdownMenuItem<TypeDocumentReceptionModel>(
-                        value: value,
-                        child: Text(value.name));
-                  }).toList(),
-                  onChanged: (TypeDocumentReceptionModel? newValue){
-                    typeDocumentController.text = newValue?.id.toString() ?? '';
-                    selectedOption = newValue;
-                    //print("Valor del tipeDocument ${selectedOption!.id}");
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none
-                  ),
-                ),
-            ),
-
-
-
           ],
         ),
       ),

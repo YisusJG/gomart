@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/models/reception_obj.dart';
 
 import '../../../Api/common_api.dart';
@@ -13,20 +14,22 @@ class PurchaseOrderDetailRepository{
   final _api = CommonApi();
 
   Future<List<PurchaseOrderDetailModel>>getPurchaseOrderDetail({required int purchaseOrderId})async{
-    final urlApi = "${Environment().apiGomart}Purchases/getPurchasesOrderDetail/purchaseOrderId/$purchaseOrderId";
-    //print("LLEga $urlApi");
+    final urlApi = "${Environment().apiGomart}Purchases/getPurchasesOrderDetail/purchaseOrderId/$purchaseOrderId"; //30076     6767
     final response = await _api.sendGet(urlApi);
-
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       List<PurchaseOrderDetailModel> data = jsonData.map((map) => PurchaseOrderDetailModel.fromJson(map)).toList();
-      //print("Data orders ${data.map((e) => e.toJson())}");
-      //print("data ${data.length}");
       return data;
-    }else if(response.statusCode == 500){   //Revisar como se recupera el mensaje de error como en el login
+    }else if(response.statusCode == 500){
       throw ("Error con el servidor");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
+    }else if(response.statusCode == 1010){
+      throw (response.body);
     }
     else {
       throw ("${response.reasonPhrase}");
@@ -37,44 +40,46 @@ class PurchaseOrderDetailRepository{
     final urlApi = "${Environment().apiGomart}Purchases/save/reception";
     var body = jsonEncode(receptionModel);
     final response = await _api.sendPost(urlApi,body);
-    try {
       if (response.statusCode == 200){
-        final data = ReceptionObj.fromJson(json.decode(response.body));
-         //print("DataApi $data");
+        final dynamic jsonData = jsonDecode(response.body);
+        ReceptionObj data = ReceptionObj.fromJson(jsonData);
         return data;
       }else if (response.statusCode == 500) {
         throw ("Error con el servidor");
       } else if (response.statusCode == 204) {
         throw ("No existen datos");
-      } else {
+      } else if(response.statusCode == 1000){
+        throw (response.body);
+      }else if(response.statusCode == 1001){
+        throw (response.body);
+      }
+      else {
         throw ("${response.reasonPhrase}");
       }
-    }catch (e) {
-      final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.messaje);
-    }
   }
 
   Future<ErrorMessaje>saveReceptionDetails({required List<ReceptionDetailModel> receptionDetail}) async{
     final urlApi = "${Environment().apiGomart}Purchases/save/receptionDetails";
     var body = jsonEncode(receptionDetail);
     final response = await _api.sendPost(urlApi,body);
-    try {
+
       if (response.statusCode == 200){
         final data = ErrorMessaje.fromJson(json.decode(response.body));
-        //print("DataApi $data");
         return data;
       }else if (response.statusCode == 500) {
         throw ("Error con el servidor");
       } else if (response.statusCode == 204) {
         throw ("No existen datos");
-      } else {
+      } else if(response.statusCode == 1000){
+        debugPrint(response.body);
+        throw (response.body);
+      }else if(response.statusCode == 1001){
+        debugPrint(response.body);
+        throw (response.body);
+      }
+      else {
         throw ("${response.reasonPhrase}");
       }
-    }catch (e) {
-      final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.messaje);
-    }
   }
 
 }

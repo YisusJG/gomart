@@ -120,13 +120,17 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
               context.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.lstReceptionDetail));
 
             }else if(stateReception is ErrorSaveReception){
+              // solo provar cuando noe stemo en la red
               messagesSnackBar(stateReception.errorApi);
+              closingDialog();
+              showDialogConfirm();
             }
           },
           child: BlocListener<ReceptionBloc, ReceptionState>(listener: (contextReceptionDetail, stateReceptionDetail){
             if(stateReceptionDetail is SaveReceptionDetailsState){
               showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
             }else if(stateReceptionDetail is ErrorSaveReceptionDetails){
+              debugPrint("Entra en en list 2");
               messagesSnackBar(stateReceptionDetail.errorApi);
             }
           },
