@@ -9,8 +9,11 @@ import 'package:gomart/Menu/inventory/bloc/api/productCategories/product_cetegor
 import 'package:gomart/Menu/inventory/bloc/api/productCategories/product_categories_state.dart';
 import 'package:gomart/Menu/inventory/bloc/api/productsByCategory/products_by_category_bloc.dart';
 import 'package:gomart/Menu/inventory/bloc/api/productsByCategory/products_by_category_event.dart';
+import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_bloc.dart';
+import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_event.dart';
 import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_bloc.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_model.dart';
+import 'package:gomart/Menu/inventory/model/branch_inventory_product_model.dart';
 import 'package:gomart/Menu/inventory/model/product_category_model.dart';
 import 'package:gomart/Menu/inventory/repository/inventory_repository.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -29,6 +32,7 @@ import '../../bloc/input/input_add_amount_state.dart';
 import '../../bloc/list/products_inventory_list_bloc.dart';
 import '../../bloc/list/products_inventory_list_event.dart';
 import '../../bloc/list/products_inventory_list_state.dart';
+import '../../model/branch_inventory_id.dart';
 import '../../model/product_model.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -67,7 +71,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             BlocProvider<ProductsInventoryListBloc>(
                 create: (context) => ProductsInventoryListBloc()),
-
+            BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc()),
           ],
           child: BlocBuilder<ProductCategoriesBloc, ProductCategoriesState>(
               builder: (contextInventory, stateInventory) {
@@ -85,31 +89,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: IconButton(
                             onPressed: () {
-                              showDialogConfirm(
-                                  title: "¿Deseas guardar el inventario?",
-                                  description:
-                                      "No podras modificar el inventario",
-                                  onOK: () {
-                                    /*BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextBranchInventory, stateBranchInventory){
-                                      if (stateBranchInventory is SaveBranchInventoryState){
-                                        context.read<BranchInventoryBloc>().add(SaveBranchInventoryEvent(branchInventoryModel: BranchInventoryModel(name: 'G100')));
-                                      } else if (stateBranchInventory is ErrorSaveBranchInventory){
-                                        messagesSnackBar(stateBranchInventory.errorApi);
-                                      }
-                                    });*/
-                                    BranchInventoryModel branchInventoryModel = BranchInventoryModel(name: 'G100');
-                                    context.read<BranchInventoryBloc>().add(SaveBranchInventoryEvent(branchInventoryModel: branchInventoryModel));
-
-                                  },
-                                  onCancel: () {
-
-                                  });
+                              contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
                             },
                             icon: Icon(
                               Icons.save_sharp,
                               color: Colors.white,
                               size: 30,
-                            )),
+                            )
+                        ),
                       )
                     ],
                     iconTheme: IconThemeData(
@@ -129,106 +116,103 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                     "${product.name} : ${product.physicalInventory}");
                               });
                             }
-                            return BlocBuilder<InputAddAmountBloc, InputAddAmountState>(builder: (contextInputAmout, stateInputAmout) {
-                              return DropdownSearch<ProductCategoryModel>(
-                                  selectedItem: _selectedProductCategory,
-                                  popupProps: PopupProps.menu(
-                                      showSearchBox: true,
-                                      showSelectedItems: false,
-                                      searchFieldProps: TextFieldProps(
-                                          decoration: InputDecoration(
-                                            hintText: "Buscar categoria",
-                                            hintStyle: TextStyle(color: Colors.grey),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(color: Colors.grey),
-                                              borderRadius: BorderRadius.circular(20),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide:
-                                              BorderSide(color: Colors.grey),
-                                              borderRadius: BorderRadius.circular(20),
-                                            ),
-                                          ))),
-                                  items: stateInventory.productCategoryModel!,
-                                  itemAsString: (ProductCategoryModel u) => u.name,
-                                  onChanged: (ProductCategoryModel? value) {
-                                    print(value?.toJson());
-                                    /*setState(() {
+                            return DropdownSearch<ProductCategoryModel>(
+                                selectedItem: _selectedProductCategory,
+                                popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    showSelectedItems: false,
+                                    searchFieldProps: TextFieldProps(
+                                        decoration: InputDecoration(
+                                          hintText: "Buscar categoria",
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.grey),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide:
+                                            BorderSide(color: Colors.grey),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                        ))),
+                                items: stateInventory.productCategoryModel!,
+                                itemAsString: (ProductCategoryModel u) => u.name,
+                                onChanged: (ProductCategoryModel? value) {
+                                  print(value?.toJson());
+                                  /*setState(() {
                                   _selectedProductCategory = value;
                                 });
 
                                 print(
                                     "El selected es ${_selectedProductCategory?.toJson()}");*/
 
-                                    if (_selectedProductCategory == null) {
-                                      setState(() {
-                                        //categoryId = value!.id;
-                                        //previousValue = value.name;
-                                        _selectedProductCategory = value;
-                                      });
-                                    } else {
-                                      if (listProductModel != null) {
-                                        if (listProductModel!.any((product) => product.physicalInventory != 0)) {
-                                          showDialogConfirm(
-                                              title: "Ya tienes productos en tu inventario",
-                                              description: "Se borraran los productos inventariados",
-                                              onOK: (){
-                                                print("En el ok es ${_selectedProductCategory?.toJson()}");
-                                                //previousValue = value!.name;
-                                                //categoryId = value.id;
-                                                listProductModel?.clear();
-                                                contextProductsInventory.read<ProductsInventoryListBloc>().add(ListProductModelEvent(listProductModel: null));
-                                                contextInputAmout.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
-                                                //context.read<InputAddAmountBloc>().add(InputAmountEvent(id: 0, amount: 0));
-                                                setState(() {
+                                  if (_selectedProductCategory == null) {
+                                    setState(() {
+                                      //categoryId = value!.id;
+                                      //previousValue = value.name;
+                                      _selectedProductCategory = value;
+                                    });
+                                  } else {
+                                    if (listProductModel != null) {
+                                      if (listProductModel!.any((product) => product.physicalInventory != 0)) {
+                                        showDialogConfirm(
+                                            title: "Ya tienes productos en tu inventario",
+                                            description: "Se borraran los productos inventariados",
+                                            onOK: (){
+                                              print("En el ok es ${_selectedProductCategory?.toJson()}");
+                                              //previousValue = value!.name;
+                                              //categoryId = value.id;
+                                              listProductModel?.clear();
+                                              contextProductsInventory.read<ProductsInventoryListBloc>().add(ListProductModelEvent(listProductModel: null));
+                                              contextProductsInventory.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
+                                              setState(() {
                                                 _selectedProductCategory = value;
-                                                  });
-                                                print("Antes del clear es ${listProductModel?.length}");
-
-                                                //print("Despues del clear es ${listProductModel?.length}");
-
-
-                                              },
-                                              onCancel: (){
-                                                print("En el cancel es ${_selectedProductCategory?.toJson()}");
-                                                setState(() {
-                                                  //value!.name = previousValue;
-                                                  value = _selectedProductCategory;
-                                                });
                                               });
-                                        } else {
-                                          setState(() {
-                                            //categoryId = value!.id;
-                                            //previousValue = value.name;
-                                            _selectedProductCategory = value;
-                                          });
-                                        }
+                                              print("Antes del clear es ${listProductModel?.length}");
+
+                                              //print("Despues del clear es ${listProductModel?.length}");
+
+
+                                            },
+                                            onCancel: (){
+                                              print("En el cancel es ${_selectedProductCategory?.toJson()}");
+                                              setState(() {
+                                                //value!.name = previousValue;
+                                                value = _selectedProductCategory;
+                                              });
+                                            });
                                       } else {
                                         setState(() {
                                           //categoryId = value!.id;
                                           //previousValue = value.name;
-                                          _selectedProductCategory == value;
+                                          _selectedProductCategory = value;
                                         });
                                       }
+                                    } else {
+                                      setState(() {
+                                        //categoryId = value!.id;
+                                        //previousValue = value.name;
+                                        _selectedProductCategory == value;
+                                      });
                                     }
-                                  },
-                                  // print,
-                                  //(ProductCategoryModel? data) => print(data?.name),
-                                  dropdownDecoratorProps: DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      labelText: "Seleccion una Categoria",
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
+                                  }
+                                },
+                                // print,
+                                //(ProductCategoryModel? data) => print(data?.name),
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    labelText: "Seleccion una Categoria",
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                  ));
-                            });
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ));
                           /*return DropdownSearch<ProductCategoryModel>(
                               selectedItem: _selectedProductCategory,
                               popupProps: PopupProps.menu(

@@ -10,7 +10,7 @@ class BranchInventoryModel {
 
   BranchInventoryModel({
     this.name = "",
-    this.inventoryId = 0,
+    this.inventoryId,
     this.productCategoryId = 0,
     this.branchId = 0,
     this.branchInventoryStatusId = 0,
@@ -19,7 +19,7 @@ class BranchInventoryModel {
     this.insertUserId = 0
   });
 
-  factory BranchInventoryModel.fromJsonn(Map<String, dynamic> map){
+  factory BranchInventoryModel.fromJson(Map<String, dynamic> map){
     return BranchInventoryModel(
       name: map["name"],
       inventoryId: map["inventoryId"],

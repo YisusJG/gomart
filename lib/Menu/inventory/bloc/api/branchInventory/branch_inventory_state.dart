@@ -17,7 +17,15 @@ class SaveBranchInventoryState extends BranchInventoryState {
   SaveBranchInventoryState({required super.branchInventoryId});
 }
 
+class SaveBranchInventoryProductState extends BranchInventoryState {
+  SaveBranchInventoryProductState({required super.message});
+}
+
 class ErrorSaveBranchInventory extends BranchInventoryState {
   ErrorSaveBranchInventory({required super.errorApi});
+}
+
+class ErrorSaveBranchProductInventory extends BranchInventoryState {
+  ErrorSaveBranchProductInventory({required super.errorApi});
 }
 

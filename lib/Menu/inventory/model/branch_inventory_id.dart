@@ -1,5 +1,4 @@
 class BranchInventoryId {
-
   final int branchInventoryId;
 
   BranchInventoryId({

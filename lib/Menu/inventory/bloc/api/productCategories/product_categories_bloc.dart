@@ -16,7 +16,6 @@ class ProductCategoriesBloc extends Bloc<ProductCategoriesEvent, ProductCategori
     try {
       emit(StartingProductCategory(productCategoryModel: productCategoryModel));
       final productCategories = await inventoryRepository.getProductCategories();
-      print("entra a bloc");
       emit(LoadProductCategory(productCategoryModel: productCategories));
     }catch(e){
       emit(ErrorLoadingProductCategory(errorApi: e.toString()));
