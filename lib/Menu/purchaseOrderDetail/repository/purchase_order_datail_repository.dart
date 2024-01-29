@@ -18,7 +18,9 @@ class PurchaseOrderDetailRepository{
     final response = await _api.sendGet(urlApi);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
+      print("Data orders $jsonData");
       List<PurchaseOrderDetailModel> data = jsonData.map((map) => PurchaseOrderDetailModel.fromJson(map)).toList();
+      print("respuesta api $data");
       return data;
     }else if(response.statusCode == 500){
       throw ("Error con el servidor");

@@ -1,3 +1,5 @@
+import 'ProductBarCodes.dart';
+
 class PurchaseOrderDetailModel {
   int id;
   int purchaseOrderId;
@@ -14,6 +16,7 @@ class PurchaseOrderDetailModel {
   double iva;
   double roundingValue;
   int expiration;
+  List<ProductBarCodes>? productBarCodes;
 
   PurchaseOrderDetailModel(
       {
@@ -32,6 +35,7 @@ class PurchaseOrderDetailModel {
         this.iva = 0.0,
         this.roundingValue = 0.0,
         this.expiration = 0,
+        this.productBarCodes,
       });
 
   factory PurchaseOrderDetailModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +55,10 @@ class PurchaseOrderDetailModel {
       iva: json['iva'],
       roundingValue: json['roundingValue'],
       expiration: json['expiration'],
+      productBarCodes: json['productBarCodes'] != null
+          ? List<ProductBarCodes>.from(json['productBarCodes']
+          .map((dynamic item) => ProductBarCodes.fromJson(item)))
+          : null,
     );
   }
 
@@ -72,6 +80,10 @@ class PurchaseOrderDetailModel {
     data['iva'] = iva;
     data['roundingValue'] = roundingValue;
     data['expiration'] = expiration;
+    if (productBarCodes != null) {
+      data['productBarCodes'] =
+          productBarCodes!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 

@@ -1,5 +1,7 @@
 import 'package:gomart/Menu/purchaseOrderDetail/models/purchase_order_detail_model.dart';
 
+import 'ProductBarCodes.dart';
+
 class ReceptionDetailModel {
   int receptionId;
   int productId;
@@ -23,6 +25,7 @@ class ReceptionDetailModel {
   bool visible;
   int expiration;
   bool isReceived;
+  List<ProductBarCodes>? productBarCodes;
 
   ReceptionDetailModel(
       {
@@ -48,6 +51,7 @@ class ReceptionDetailModel {
         this.visible = true,
         this.expiration = 0,
         this.isReceived = false,
+        this.productBarCodes,
       });
 
   factory ReceptionDetailModel.fromJson(Map<String, dynamic> map) {
