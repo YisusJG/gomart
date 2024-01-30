@@ -11,6 +11,7 @@ import 'package:gomart/Menu/inventory/bloc/api/productsByCategory/products_by_ca
 import 'package:gomart/Menu/inventory/bloc/api/productsByCategory/products_by_category_event.dart';
 import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_bloc.dart';
 import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_event.dart';
+import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_state.dart';
 import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_bloc.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_model.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_product_model.dart';
@@ -34,6 +35,7 @@ import '../../bloc/list/products_inventory_list_event.dart';
 import '../../bloc/list/products_inventory_list_state.dart';
 import '../../model/branch_inventory_id.dart';
 import '../../model/product_model.dart';
+import '../widget/card_list_products_by_category_detail.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -58,11 +60,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
           providers: [
             BlocProvider<ProductCategoriesBloc>(
                 create: (context) => ProductCategoriesBloc(
-                    RepositoryProvider.of<InventoryRepository>(context))
-                  ..add(LoadProductCategoriesEvent())),
+                    RepositoryProvider.of<InventoryRepository>(context)
+                )
+                  ..add(LoadProductCategoriesEvent())
+            ),
             BlocProvider<ProductsByCategoryBloc>(
                 create: (context) => ProductsByCategoryBloc(
-                    RepositoryProvider.of<InventoryRepository>(context))),
+                    RepositoryProvider.of<InventoryRepository>(context)
+                )
+            ),
             BlocProvider<InventoryBarcodeBloc>(
               create: (context) => InventoryBarcodeBloc(),
             ),
@@ -70,54 +76,57 @@ class _InventoryScreenState extends State<InventoryScreen> {
               create: (context) => InputAddAmountBloc(),
             ),
             BlocProvider<ProductsInventoryListBloc>(
-                create: (context) => ProductsInventoryListBloc()),
-            //BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc()),
+                create: (context) => ProductsInventoryListBloc()
+            ),
+            BlocProvider<ClickButtonSaveInventoryBloc>(
+                create: (context) => ClickButtonSaveInventoryBloc(),
+            ),
           ],
-          child: BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc(),
           child: BlocBuilder<ProductCategoriesBloc, ProductCategoriesState>(
               builder: (contextInventory, stateInventory) {
             if (stateInventory.productCategoryModel != null) {
-              return Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                      "Inventario",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+              return BlocBuilder<ClickButtonSaveInventoryBloc, ClickButtonSaveInventoryState>(builder: (contextClick, stateClick){
+                return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                        "Inventario",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Color(getColorHexadecimal(secondaryColor))),
+                      ),
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: IconButton(
+                              onPressed: () {
+                                //BlocProvider.of<ClickButtonSaveInventoryBloc>(contextInventory).add(ButtonSaveInventoryEvent());
+                                contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
+                              },
+                              icon: const Icon(
+                                Icons.save_sharp,
+                                color: Colors.white,
+                                size: 30,
+                              )
+                          ),
+                        )
+                      ],
+                      iconTheme: IconThemeData(
                           color: Color(getColorHexadecimal(secondaryColor))),
+                      backgroundColor: Color(getColorHexadecimal(primaryColor)),
                     ),
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconButton(
-                            onPressed: () {
-                              //BlocProvider.of<ClickButtonSaveInventoryBloc>(context).add(ButtonSaveInventoryEvent());
-                              contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
-                            },
-                            icon: const Icon(
-                              Icons.save_sharp,
-                              color: Colors.white,
-                              size: 30,
-                            )
-                        ),
-                      )
-                    ],
-                    iconTheme: IconThemeData(
-                        color: Color(getColorHexadecimal(secondaryColor))),
-                    backgroundColor: Color(getColorHexadecimal(primaryColor)),
-                  ),
-                  body: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: BlocBuilder<ProductsInventoryListBloc,ProductsInventoryListState>(builder: (contextProductsInventory,stateProductsInventory) {
+                    body: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: BlocBuilder<ProductsInventoryListBloc,ProductsInventoryListState>(builder: (contextProductsInventory,stateProductsInventory) {
                             listProductModel = stateProductsInventory.listProductModel;
-                            if (listProductModel != null) {
+                            /*if (listProductModel != null) {
                               listProductModel?.forEach((product) {
                                 print(
                                     "${product.name} : ${product.physicalInventory}");
                               });
-                            }
+                            }*/
                             return DropdownSearch<ProductCategoryModel>(
                                 selectedItem: _selectedProductCategory,
                                 popupProps: PopupProps.menu(
@@ -215,7 +224,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                     ),
                                   ),
                                 ));
-                          /*return DropdownSearch<ProductCategoryModel>(
+                            /*return DropdownSearch<ProductCategoryModel>(
                               selectedItem: _selectedProductCategory,
                               popupProps: PopupProps.menu(
                                   showSearchBox: true,
@@ -315,20 +324,22 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           }),
                         ),
 
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      if (_selectedProductCategory != null)
-                        CardListProductsByCategory(selectedProductCategory: _selectedProductCategory!),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        if (_selectedProductCategory != null)
+                          CardListProductsByCategory(selectedProductCategory: _selectedProductCategory!),
 
-                    ],
-                  ));
+                      ],
+                    ));
+              });
+
             }
             return const Center(
               child: CircularProgressIndicator(),
             );
           })),
-    ));
+    );
   }
 
   void showDialogConfirm(

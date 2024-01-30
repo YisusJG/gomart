@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 class ClickButtonSaveInventoryState{
-  final VoidCallback? onClick;
+  final void Function()? onClick;
 
   ClickButtonSaveInventoryState({
     this.onClick
