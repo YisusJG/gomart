@@ -71,8 +71,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             BlocProvider<ProductsInventoryListBloc>(
                 create: (context) => ProductsInventoryListBloc()),
-            BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc()),
+            //BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc()),
           ],
+          child: BlocProvider<ClickButtonSaveInventoryBloc>(create: (context) => ClickButtonSaveInventoryBloc(),
           child: BlocBuilder<ProductCategoriesBloc, ProductCategoriesState>(
               builder: (contextInventory, stateInventory) {
             if (stateInventory.productCategoryModel != null) {
@@ -89,9 +90,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         padding: const EdgeInsets.only(right: 10.0),
                         child: IconButton(
                             onPressed: () {
+                              //BlocProvider.of<ClickButtonSaveInventoryBloc>(context).add(ButtonSaveInventoryEvent());
                               contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.save_sharp,
                               color: Colors.white,
                               size: 30,
@@ -326,7 +328,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               child: CircularProgressIndicator(),
             );
           })),
-    );
+    ));
   }
 
   void showDialogConfirm(

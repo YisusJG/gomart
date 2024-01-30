@@ -8,7 +8,7 @@ class PurchaseOrderDetailModel {
   int quantity;
   int amountReceived;
   double unitPrice;
-  double unitCost;
+  int unitCost;
   String name;
   String? barcode;
   String? description;
@@ -27,7 +27,7 @@ class PurchaseOrderDetailModel {
         this.quantity = 0,
         this.amountReceived = 0,
         this.unitPrice = 0.0,
-        this.unitCost = 0.0,
+        this.unitCost = 0,
         this.name="",
         this.barcode,
         this.description,

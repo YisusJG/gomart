@@ -9,8 +9,8 @@ class ClickButtonSaveInventoryBloc extends Bloc<ClickButtonSaveInventoryEvent, C
   }
 
   void _buttonSaveInventoryEvent(ButtonSaveInventoryEvent event, Emitter<ClickButtonSaveInventoryState> emit){
-    debugPrint("ClickButtonSaveInventory ${event.onClick}");
-    emit(ButtonSaveInventoryState(onClick: event.onClick));
+    debugPrint("ClickButtonSaveInventory ${event.onClickSaveInventory}");
+    emit(ButtonSaveInventoryState(onClick: event.onClickSaveInventory));
 
   }
 }

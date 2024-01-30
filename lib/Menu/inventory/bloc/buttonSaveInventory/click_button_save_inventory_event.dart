@@ -1,9 +1,9 @@
 abstract class ClickButtonSaveInventoryEvent{}
 
 class ButtonSaveInventoryEvent extends ClickButtonSaveInventoryEvent{
-  final void Function()? onClick;
+  final void Function()? onClickSaveInventory;
 
   ButtonSaveInventoryEvent({
-    this.onClick
+    this.onClickSaveInventory
   });
 }

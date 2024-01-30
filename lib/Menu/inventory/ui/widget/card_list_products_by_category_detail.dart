@@ -53,7 +53,6 @@ class _CardListProductsByCategoryDetailState extends State<CardListProductsByCat
             if (stateProductsInventory is ListProductModelState) {
               debugPrint("Entro al if");
               return BlocListener<ClickButtonSaveInventoryBloc, ClickButtonSaveInventoryState>(listener: (contextButtonSaveInventory, stateButtonSaveInventoryState){
-
                 debugPrint("Entro listener ${stateButtonSaveInventoryState.onClick}");
                 showAlert("Aviso", "Agrega por lo menos un regalo para continuar");
               },
