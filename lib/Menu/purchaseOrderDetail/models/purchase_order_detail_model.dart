@@ -8,7 +8,7 @@ class PurchaseOrderDetailModel {
   int quantity;
   int amountReceived;
   double unitPrice;
-  int unitCost;
+  //int unitCost;
   String name;
   String? barcode;
   String? description;
@@ -27,7 +27,7 @@ class PurchaseOrderDetailModel {
         this.quantity = 0,
         this.amountReceived = 0,
         this.unitPrice = 0.0,
-        this.unitCost = 0,
+        //this.unitCost = 0,
         this.name="",
         this.barcode,
         this.description,
@@ -47,7 +47,7 @@ class PurchaseOrderDetailModel {
       quantity: json['quantity'],
       amountReceived: json['amountReceived'],
       unitPrice: json['unitPrice'],
-      unitCost: json['unitCost'],
+      //unitCost: json['unitCost'] ,
       name: json['name'],
       barcode: json['barcode'],
       description: json['description'],
@@ -56,9 +56,9 @@ class PurchaseOrderDetailModel {
       roundingValue: json['roundingValue'],
       expiration: json['expiration'],
       productBarCodes: json['productBarCodes'] != null
-          ? List<ProductBarCodes>.from(json['productBarCodes']
-          .map((dynamic item) => ProductBarCodes.fromJson(item)))
+          ? (json['productBarCodes'] as List).map((i) => ProductBarCodes.fromJson(i)).toList()
           : null,
+
     );
   }
 
@@ -72,7 +72,7 @@ class PurchaseOrderDetailModel {
     data['quantity'] = quantity;
     data['amountReceived'] = amountReceived;
     data['unitPrice'] = unitPrice;
-    data['unitCost'] = unitCost;
+    //data['unitCost'] = unitCost;
     data['name'] = name;
     data['barcode'] = barcode;
     data['description'] = description;
@@ -80,10 +80,6 @@ class PurchaseOrderDetailModel {
     data['iva'] = iva;
     data['roundingValue'] = roundingValue;
     data['expiration'] = expiration;
-    if (productBarCodes != null) {
-      data['productBarCodes'] =
-          productBarCodes!.map((v) => v.toJson()).toList();
-    }
     return data;
   }
 

@@ -81,14 +81,14 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
       }
       return BlocListener<OrderBarcodeBloc, OrderBarcodeState>(listener: (contextBarcodeListener,stateBarcodeListener){
-        var productName = widget.lstReceptionDetail.where((x) => x.barcode == stateBarcodeListener.barcode);
+        var productName = widget.lstReceptionDetail.where((x) => x.barcode == stateBarcodeListener.barcode || (x.productBarCodes != null &&
+            x.productBarCodes!.any((barcode) => barcode.barcode == stateBarcodeListener.barcode)),);
+
         if(productName.isNotEmpty){
-         // print('amount: ${productName.first.amountReceived} qauntity: ${productName.first.unitCost}');
           if(productName.first.isReceived){
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
             showDialogInfoInput(productName.first);
-            //showDialogConfirm();
           }
 
 
@@ -130,7 +130,6 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
             if(stateReceptionDetail is SaveReceptionDetailsState){
               showDialogSucces("Guardado exitoso",stateReceptionDetail.message);
             }else if(stateReceptionDetail is ErrorSaveReceptionDetails){
-              debugPrint("Entra en en list 2");
               messagesSnackBar(stateReceptionDetail.errorApi);
             }
           },
@@ -251,7 +250,6 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
         }
     );
     dialog.showDialogQuestion("Si","No");
-
   }
 
   void closingDialog(){

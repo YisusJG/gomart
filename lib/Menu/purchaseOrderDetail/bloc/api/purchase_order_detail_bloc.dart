@@ -30,6 +30,7 @@ class PurchaseOrderDetailBloc extends Bloc<PurchaseOrderDetailEvent, PurchaseOrd
           productName: purchaseOrderDetail.name,
           barcode: purchaseOrderDetail.barcode,
           expiration: purchaseOrderDetail.expiration,
+          productBarCodes: purchaseOrderDetail.productBarCodes
         );
       }).toList();
       emit(LoadPurchaseOrderDetail(receptionDetail: receptionDetail));

@@ -49,6 +49,11 @@ class _OptionsScreenState extends State<OptionsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: _options.take(2).map((options) => CustomOvalButton(menu: options)).toList(),
                         ),
+                        const SizedBox(height: 25),
+                        Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: _options.skip(2).take(1).map((options) => CustomOvalButton(menu: options)).toList(),
+                        ),
                       ],
                     )
                   ],

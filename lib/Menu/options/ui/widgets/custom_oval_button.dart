@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomart/Menu/dummy/ui/screen/example_screen.dart';
 import 'package:gomart/Menu/inventory/ui/screen/inventory_screen.dart';
 import 'package:gomart/Menu/purchaseOrder/ui/screen/purchase_orders_screen.dart';
 
@@ -66,6 +67,11 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const InventoryScreen()),
+      );
+    }if(option ==3){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ExampleScreen()),
       );
     }
   }
