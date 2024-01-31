@@ -27,4 +27,21 @@ class BranchEntity{
       description: data.description,
     );
   }
+
+  BranchEntity.fromMap(Map<String, dynamic> map)
+    : id = map["id"],
+      zoneName = map["zoneName"],
+      branchNumber = map["branchNumber"],
+      ip = map["ip"],
+      description = map["description"];
+
+  Map<String, dynamic> branchEntityToMap() {
+    return {
+      'id' : id,
+      'zoneName' : zoneName,
+      'branchNumber' : branchNumber,
+      'ip' : ip,
+      'description' : description
+    };
+  }
 }

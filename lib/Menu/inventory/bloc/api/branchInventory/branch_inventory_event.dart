@@ -1,4 +1,6 @@
 
+import 'package:gomart/ConnectionToGomart/models/branch_model.dart';
+import 'package:gomart/Menu/Login/models/employee_model.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_model.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_product_model.dart';
 
@@ -15,4 +17,15 @@ class SaveBranchInventoryProductEvent extends BranchInventoryEvent{
 
   SaveBranchInventoryProductEvent({required this.branchInventoryProductModel});
 }
+
+class GetEmployeeInfoEvent extends BranchInventoryEvent{
+  final EmployeeModel? employeeModel;
+  GetEmployeeInfoEvent({required this.employeeModel});
+}
+
+class GetBranchInventoryEvent extends BranchInventoryEvent{
+  final BranchModel? branchModel;
+  GetBranchInventoryEvent({required this.branchModel});
+}
+
 

@@ -51,25 +51,26 @@ class AmountInventoryDialog {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: TColor.primaryText)),
-                  SizedBox(height: 15,),
+                  const SizedBox(height: 15,),
                   TextField(
                     controller: productAmountController,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
+                    maxLength: 4,
                     decoration: InputDecoration(
                       hintText: 'Ingresa una cantidad',
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                      border: const OutlineInputBorder(),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                       errorText: stateInputAddAmount.isValidAmount
                           ? '                Por favor, ingresa una cantidad'
                           : null,
-                      errorBorder: OutlineInputBorder(
+                      errorBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.red,
                           width: 2.0,
                         ),
                       ),
-                      focusedErrorBorder: OutlineInputBorder(
+                      focusedErrorBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.red,
                           width: 2.0,

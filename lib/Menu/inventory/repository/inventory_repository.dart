@@ -1,10 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gomart/Api/common_api.dart';
+import 'package:gomart/ConnectionToGomart/models/branch_model.dart';
+import 'package:gomart/Menu/Login/models/employee_model.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_model.dart';
 import 'package:gomart/Menu/inventory/model/branch_inventory_product_model.dart';
 import 'package:gomart/Menu/inventory/model/product_category_model.dart';
 import 'package:gomart/Menu/inventory/model/product_model.dart';
+import '../../../DataBase/db.dart';
+import '../../../DataBase/entities/branch_entity.dart';
+import '../../../DataBase/entities/employee_entity.dart';
 import '../../../Environments/environment.dart';
 import '../../Login/models/error_messaje.dart';
 import '../model/branch_inventory_id.dart';
@@ -69,6 +74,7 @@ class InventoryRepository{
   Future<BranchInventoryId> saveBranchInventory({required BranchInventoryModel branchInventoryModel}) async {
     final urlApi = "${Environment().apiGomart}Inventories/save/branchInventory";
     var body = jsonEncode(branchInventoryModel);
+    debugPrint("El body branchInventory es $body");
     final response = await _api.sendPost(urlApi,body);
     try {
       debugPrint("El response es ${response.body}");
@@ -94,7 +100,7 @@ class InventoryRepository{
     final urlApi = "${Environment().apiGomart}Inventories/save/branchInventoryProduct";
     debugPrint("La url es $urlApi");
     var body = jsonEncode(branchInventoryProductModel);
-    debugPrint("El body es $body");
+    debugPrint("El body products Inventory es $body");
     final response = await _api.sendPost(urlApi,body);
     try {
       debugPrint("El response es ${response.body}");
@@ -115,4 +121,17 @@ class InventoryRepository{
       throw (data.messaje);
     }
   }
+
+  Future<EmployeeModel?> getEmployeeInventory() async{
+    final db = await DB.instance.database;
+    EmployeeEntity? employeeEntity = await db!.employeeDao.findEmployee();
+    return EmployeeModel.fromJson(employeeEntity!.employeeEntityToMap());
+  }
+
+  Future<BranchModel?> getBranchInventory() async{
+    final db = await DB.instance.database;
+    BranchEntity? branchEntity = await db?.branchDao.findBranch();
+    return BranchModel.fromJson(branchEntity!.branchEntityToMap());
+  }
+
 }

@@ -87,7 +87,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `EmployeeEntity` (`id` INTEGER NOT NULL, `employeeNumber` TEXT NOT NULL, `name` TEXT NOT NULL, `lastName` TEXT NOT NULL, `mothersLastName` TEXT NOT NULL, `photo` TEXT, `corporateEmail` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `EmployeeEntity` (`id` INTEGER NOT NULL, `branchId` INTEGER NOT NULL, `employeeNumber` TEXT NOT NULL, `name` TEXT NOT NULL, `lastName` TEXT NOT NULL, `mothersLastName` TEXT NOT NULL, `photo` TEXT, `corporateEmail` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `BranchEntity` (`id` INTEGER NOT NULL, `zoneName` TEXT NOT NULL, `branchNumber` TEXT NOT NULL, `ip` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
@@ -118,6 +118,7 @@ class _$EmployeeDao extends EmployeeDao {
             'EmployeeEntity',
             (EmployeeEntity item) => <String, Object?>{
                   'id': item.id,
+                  'branchId': item.branchId,
                   'employeeNumber': item.employeeNumber,
                   'name': item.name,
                   'lastName': item.lastName,
@@ -139,6 +140,7 @@ class _$EmployeeDao extends EmployeeDao {
     return _queryAdapter.queryList('SELECT * FROM EmployeeEntity',
         mapper: (Map<String, Object?> row) => EmployeeEntity(
             id: row['id'] as int,
+            branchId: row['branchId'] as int,
             employeeNumber: row['employeeNumber'] as String,
             name: row['name'] as String,
             lastName: row['lastName'] as String,
@@ -152,6 +154,21 @@ class _$EmployeeDao extends EmployeeDao {
     return _queryAdapter.query('DELETE FROM EmployeeEntity',
         mapper: (Map<String, Object?> row) => EmployeeEntity(
             id: row['id'] as int,
+            branchId: row['branchId'] as int,
+            employeeNumber: row['employeeNumber'] as String,
+            name: row['name'] as String,
+            lastName: row['lastName'] as String,
+            mothersLastName: row['mothersLastName'] as String,
+            photo: row['photo'] as String?,
+            corporateEmail: row['corporateEmail'] as String));
+  }
+
+  @override
+  Future<EmployeeEntity?> findEmployee() async {
+    return _queryAdapter.query('SELECT * FROM EmployeeEntity',
+        mapper: (Map<String, Object?> row) => EmployeeEntity(
+            id: row['id'] as int,
+            branchId: row['branchId'] as int,
             employeeNumber: row['employeeNumber'] as String,
             name: row['name'] as String,
             lastName: row['lastName'] as String,
@@ -190,6 +207,17 @@ class _$BranchDao extends BranchDao {
   final QueryAdapter _queryAdapter;
 
   final InsertionAdapter<BranchEntity> _branchEntityInsertionAdapter;
+
+  @override
+  Future<BranchEntity?> findBranch() async {
+    return _queryAdapter.query('SELECT * FROM BranchEntity',
+        mapper: (Map<String, Object?> row) => BranchEntity(
+            id: row['id'] as int,
+            zoneName: row['zoneName'] as String,
+            branchNumber: row['branchNumber'] as String,
+            ip: row['ip'] as String,
+            description: row['description'] as String));
+  }
 
   @override
   Future<List<BranchEntity>> findAllBranch() async {

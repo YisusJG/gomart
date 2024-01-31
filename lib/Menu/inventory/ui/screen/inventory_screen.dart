@@ -45,6 +45,7 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  late TypeDialog dialog;
   var categoryId = 0;
   var previousId = 0;
   var visibleAmount = false;
@@ -86,252 +87,166 @@ class _InventoryScreenState extends State<InventoryScreen> {
               builder: (contextInventory, stateInventory) {
             if (stateInventory.productCategoryModel != null) {
               return BlocBuilder<ClickButtonSaveInventoryBloc, ClickButtonSaveInventoryState>(builder: (contextClick, stateClick){
-                return Scaffold(
-                    appBar: AppBar(
-                      title: Text(
-                        "Inventario",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Color(getColorHexadecimal(secondaryColor))),
-                      ),
-                      actions: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: IconButton(
-                              onPressed: () {
-                                //BlocProvider.of<ClickButtonSaveInventoryBloc>(contextInventory).add(ButtonSaveInventoryEvent());
-                                contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
-                              },
-                              icon: const Icon(
-                                Icons.save_sharp,
-                                color: Colors.white,
-                                size: 30,
-                              )
+                return PopScope(
+                    canPop: false,
+                    onPopInvoked: (bool didPop) {
+                      debugPrint("$didPop");
+                      if (didPop) {
+                        return;
+                      }
+                      showDialogQuestion("¿Estas seguro de regresar?","Perderas el avance del inventario");
+                    },
+                    child: Scaffold(
+                        appBar: AppBar(
+                          title: Text(
+                            "Inventario",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(getColorHexadecimal(secondaryColor))),
                           ),
-                        )
-                      ],
-                      iconTheme: IconThemeData(
-                          color: Color(getColorHexadecimal(secondaryColor))),
-                      backgroundColor: Color(getColorHexadecimal(primaryColor)),
-                    ),
-                    body: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: BlocBuilder<ProductsInventoryListBloc,ProductsInventoryListState>(builder: (contextProductsInventory,stateProductsInventory) {
-                            listProductModel = stateProductsInventory.listProductModel;
-                            /*if (listProductModel != null) {
+                          actions: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: IconButton(
+                                  onPressed: () {
+                                    if (_selectedProductCategory == null){
+                                      messagesSnackBar("No existe un inventario que guardar");
+                                    } else {
+                                      contextInventory.read<ClickButtonSaveInventoryBloc>().add(ButtonSaveInventoryEvent());
+                                    }
+
+                                  },
+                                  icon: const Icon(
+                                    Icons.save_sharp,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )
+                              ),
+                            )
+                          ],
+                          iconTheme: IconThemeData(
+                              color: Color(getColorHexadecimal(secondaryColor))),
+                          backgroundColor: Color(getColorHexadecimal(primaryColor)),
+                        ),
+                        body: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: BlocBuilder<ProductsInventoryListBloc,ProductsInventoryListState>(builder: (contextProductsInventory,stateProductsInventory) {
+                                listProductModel = stateProductsInventory.listProductModel;
+                                /*if (listProductModel != null) {
                               listProductModel?.forEach((product) {
                                 print(
                                     "${product.name} : ${product.physicalInventory}");
                               });
                             }*/
-                            return DropdownSearch<ProductCategoryModel>(
-                                selectedItem: _selectedProductCategory,
-                                popupProps: PopupProps.menu(
-                                    showSearchBox: true,
-                                    showSelectedItems: false,
-                                    searchFieldProps: TextFieldProps(
-                                        decoration: InputDecoration(
-                                          hintText: "Buscar categoria",
-                                          hintStyle: TextStyle(color: Colors.grey),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide:
-                                            BorderSide(color: Colors.grey),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide:
-                                            BorderSide(color: Colors.grey),
-                                            borderRadius: BorderRadius.circular(20),
-                                          ),
-                                        ))),
-                                items: stateInventory.productCategoryModel!,
-                                itemAsString: (ProductCategoryModel u) => u.name,
-                                onChanged: (ProductCategoryModel? value) {
-                                  print(value?.toJson());
-                                  /*setState(() {
+                                return DropdownSearch<ProductCategoryModel>(
+                                    selectedItem: _selectedProductCategory,
+                                    popupProps: PopupProps.menu(
+                                        showSearchBox: true,
+                                        showSelectedItems: false,
+                                        searchFieldProps: TextFieldProps(
+                                            decoration: InputDecoration(
+                                              hintText: "Buscar categoria",
+                                              hintStyle: TextStyle(color: Colors.grey),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide:
+                                                BorderSide(color: Colors.grey),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide:
+                                                BorderSide(color: Colors.grey),
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                            ))),
+                                    items: stateInventory.productCategoryModel!,
+                                    itemAsString: (ProductCategoryModel u) => u.name,
+                                    onChanged: (ProductCategoryModel? value) {
+                                      print(value?.toJson());
+                                      /*setState(() {
                                   _selectedProductCategory = value;
                                 });
 
                                 print(
                                     "El selected es ${_selectedProductCategory?.toJson()}");*/
 
-                                  if (_selectedProductCategory == null) {
-                                    setState(() {
-                                      //categoryId = value!.id;
-                                      //previousValue = value.name;
-                                      _selectedProductCategory = value;
-                                    });
-                                  } else {
-                                    if (listProductModel != null) {
-                                      if (listProductModel!.any((product) => product.physicalInventory != 0)) {
-                                        showDialogConfirm(
-                                            title: "Ya tienes productos en tu inventario",
-                                            description: "Se borraran los productos inventariados",
-                                            onOK: (){
-                                              print("En el ok es ${_selectedProductCategory?.toJson()}");
-                                              //previousValue = value!.name;
-                                              //categoryId = value.id;
-                                              listProductModel?.clear();
-                                              contextProductsInventory.read<ProductsInventoryListBloc>().add(ListProductModelEvent(listProductModel: null));
-                                              contextProductsInventory.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
-                                              setState(() {
-                                                _selectedProductCategory = value;
-                                              });
-                                              print("Antes del clear es ${listProductModel?.length}");
-
-                                              //print("Despues del clear es ${listProductModel?.length}");
-
-
-                                            },
-                                            onCancel: (){
-                                              print("En el cancel es ${_selectedProductCategory?.toJson()}");
-                                              setState(() {
-                                                //value!.name = previousValue;
-                                                value = _selectedProductCategory;
-                                              });
-                                            });
-                                      } else {
+                                      if (_selectedProductCategory == null) {
                                         setState(() {
                                           //categoryId = value!.id;
                                           //previousValue = value.name;
                                           _selectedProductCategory = value;
                                         });
+                                      } else {
+                                        if (listProductModel != null) {
+                                          if (listProductModel!.any((product) => product.physicalInventory != 0)) {
+                                            showDialogConfirm(
+                                                title: "Ya tienes productos en tu inventario",
+                                                description: "Se borraran los productos inventariados",
+                                                onOK: (){
+                                                  print("En el ok es ${_selectedProductCategory?.toJson()}");
+                                                  //previousValue = value!.name;
+                                                  //categoryId = value.id;
+                                                  listProductModel?.clear();
+                                                  contextProductsInventory.read<ProductsInventoryListBloc>().add(ListProductModelEvent(listProductModel: null));
+                                                  contextProductsInventory.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
+                                                  setState(() {
+                                                    _selectedProductCategory = value;
+                                                  });
+                                                  print("Antes del clear es ${listProductModel?.length}");
+                                                },
+                                                onCancel: (){
+                                                  print("En el cancel es ${_selectedProductCategory?.toJson()}");
+                                                  setState(() {
+                                                    //value!.name = previousValue;
+                                                    value = _selectedProductCategory;
+                                                  });
+                                                });
+                                          } else {
+                                            setState(() {
+                                              //categoryId = value!.id;
+                                              //previousValue = value.name;
+                                              _selectedProductCategory = value;
+                                            });
+                                          }
+                                        } else {
+                                          setState(() {
+                                            //categoryId = value!.id;
+                                            //previousValue = value.name;
+                                            _selectedProductCategory == value;
+                                          });
+                                        }
                                       }
-                                    } else {
-                                      setState(() {
-                                        //categoryId = value!.id;
-                                        //previousValue = value.name;
-                                        _selectedProductCategory == value;
-                                      });
-                                    }
-                                  }
-                                },
-                                // print,
-                                //(ProductCategoryModel? data) => print(data?.name),
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    labelText: "Seleccion una Categoria",
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                ));
-                            /*return DropdownSearch<ProductCategoryModel>(
-                              selectedItem: _selectedProductCategory,
-                              popupProps: PopupProps.menu(
-                                  showSearchBox: true,
-                                  showSelectedItems: false,
-                                  searchFieldProps: TextFieldProps(
-                                      decoration: InputDecoration(
-                                        hintText: "Buscar categoria",
-                                        hintStyle: TextStyle(color: Colors.grey),
+                                    },
+                                    // print,
+                                    //(ProductCategoryModel? data) => print(data?.name),
+                                    dropdownDecoratorProps: DropDownDecoratorProps(
+                                      dropdownSearchDecoration: InputDecoration(
+                                        labelText: "Seleccion una Categoria",
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.grey),
+                                          borderSide: BorderSide(color: Colors.grey),
                                           borderRadius: BorderRadius.circular(20),
                                         ),
                                         border: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Colors.grey),
+                                          borderSide: BorderSide(color: Colors.grey),
                                           borderRadius: BorderRadius.circular(20),
                                         ),
-                                      ))),
-                              items: stateInventory.productCategoryModel!,
-                              itemAsString: (ProductCategoryModel u) => u.name,
-                              onChanged: (ProductCategoryModel? value) {
-                                print(value?.toJson());
-                                /*setState(() {
-                                  _selectedProductCategory = value;
-                                });
+                                      ),
+                                    ));
+                              }),
+                            ),
 
-                                print(
-                                    "El selected es ${_selectedProductCategory?.toJson()}");*/
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            if (_selectedProductCategory != null)
+                              CardListProductsByCategory(selectedProductCategory: _selectedProductCategory!),
 
-                                if (_selectedProductCategory == null) {
-                                  setState(() {
-                                    //categoryId = value!.id;
-                                    //previousValue = value.name;
-                                    _selectedProductCategory = value;
-                                  });
-                                } else {
-                                  if (listProductModel != null) {
-                                    if (listProductModel!.any((product) => product.physicalInventory != 0)) {
-                                      showDialogConfirm(
-                                          title: "Ya tienes productos en tu inventario",
-                                          description: "Se borraran los productos inventariados",
-                                          onOK: (){
-                                            print("En el ok es ${_selectedProductCategory?.toJson()}");
-                                            //previousValue = value!.name;
-                                            //categoryId = value.id;
-                                            listProductModel?.clear();
-                                            contextProductsInventory.read<ProductsInventoryListBloc>().add(ListProductModelEvent(listProductModel: null));
-                                            //context.read<InputAddAmountBloc>().add(InputAmountEvent(id: 0, amount: 0));
-                                            //setState(() {
-                                                _selectedProductCategory = value;
-                                            //  });
-                                            print("Antes del clear es ${listProductModel?.length}");
+                          ],
+                        ))
+                );
 
-                                            //print("Despues del clear es ${listProductModel?.length}");
-
-
-                                          },
-                                          onCancel: (){
-                                            print("En el cancel es ${_selectedProductCategory?.toJson()}");
-                                            setState(() {
-                                              //value!.name = previousValue;
-                                              value = _selectedProductCategory;
-                                            });
-                                          });
-                                    } else {
-                                      setState(() {
-                                        //categoryId = value!.id;
-                                        //previousValue = value.name;
-                                        _selectedProductCategory = value;
-                                      });
-                                    }
-                                  } else {
-                                    setState(() {
-                                      //categoryId = value!.id;
-                                      //previousValue = value.name;
-                                      _selectedProductCategory == value;
-                                    });
-                                  }
-                                }
-                              },
-                              // print,
-                              //(ProductCategoryModel? data) => print(data?.name),
-                              dropdownDecoratorProps: DropDownDecoratorProps(
-                                dropdownSearchDecoration: InputDecoration(
-                                  labelText: "Seleccion una Categoria",
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ));*/
-                          }),
-                        ),
-
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        if (_selectedProductCategory != null)
-                          CardListProductsByCategory(selectedProductCategory: _selectedProductCategory!),
-
-                      ],
-                    ));
               });
 
             }
@@ -354,6 +269,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
         onOk: onOK,
         onCancel: onCancel);
     dialog.showDialogConfirm();
+  }
+
+  void showDialogQuestion(String title, String description){
+    dialog = TypeDialog(
+        context: context,
+        title: title,
+        description: description,
+        onCancel: (){
+
+        },
+        onOk: (){
+          closingDialog();
+        }
+    );
+    dialog.showDialogQuestion("Aceptar","Cancelar");
+
+  }
+
+  void closingDialog(){
+    Navigator.pop(context);
   }
 
   void messagesSnackBar(String message){

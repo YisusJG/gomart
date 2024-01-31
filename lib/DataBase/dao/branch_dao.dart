@@ -7,8 +7,13 @@ abstract class BranchDao{
   Future<void>insertBranch(BranchEntity branch);
 
   @Query('SELECT * FROM BranchEntity')
+  Future<BranchEntity?>findBranch();
+
+  @Query('SELECT * FROM BranchEntity')
   Future<List<BranchEntity>>findAllBranch();
 
   @Query('DELETE FROM BranchEntity')
   Future<BranchEntity?>deleteBranch();
+
+
 }

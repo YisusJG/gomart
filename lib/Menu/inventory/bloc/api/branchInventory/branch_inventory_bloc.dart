@@ -12,27 +12,38 @@ class BranchInventoryBloc extends Bloc<BranchInventoryEvent, BranchInventoryStat
   BranchInventoryBloc(this.inventoryRepository) : super(BranchInventoryState()){
    on<SaveBranchInventoryEvent>(_saveBranchInventoryEvent);
    on<SaveBranchInventoryProductEvent>(_saveBranchInventoryProductEvent);
+   on<GetEmployeeInfoEvent>(_getEmployeeInfoEvent);
+   on<GetBranchInventoryEvent>(_getBranchInventoryEvent);
   }
 
   void _saveBranchInventoryEvent(SaveBranchInventoryEvent event, Emitter<BranchInventoryState> emit) async {
     try{
       BranchInventoryId branchInventoryId = await inventoryRepository.saveBranchInventory(branchInventoryModel: event.branchInventoryModel);
       emit(SaveBranchInventoryState(branchInventoryId: branchInventoryId));
-      debugPrint("BranchInventoryId 2 ${branchInventoryId.branchInventoryId}");
     } catch(e){
       emit(ErrorSaveBranchInventory(errorApi: e.toString()));
     }
-
   }
 
   void _saveBranchInventoryProductEvent(SaveBranchInventoryProductEvent event, Emitter<BranchInventoryState> emit) async {
     try{
-      debugPrint("En el bloc ${event.branchInventoryProductModel.toList()}");
-      debugPrint("En el bloc ${event.branchInventoryProductModel.length}");
+      //debugPrint("En el bloc ${event.branchInventoryProductModel.toList()}");
       final messageSaveBranchInventoryProduct = await inventoryRepository.saveBranchInventoryProduct(branchInventoryProductModel: event.branchInventoryProductModel);
       emit(SaveBranchInventoryProductState(message: messageSaveBranchInventoryProduct.messaje));
     }catch(e){
       emit(ErrorSaveBranchProductInventory(errorApi: e.toString()));
     }
+  }
+
+  void _getEmployeeInfoEvent(GetEmployeeInfoEvent event, Emitter<BranchInventoryState> emit) async {
+    final employee = await inventoryRepository.getEmployeeInventory();
+    emit(GetEmployeeInfoState(employeeModel: employee));
+
+  }
+
+  void _getBranchInventoryEvent(GetBranchInventoryEvent event, Emitter<BranchInventoryState> emit) async {
+    final branch = await inventoryRepository.getBranchInventory();
+    debugPrint("El branch name viene como ${branch?.toJson()}");
+    emit(GetBranchInventoryState(branchModel: branch));
   }
 }

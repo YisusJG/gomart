@@ -11,4 +11,7 @@ abstract class EmployeeDao{
 
   @Query('DELETE FROM EmployeeEntity')
   Future<EmployeeEntity?>deleteEmployee();
+
+  @Query('SELECT * FROM EmployeeEntity')
+  Future<EmployeeEntity?> findEmployee();
 }

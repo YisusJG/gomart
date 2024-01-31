@@ -7,6 +7,8 @@ import 'package:gomart/Menu/inventory/model/product_model.dart';
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
 import '../../../../Helpers/scan_barcode_channel.dart';
+import '../../bloc/api/branchInventory/branch_inventory_bloc.dart';
+import '../../bloc/api/branchInventory/branch_inventory_event.dart';
 import '../../bloc/api/productsByCategory/products_by_category_bloc.dart';
 import '../../bloc/api/productsByCategory/products_by_category_event.dart';
 import '../../bloc/api/productsByCategory/products_by_category_state.dart';
@@ -56,6 +58,7 @@ class _CardListProductsByCategoryState
         contextProduct
             .read<ProductsByCategoryBloc>()
             .add(LoadProductsByCategoryEvent(categoryId: widget.selectedProductCategory.id));
+
       }
       return BlocListener<InventoryBarcodeBloc, InventoryBarcodeState>(
         listener: (contextBarcodeListener, stateBarcodeListener) {
