@@ -1,5 +1,5 @@
 int getColorHexadecimal(String colorStr) {
-  colorStr = "FF" + colorStr;
+  colorStr = "FF$colorStr";
   colorStr = colorStr.replaceAll("#", "");
   int val = 0;
   int len = colorStr.length;

@@ -19,5 +19,5 @@ class LoadValidateIpGomartState extends ValidateIpGomartState{
 }
 
 class ErrorLoadingValidateIpGomart extends ValidateIpGomartState{
-  ErrorLoadingValidateIpGomart({required String error}): super(errorApi: error);
+  ErrorLoadingValidateIpGomart({required String error}) : super(errorApi: error);
 }

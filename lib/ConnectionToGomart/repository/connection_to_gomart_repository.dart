@@ -9,7 +9,7 @@ class ConnectionToGomartRepository{
   final _api = CommonApi();
 
   Future<BranchModel> getBranchGomart({required String ipGomart}) async {
-    final urlApi = "${Environment().API_GOMART}Branches/$ipGomart";
+    final urlApi = "${Environment().apiGomart}Branches/$ipGomart";
     final response = await _api.sendGet(urlApi);
     if (response.statusCode == 200) {
       final data = BranchModel.fromJson(json.decode(response.body));
