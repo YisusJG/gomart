@@ -7,6 +7,7 @@ import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_event.dart';
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
+import '../../../options/ui/screen/options_screen.dart';
 import '../../bloc/api/branchInventory/branch_inventory_bloc.dart';
 import '../../bloc/api/branchInventory/branch_inventory_event.dart';
 import '../../bloc/input/input_add_amount_bloc.dart';
@@ -101,10 +102,21 @@ class _CardListProductsByCategoryDetailState
           contextBranchId.read<BranchInventoryBloc>().add(SaveBranchInventoryProductEvent(branchInventoryProductModel: branchInventoryProductModelList));
           widget.lstProductsModel.clear();
           contextBranchId.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
+        } else if (stateBranchId is ErrorSaveBranchInventory) {
+          messagesSnackBar(stateBranchId.errorApi);
+        }
+      }, child: BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextSaveBranchInventory, stateSaveBranchInventory){
+        if (stateSaveBranchInventory is SaveBranchInventoryProductState) {
+          debugPrint("Entro al 1");
+            showDialogSucces("Guardado exitoso", stateSaveBranchInventory.message);
+            //showDialogSucces("Guardado exitoso", "Se guardo correctamente el inventario");
+        } else if(stateSaveBranchInventory is ErrorSaveBranchProductInventoryState){
+          debugPrint("Entro al 2");
+            showAlert("Error", stateSaveBranchInventory.errorApi);
+          //showDialogSucces("Guardado exitoso", "Se guardo el inventario correctamente");
         }
 
-      },
-      child: BlocBuilder<InputAddAmountBloc, InputAddAmountState>(
+      }, child: BlocBuilder<InputAddAmountBloc, InputAddAmountState>(
           builder: (contextInputAmout, stateInputAmout) {
             if (stateInputAmout.id > 0) {
               ProductModel targetProduct = widget.lstProductsModel
@@ -221,10 +233,11 @@ class _CardListProductsByCategoryDetailState
                     ],
                   );
                 });
-          })),
+          }),)
+      )
 
-
-    ));
+    )
+    );
   }
 
   void showError(String title, String description) {
@@ -258,5 +271,20 @@ class _CardListProductsByCategoryDetailState
         onOk: onOK,
         onCancel: onCancel);
     dialog.showDialogConfirm();
+  }
+
+  void showDialogSucces(String title, String description) {
+    dialog = TypeDialog(
+        context: context,
+        title: title,
+        description: description,
+        onOk: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const OptionsScreen()),
+          );
+        }
+    );
+    dialog.showDialogSucces();
   }
 }

@@ -31,8 +31,8 @@ class ErrorSaveBranchInventory extends BranchInventoryState {
   ErrorSaveBranchInventory({required super.errorApi});
 }
 
-class ErrorSaveBranchProductInventory extends BranchInventoryState {
-  ErrorSaveBranchProductInventory({required super.errorApi});
+class ErrorSaveBranchProductInventoryState extends BranchInventoryState {
+  ErrorSaveBranchProductInventoryState({required super.errorApi});
 }
 
 class GetEmployeeInfoState extends BranchInventoryState{

@@ -10,14 +10,14 @@ final class ProductCategoriesState{
   });
 }
 
-final class StartingProductCategory extends ProductCategoriesState{
-  StartingProductCategory({required super.productCategoryModel});
+final class StartingProductCategoryState extends ProductCategoriesState{
+  StartingProductCategoryState({required super.productCategoryModel});
 }
 
-final class LoadProductCategory extends ProductCategoriesState{
-  LoadProductCategory({required super.productCategoryModel});
+final class LoadProductCategoryState extends ProductCategoriesState{
+  LoadProductCategoryState({required super.productCategoryModel});
 }
 
-final class ErrorLoadingProductCategory extends ProductCategoriesState{
-  ErrorLoadingProductCategory({required super.errorApi});
+final class ErrorLoadingProductCategoryState extends ProductCategoriesState{
+  ErrorLoadingProductCategoryState({required super.errorApi});
 }

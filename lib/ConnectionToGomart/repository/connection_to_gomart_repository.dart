@@ -18,6 +18,10 @@ class ConnectionToGomartRepository{
       throw ("No existe sucursal con esa IP");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
     }
     else {
       throw ("${response.reasonPhrase}");

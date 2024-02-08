@@ -28,8 +28,11 @@ class InventoryRepository{
       throw ("Error con el servidor");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
-    }
-    else {
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
+    } else {
       throw ("${response.reasonPhrase}");
     }
   }
@@ -46,6 +49,10 @@ class InventoryRepository{
       throw ("Error con el servidor");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
     }
     else {
       throw ("${response.reasonPhrase}");
@@ -65,6 +72,10 @@ class InventoryRepository{
       throw ("Error con el servidor");
     }else if(response.statusCode == 204){
       throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
     }
     else {
       throw ("${response.reasonPhrase}");
@@ -72,53 +83,50 @@ class InventoryRepository{
   }
 
   Future<BranchInventoryId> saveBranchInventory({required BranchInventoryModel branchInventoryModel}) async {
+
     final urlApi = "${Environment().apiGomart}Inventories/save/branchInventory";
     var body = jsonEncode(branchInventoryModel);
-    debugPrint("El body branchInventory es $body");
     final response = await _api.sendPost(urlApi,body);
-    try {
-      debugPrint("El response es ${response.body}");
-      if (response.statusCode == 200){
-        final data = BranchInventoryId.fromJson(json.decode(response.body));
-        //debugPrint("DataApi $data");
-        return data;
-      }else if (response.statusCode == 500) {
-        throw ("Error con el servidor");
-      } else if (response.statusCode == 204) {
-        throw ("No existen datos");
-      } else {
-        throw ("${response.reasonPhrase}");
-      }
-    }catch (e) {
-      //debugPrint("ErrorMessaje $e");
-      final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.message);
+
+    if (response.statusCode == 200){
+      final data = BranchInventoryId.fromJson(json.decode(response.body));
+      return data;
+    }else if (response.statusCode == 500) {
+      throw ("Error con el servidor");
+    } else if (response.statusCode == 204) {
+      throw ("No existen datos");
+    } else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
     }
+    else {
+      throw ("${response.reasonPhrase}");
+    }
+
   }
 
   Future<ErrorMessaje> saveBranchInventoryProduct({required List<BranchInventoryProductModel> branchInventoryProductModel}) async {
     final urlApi = "${Environment().apiGomart}Inventories/save/branchInventoryProduct";
-    debugPrint("La url es $urlApi");
     var body = jsonEncode(branchInventoryProductModel);
-    debugPrint("El body products Inventory es $body");
     final response = await _api.sendPost(urlApi,body);
-    try {
-      debugPrint("El response es ${response.body}");
-      if (response.statusCode == 200){
-        final data = ErrorMessaje.fromJson(json.decode(response.body));
-        //debugPrint("DataApi $data");
-        return data;
-      }else if (response.statusCode == 500) {
-        throw ("Error con el servidor");
-      } else if (response.statusCode == 204) {
-        throw ("No existen datos");
-      } else {
-        throw ("${response.reasonPhrase}");
-      }
-    }catch (e) {
-      //debugPrint("ErrorMessaje $e");
+
+    if (response.statusCode == 200){
       final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.message);
+      return data;
+    }else if (response.statusCode == 500) {
+      throw ("Error con el servidor");
+    } else if (response.statusCode == 204) {
+      throw ("No existen datos");
+    } else if(response.statusCode == 1000){
+      debugPrint(response.body);
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      debugPrint(response.body);
+      throw (response.body);
+    }
+    else {
+      throw ("${response.reasonPhrase}");
     }
   }
 

@@ -14,11 +14,11 @@ class ProductCategoriesBloc extends Bloc<ProductCategoriesEvent, ProductCategori
 
   void _productCategoriesEvent(LoadProductCategoriesEvent event, Emitter<ProductCategoriesState> emit) async {
     try {
-      emit(StartingProductCategory(productCategoryModel: productCategoryModel));
+      emit(StartingProductCategoryState(productCategoryModel: productCategoryModel));
       final productCategories = await inventoryRepository.getProductCategories();
-      emit(LoadProductCategory(productCategoryModel: productCategories));
+      emit(LoadProductCategoryState(productCategoryModel: productCategories));
     }catch(e){
-      emit(ErrorLoadingProductCategory(errorApi: e.toString()));
+      emit(ErrorLoadingProductCategoryState(errorApi: e.toString()));
     }
   }
 }

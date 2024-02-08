@@ -21,23 +21,22 @@ class LoginRepository{
       });
       final response = await _api.sendPost(uriApi, body);
 
-      try {
       if (response.statusCode == 200) {
-       // print("DataApi ${response.body}");
         final data = EmployeeModel.fromJson(json.decode(response.body));
-       // print("DataApi $data");
         return data;
       } else if (response.statusCode == 500) {
         throw ("Usuario no registrado");
       } else if (response.statusCode == 204) {
         throw ("No existen datos");
-      } else {
+      } else if(response.statusCode == 1000){
+        throw (response.body);
+      }else if(response.statusCode == 1001){
+        throw (response.body);
+      }
+      else {
         throw ("${response.reasonPhrase}");
       }
-      }catch (e){
-        final data = ErrorMessaje.fromJson(json.decode(response.body));
-        throw (data.message);
-      }
+
   }
 
   Future<bool> saveEmployee({required EmployeeModel employeeModel}) async{
