@@ -49,6 +49,7 @@ dependencies:
   dropdown_search: ^5.0.6
   intl: ^0.18.1
   curved_navigation_bar: ^1.0.3
+  bluetooth_print: ^4.3.0
 
 dev_dependencies:
   flutter_test:

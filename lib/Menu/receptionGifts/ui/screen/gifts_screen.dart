@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/Menu/options/ui/screen/options_screen.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_bloc.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_event.dart';
 import 'package:gomart/Menu/receptionGifts/bloc/api/products/supplier_products_state.dart';
@@ -113,7 +114,8 @@ class _GiftsScreenState extends State<GiftsScreen> {
 
         },
         onOk: (){
-          closingDialog();
+          //closingDialog();
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const OptionsScreen()));
         }
     );
     dialog.showDialogQuestion("Aceptar","Cancelar");

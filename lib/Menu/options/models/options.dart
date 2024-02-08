@@ -34,10 +34,10 @@ class Options{
     ),
     Options(
         id: 3,
-        title: "Dummy",
+        title: "Impresora",
         bacgroundColor: Colors.black,
         textColor: Colors.white,
-        icon: Icons.adb
+        icon: Icons.print_sharp
     ),
   ];
 

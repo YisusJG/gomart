@@ -64,8 +64,10 @@ class PurchaseOrderDetailRepository{
     var body = jsonEncode(receptionDetail);
     final response = await _api.sendPost(urlApi,body);
 
+    debugPrint("estatus ${response.statusCode}");
       if (response.statusCode == 200){
         final data = ErrorMessaje.fromJson(json.decode(response.body));
+        debugPrint("response save details $data");
         return data;
       }else if (response.statusCode == 500) {
         throw ("Error con el servidor");

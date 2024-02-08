@@ -30,7 +30,7 @@ class CommonApi {
             body: body).timeout(_timeoutDuration,);
         try{
           ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
-          return http.Response(messageApi.messaje,1010);
+          return http.Response(messageApi.message,1010);
         }catch(e){
           e.toString();
         }
@@ -38,8 +38,13 @@ class CommonApi {
       } else {
         final response = await http.post(url, headers: {'Content-Type': 'application/json'}, body: body).timeout(_timeoutDuration);
         try{
+          //revisar esta parte , para los mensajes y manejar dos, uno de succes y otro de error
           ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
-          return http.Response(messageApi.messaje,1010);
+          if(messageApi.typeMessage == 1){
+            return response;
+          }else{
+            return http.Response(messageApi.message,1010);
+          }
         }catch(e){
           e.toString();
         }
@@ -65,7 +70,7 @@ class CommonApi {
             .timeout(_timeoutDuration);
         try{
           ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
-          return http.Response(messageApi.messaje,1010);
+          return http.Response(messageApi.message,1010);
         }catch(e){
           e.toString();
         }
@@ -74,7 +79,7 @@ class CommonApi {
         final response = await http.get(url, headers: {'Content-Type': 'application/json'}).timeout(_timeoutDuration);
         try{
           ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
-          return http.Response(messageApi.messaje,1010);
+          return http.Response(messageApi.message,1010);
         }catch(e){
           e.toString();
         }

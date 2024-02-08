@@ -13,7 +13,7 @@ class GiftsBloc extends Bloc<GiftsEvent,GiftsState>{
   void _saveGiftsEvent(SaveGiftsEvent event, Emitter<GiftsState> emit) async {
     try {
       final messageDetails = await giftsRepository.saveGifts(gifts: event.receptionGiftsModel);
-      emit(SaveGiftsState(message: messageDetails.messaje));
+      emit(SaveGiftsState(message: messageDetails.message));
     }catch (e) {
       emit(ErrorSaveGifts(errorApi: e.toString()));
     }

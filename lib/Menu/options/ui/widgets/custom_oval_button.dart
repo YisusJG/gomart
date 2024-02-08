@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gomart/Menu/dummy/ui/screen/example_screen.dart';
 import 'package:gomart/Menu/inventory/ui/screen/inventory_screen.dart';
 import 'package:gomart/Menu/purchaseOrder/ui/screen/purchase_orders_screen.dart';
-
+import 'package:gomart/Menu/thermalPrint/ui/screen/thermal_print_screen.dart';
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
 import '../../models/options.dart';
@@ -71,7 +70,7 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
     }if(option ==3){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ExampleScreen()),
+        MaterialPageRoute(builder: (context) => const ThermalPrintScreen()),
       );
     }
   }

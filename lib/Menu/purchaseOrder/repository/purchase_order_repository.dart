@@ -64,7 +64,7 @@ class PurchaseOrderRepository{
       }
     }catch (e) {
       final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.messaje);
+      throw (data.message);
     }
   }
 }

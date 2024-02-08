@@ -1,20 +1,24 @@
 class ErrorMessaje{
-  late String messaje;
+  late int typeMessage;
+  late String message;
 
 
   ErrorMessaje({
-    this.messaje = "",
+    this.typeMessage = 0,
+    this.message = "",
   });
 
   factory ErrorMessaje.fromJson(Map<String, dynamic> map){
     return ErrorMessaje(
-      messaje: map['messaje'],
+      typeMessage: map['typeMessage'],
+      message: map['message'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['messaje'] = messaje;
+    data['typeMessage'] = typeMessage;
+    data['message'] = message;
     return data;
   }
 }

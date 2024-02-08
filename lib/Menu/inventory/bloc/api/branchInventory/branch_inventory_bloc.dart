@@ -29,7 +29,7 @@ class BranchInventoryBloc extends Bloc<BranchInventoryEvent, BranchInventoryStat
     try{
       //debugPrint("En el bloc ${event.branchInventoryProductModel.toList()}");
       final messageSaveBranchInventoryProduct = await inventoryRepository.saveBranchInventoryProduct(branchInventoryProductModel: event.branchInventoryProductModel);
-      emit(SaveBranchInventoryProductState(message: messageSaveBranchInventoryProduct.messaje));
+      emit(SaveBranchInventoryProductState(message: messageSaveBranchInventoryProduct.message));
     }catch(e){
       emit(ErrorSaveBranchProductInventory(errorApi: e.toString()));
     }

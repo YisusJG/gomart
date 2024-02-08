@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_state.dart';
@@ -28,12 +29,14 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
   void _saveReceptionDetailsEvent(SaveReceptionDetailsEvent event, Emitter<ReceptionState> emit)async{
     try{
       //print("ReceptionDeatils ${event.details.length}");
-      //print("receptionDetail ${event.details.map((e) => e.toJson())}");
+      debugPrint("receptionDetail ${event.details.map((e) => e.toJson())}");
       final messageDetails = await orderDetailRepository.saveReceptionDetails(receptionDetail: event.details);
-      emit(SaveReceptionDetailsState(message: messageDetails.messaje));
+      debugPrint("En el bloc response ${messageDetails.message}");
+      emit(SaveReceptionDetailsState(message: messageDetails.message));
       //print("ReceptionId ${reception.receptionId}");
 
     }catch(e){
+      debugPrint("entro en el catch por que?");
       emit(ErrorSaveReceptionDetails(errorApi: e.toString()));
     }
   }

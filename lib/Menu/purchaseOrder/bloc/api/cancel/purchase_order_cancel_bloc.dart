@@ -15,7 +15,7 @@ class PurchaseOrderCancelBloc extends Bloc<PurchaseOrderCancelEvent, PurchaseOrd
     try{
       //print("Reception ${event.receptionModel.toJson()}");
       final messageReception = await purchaseOrderRepository.cancelReception(receptionModel: event.receptionModel);
-      emit(CancelReceptionState(message: messageReception.messaje));
+      emit(CancelReceptionState(message: messageReception.message));
       //print("ReceptionId ${reception.receptionId}");
 
     }catch(e){

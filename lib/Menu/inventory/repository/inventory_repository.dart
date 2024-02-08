@@ -92,7 +92,7 @@ class InventoryRepository{
     }catch (e) {
       //debugPrint("ErrorMessaje $e");
       final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.messaje);
+      throw (data.message);
     }
   }
 
@@ -118,7 +118,7 @@ class InventoryRepository{
     }catch (e) {
       //debugPrint("ErrorMessaje $e");
       final data = ErrorMessaje.fromJson(json.decode(response.body));
-      throw (data.messaje);
+      throw (data.message);
     }
   }
 
