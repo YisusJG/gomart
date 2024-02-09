@@ -32,13 +32,13 @@ class Options{
         textColor: Colors.white,
         icon: Icons.qr_code_scanner_outlined
     ),
-    Options(
-        id: 3,
-        title: "Impresora",
-        bacgroundColor: Colors.black,
-        textColor: Colors.white,
-        icon: Icons.print_sharp
-    ),
+    // Options(
+    //     id: 3,
+    //     title: "Impresora",
+    //     bacgroundColor: Colors.black,
+    //     textColor: Colors.white,
+    //     icon: Icons.print_sharp
+    // ),
   ];
 
 }

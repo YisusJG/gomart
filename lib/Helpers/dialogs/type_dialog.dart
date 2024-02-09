@@ -238,4 +238,24 @@ class TypeDialog {
     ).show();
   }
 
+
+  void showDialogQuestion2(String textBtnOk, String textBtnCancel) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.question,
+      animType: AnimType.leftSlide,
+      showCloseIcon: false,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      title: title,
+      desc: description,
+      btnCancelOnPress: onCancel,
+      btnCancelText: textBtnCancel,
+      // btnCancelIcon: Icons.cancel,
+      btnOkOnPress: onOk,
+      btnOkText: textBtnOk,
+      //btnOkIcon: Icons.check_circle_rounded,
+    ).show();
+  }
+
 }

@@ -11,7 +11,7 @@ class ReceptionModel {
   String notes;
   int branchId;
   int timesPrinted;
-  String sapCode;
+  String? sapCode;
   int insertUserId;
   String providerReference;
   int typeDocumentsReceptionId;
@@ -32,7 +32,7 @@ class ReceptionModel {
         this.notes = '',
         this.branchId = 0,
         this.timesPrinted = 0,
-        this.sapCode  = '',
+        this.sapCode,
         this.insertUserId = 1,
         this.providerReference = '',
         this.typeDocumentsReceptionId = 1,

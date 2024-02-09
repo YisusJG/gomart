@@ -202,7 +202,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
       totalQuantity: widget.lstReceptionDetail.fold(0, (int sum , ReceptionDetailModel x) => sum + x.quantity),
       notes: observationsController.text,
       branchId: widget.referenceOrderModel.branchId,
-      //wsapCode: //widget.referenceOrderModel.sapCode, // descomentar cuando ya tengamos el sapcode
+      sapCode: widget.referenceOrderModel.sapCode, // descomentar cuando ya tengamos el sapcode
       insertUserId: 1, //Cambiar esto que sea dinamicoa
       providerReference: widget.referenceOrderModel.providerReference,
       typeDocumentsReceptionId: widget.referenceOrderModel.typeDocumentId,
