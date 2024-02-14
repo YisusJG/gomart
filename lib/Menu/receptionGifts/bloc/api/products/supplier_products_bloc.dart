@@ -29,6 +29,7 @@ class SupplierProductsBloc extends Bloc<SupplierProductsEvent, SupplierProductsS
           nameUnit: productProviderModel.nameUnit,
           sapmaterial: productProviderModel.sapmaterial,
           barcode: productProviderModel.barcode,
+          productBarCodes: productProviderModel.productBarCodes
         );
       }).toList();
       emit(LoadSupplierProductsState(lsReceptionGifts: receptionGifts));

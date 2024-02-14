@@ -1,3 +1,5 @@
+import '../../purchaseOrderDetail/models/ProductBarCodes.dart';
+
 class ReceptionGiftsModel {
 
   int receptionId;
@@ -15,6 +17,7 @@ class ReceptionGiftsModel {
   String sapmaterial;
   String nameUnit;
   String barcode;
+  List<ProductBarCodes>? productBarCodes;
 
   ReceptionGiftsModel(
       {
@@ -33,6 +36,7 @@ class ReceptionGiftsModel {
         this.sapmaterial = "",
         this.nameUnit = "",
         this.barcode = "",
+        this.productBarCodes
       });
 
   factory ReceptionGiftsModel.fromJson(Map<String, dynamic> map) {

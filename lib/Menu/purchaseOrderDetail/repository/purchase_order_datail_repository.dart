@@ -13,7 +13,7 @@ import '../models/reception_model.dart';
 class PurchaseOrderDetailRepository{
   final _api = CommonApi();
 
-  Future<List<PurchaseOrderDetailModel>>getPurchaseOrderDetail({required int purchaseOrderId})async{
+  Future<List<PurchaseOrderDetailModel>> getPurchaseOrderDetail({required int purchaseOrderId})async{
     final urlApi = "${Environment().apiGomart}Purchases/getPurchasesOrderDetail/purchaseOrderId/$purchaseOrderId"; //30076     6767
     final response = await _api.sendGet(urlApi);
     if (response.statusCode == 200) {

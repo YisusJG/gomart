@@ -1,3 +1,5 @@
+import '../../purchaseOrderDetail/models/ProductBarCodes.dart';
+
 class ProductProviderModel {
   int productId;
   String name;
@@ -7,6 +9,7 @@ class ProductProviderModel {
   int quantity;
   double roundingValue;
   int unitId;
+  List<ProductBarCodes>? productBarCodes;
 
   ProductProviderModel(
       {
@@ -18,18 +21,22 @@ class ProductProviderModel {
         this.quantity = 0,
         this.roundingValue = 0,
         this.unitId = 0,
+        this.productBarCodes
       });
 
-  factory ProductProviderModel.fromJson(Map<String, dynamic> map) {
+  factory ProductProviderModel.fromJson(Map<String, dynamic> json) {
     return ProductProviderModel(
-    productId: map['productId'],
-    name: map['name'],
-    barcode: map['barcode'],
-    sapmaterial: map['sapmaterial'],
-    nameUnit: map['nameUnit'],
-    quantity: map['quantity'],
-    roundingValue: map['roundingValue'],
-    unitId: map['unitId'],
+    productId: json['productId'],
+    name: json['name'],
+    barcode: json['barcode'],
+    sapmaterial: json['sapmaterial'],
+    nameUnit: json['nameUnit'],
+    quantity: json['quantity'],
+    roundingValue: json['roundingValue'],
+    unitId: json['unitId'],
+    productBarCodes: json['productBarCodes'] != null
+        ? (json['productBarCodes'] as List).map((i) => ProductBarCodes.fromJson(i)).toList()
+        : null
     );
   }
 

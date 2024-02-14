@@ -119,8 +119,11 @@ class _CardListGiftsState extends State<CardListGifts> {
   }
 
   void showInputBasicDialog(List<ReceptionGiftsModel> listGift, String barcode){
-    var gift = listGift.firstWhere((x) => x.barcode == barcode);
+    var gift = listGift.where((x) => x.barcode == barcode || (x.productBarCodes != null &&
+        x.productBarCodes!.any((barcodeResult) => barcodeResult.barcode == barcode)));
+
     var productIndex = listGift.indexWhere((x) => x.barcode == barcode);
+
     dialog = TypeDialog(
       context: context,
       onOk:(){
@@ -141,7 +144,7 @@ class _CardListGiftsState extends State<CardListGifts> {
       },
       amountController: amounController,
     );
-    dialog.showInputBasicDialog(gift.name,gift.nameUnit, "Aceptar", "Cancelar");
+    dialog.showInputBasicDialog(gift.first.name, gift.first.nameUnit, "Aceptar", "Cancelar");
   }
 
   void _scrollToEditedBarcode(int index) {
