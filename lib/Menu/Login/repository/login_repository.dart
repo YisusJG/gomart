@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:gomart/ConnectionToGomart/models/branch_model.dart';
 import 'package:gomart/DataBase/entities/branch_entity.dart';
 import 'package:gomart/DataBase/entities/employee_entity.dart';
@@ -13,14 +14,17 @@ import '../models/error_messaje.dart';
 class LoginRepository{
   final _api = CommonApi();
 
-  Future<EmployeeModel> getUser({required String user, required String password}) async {
-      final uriApi = "${Environment().apiGomart}Empleados/validaUsario";
+  Future<EmployeeModel> getUser({required String ip ,required String user, required String password}) async {
+      //final uriApi = "${Environment().apiGomart}Empleados/validaUsario";
+        http://10.0.1.65:8080/G137/api/
+      final uriApi = "http://$ip:8080/G137/api/Empleados/validaUsario";
+        debugPrint(uriApi);
       var body = jsonEncode(<String, String>{
         'User': user,
         'Password': password,
       });
       final response = await _api.sendPost(uriApi, body);
-
+        debugPrint("${response.statusCode}");
       if (response.statusCode == 200) {
         final data = EmployeeModel.fromJson(json.decode(response.body));
         return data;

@@ -1,3 +1,5 @@
+import '../../purchaseOrderDetail/models/ProductBarCodes.dart';
+
 class ProductModel {
   int id;
   String name;
@@ -10,6 +12,7 @@ class ProductModel {
   String productSubcategory;
   String productStatus;
   int physicalInventory;
+  List<ProductBarCodes>? productBarCodes;
 
   ProductModel({
         this.id = 0,
@@ -22,21 +25,25 @@ class ProductModel {
         this.productCategory = "",
         this.productSubcategory = "",
         this.productStatus = "",
-        this.physicalInventory = 0
+        this.physicalInventory = 0,
+        this.productBarCodes,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> map) {
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: map['id'],
-      name: map['name'],
-      barcode: map['barcode'],
-      hasStock: map['hasStock'],
-      purchaseUnit: map['purchaseUnit'],
-      validFrom: map['validFrom'],
-      visible: map['visible'],
-      productCategory: map['productCategory'],
-      productSubcategory: map['productSubcategory'],
-      productStatus: map['productStatus'],
+      id: json['id'],
+      name: json['name'],
+      barcode: json['barcode'] ?? "",
+      hasStock: json['hasStock'],
+      purchaseUnit: json['purchaseUnit'],
+      validFrom: json['validFrom'],
+      visible: json['visible'],
+      productCategory: json['productCategory'],
+      productSubcategory: json['productSubcategory'],
+      productStatus: json['productStatus'],
+        productBarCodes: json['productBarCodes'] != null
+            ? (json['productBarCodes'] as List).map((i) => ProductBarCodes.fromJson(i)).toList()
+            : null
     );
   }
 

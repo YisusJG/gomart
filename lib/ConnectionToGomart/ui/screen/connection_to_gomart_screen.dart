@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/ConnectionToGomart/models/ip_gomart_modal.dart';
 import '../../../Constants/app_colors.dart';
 import '../../../Helpers/get_color_hexadecimal.dart';
 import '../../../Menu/Login/ui/screen/login_screen.dart';
@@ -72,6 +73,8 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                   Expanded(
                     child:BlocListener<ValidateIpGomartBloc, ValidateIpGomartState>(listener: (contextGomartListener,stateGomartListener) async {
                       if(stateGomartListener is LoadValidateIpGomartState){
+                        IpGomartModal ipGomartModal = IpGomartModal(ip: stateGomartListener.branch!.ip);
+                        contextGomartListener.read<ValidateIpGomartBloc>().add(SaveIpGomartEvent(ipGomartModal: ipGomartModal));
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => LoginScreen(branchModel: stateGomartListener.branch!,)),
@@ -107,7 +110,7 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                                     messagesSnackBar("Favor de llenar el campo cuatro");
                                   }else{
                                     contextGomart.read<ValidateIpGomartBloc>().add(
-                                        LoadValidateIpGomartEven(ipGomart:"${stateInput.octetOne}.${stateInput.octetTwo}.${stateInput.octetThree}.${stateInput.octetFour}"));
+                                        LoadValidateIpGomartEvent(ipGomart:"${stateInput.octetOne}.${stateInput.octetTwo}.${stateInput.octetThree}.${stateInput.octetFour}"));
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

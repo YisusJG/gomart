@@ -55,24 +55,25 @@ class _CardListProductsByCategoryState
         builder: (contextProduct, stateProduct) {
       if (widget.selectedProductCategory != previousCategory) {
         previousCategory = widget.selectedProductCategory;
-        contextProduct
-            .read<ProductsByCategoryBloc>()
+        contextProduct.read<ProductsByCategoryBloc>()
             .add(LoadProductsByCategoryEvent(categoryId: widget.selectedProductCategory.id));
 
       }
       return BlocListener<InventoryBarcodeBloc, InventoryBarcodeState>(
         listener: (contextBarcodeListener, stateBarcodeListener) {
 
-          var product = stateProduct.productModel
-              ?.where((x) => x.barcode == stateBarcodeListener.barcode);
-          if (product!.isNotEmpty) {
-            showDialogAmountInventory(product.first);
+          var productBarcode = stateProduct.productModel
+              ?.where((x) => x.barcode == stateBarcodeListener.barcode || (x.productBarCodes != null &&
+              x.productBarCodes!.any((barcode) => barcode.barcode == stateBarcodeListener.barcode)));
+
+          if (productBarcode!.isNotEmpty) {
+            showDialogAmountInventory(productBarcode.first);
           } else {
             messagesSnackBar("El producto no pertenece a esta categoria");
           }
         },
         child: (stateProduct.productModel != null)
-            ? Expanded(
+        ? Expanded(
                 child: Stack(
                   children: [
                     Container(
@@ -92,9 +93,13 @@ class _CardListProductsByCategoryState
                   ],
                 ),
               )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
+            : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(stateProduct.errorApi),
+              //child: const Text("No es posible cargar los productos para esta catergoria"),
+            )
+
+
       );
     });
   }

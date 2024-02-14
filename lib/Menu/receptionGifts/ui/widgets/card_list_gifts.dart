@@ -144,8 +144,6 @@ class _CardListGiftsState extends State<CardListGifts> {
     dialog.showInputBasicDialog(gift.name,gift.nameUnit, "Aceptar", "Cancelar");
   }
 
-
-
   void _scrollToEditedBarcode(int index) {
     _scrollController.animateTo(
       index * (MediaQuery.of(context).size.height / 5.5),

@@ -1,6 +1,13 @@
-abstract class  ValidateIpGomartEven{}
+import 'package:gomart/ConnectionToGomart/models/ip_gomart_modal.dart';
 
-class LoadValidateIpGomartEven extends ValidateIpGomartEven{
+abstract class  ValidateIpGomartEvent{}
+
+class LoadValidateIpGomartEvent extends ValidateIpGomartEvent{
   final String ipGomart;
-  LoadValidateIpGomartEven({this.ipGomart = ""});
+  LoadValidateIpGomartEvent({this.ipGomart = ""});
+}
+
+class SaveIpGomartEvent extends ValidateIpGomartEvent{
+  final IpGomartModal ipGomartModal;
+  SaveIpGomartEvent({required this.ipGomartModal});
 }

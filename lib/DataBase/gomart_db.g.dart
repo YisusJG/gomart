@@ -65,6 +65,8 @@ class _$AppDatabase extends AppDatabase {
 
   BranchDao? _branchDaoInstance;
 
+  IpGomartDao? _ipGomartDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -90,6 +92,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `EmployeeEntity` (`id` INTEGER NOT NULL, `branchId` INTEGER NOT NULL, `employeeNumber` TEXT NOT NULL, `name` TEXT NOT NULL, `lastName` TEXT NOT NULL, `mothersLastName` TEXT NOT NULL, `photo` TEXT, `corporateEmail` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `BranchEntity` (`id` INTEGER NOT NULL, `zoneName` TEXT NOT NULL, `branchNumber` TEXT NOT NULL, `ip` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `IpGomartEntity` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ip` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -105,6 +109,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   BranchDao get branchDao {
     return _branchDaoInstance ??= _$BranchDao(database, changeListener);
+  }
+
+  @override
+  IpGomartDao get ipGomartDao {
+    return _ipGomartDaoInstance ??= _$IpGomartDao(database, changeListener);
   }
 }
 
@@ -245,5 +254,38 @@ class _$BranchDao extends BranchDao {
   Future<void> insertBranch(BranchEntity branch) async {
     await _branchEntityInsertionAdapter.insert(
         branch, OnConflictStrategy.abort);
+  }
+}
+
+class _$IpGomartDao extends IpGomartDao {
+  _$IpGomartDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _ipGomartEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'IpGomartEntity',
+            (IpGomartEntity item) =>
+                <String, Object?>{'id': item.id, 'ip': item.ip});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<IpGomartEntity> _ipGomartEntityInsertionAdapter;
+
+  @override
+  Future<IpGomartEntity?> findIpGomart() async {
+    return _queryAdapter.query('SELECT * FROM IpGomartEntity',
+        mapper: (Map<String, Object?> row) =>
+            IpGomartEntity(id: row['id'] as int, ip: row['ip'] as String));
+  }
+
+  @override
+  Future<void> insertIpGomart(IpGomartEntity ipGomartEntity) async {
+    await _ipGomartEntityInsertionAdapter.insert(
+        ipGomartEntity, OnConflictStrategy.abort);
   }
 }

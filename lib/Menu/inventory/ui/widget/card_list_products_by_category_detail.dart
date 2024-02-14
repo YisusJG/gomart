@@ -35,7 +35,11 @@ class CardListProductsByCategoryDetail extends StatefulWidget {
 
 class _CardListProductsByCategoryDetailState
     extends State<CardListProductsByCategoryDetail> {
+  var branchNumber = "";
+  var branchId = 0;
+  var insertUserId = 0;
   late TypeDialog dialog;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -45,9 +49,6 @@ class _CardListProductsByCategoryDetailState
 
   @override
   Widget build(BuildContext context) {
-    var branchNumber = "";
-    var branchId = 0;
-    var insertUserId = 0;
 
     return MultiBlocProvider(providers:[
     BlocProvider<BranchInventoryBloc>(create: (context) => BranchInventoryBloc(RepositoryProvider.of(context))),
@@ -89,15 +90,17 @@ class _CardListProductsByCategoryDetailState
         if (stateBranchId is SaveBranchInventoryState) {
           List<BranchInventoryProductModel> branchInventoryProductModelList = [];
           for (var element in widget.lstProductsModel) {
-            BranchInventoryProductModel branchInventoryProductModel = BranchInventoryProductModel(
-                branchInventoriesId: stateBranchId.branchInventoryId!.branchInventoryId,
-                branchId: branchId,
-                productId: element.id,
-                count: element.physicalInventory,
-                visible: true,
-                insertUserId: insertUserId
-            );
-            branchInventoryProductModelList.add(branchInventoryProductModel);
+            if (element.physicalInventory != 0){
+              BranchInventoryProductModel branchInventoryProductModel = BranchInventoryProductModel(
+                  branchInventoriesId: stateBranchId.branchInventoryId!.branchInventoryId,
+                  branchId: branchId,
+                  productId: element.id,
+                  count: element.physicalInventory,
+                  visible: true,
+                  insertUserId: insertUserId
+              );
+              branchInventoryProductModelList.add(branchInventoryProductModel);
+            }
           }
           contextBranchId.read<BranchInventoryBloc>().add(SaveBranchInventoryProductEvent(branchInventoryProductModel: branchInventoryProductModelList));
           widget.lstProductsModel.clear();
@@ -122,11 +125,15 @@ class _CardListProductsByCategoryDetailState
               ProductModel targetProduct = widget.lstProductsModel
                   .firstWhere((product) => product.id == stateInputAmout.id);
 
+              var productIndex = widget.lstProductsModel.indexWhere((element) => element.id == stateInputAmout.id);
+
               targetProduct.physicalInventory = stateInputAmout.amount;
               context.read<ProductsInventoryListBloc>().add(
                   ListProductModelEvent(listProductModel: widget.lstProductsModel));
+              scrollToEditedBarcode(productIndex);
             }
             return ListView.builder(
+                controller: scrollController,
                 itemCount: widget.lstProductsModel.length,
                 itemBuilder: (context, index) {
                   var currentProduct = widget.lstProductsModel[index];
@@ -233,10 +240,19 @@ class _CardListProductsByCategoryDetailState
                     ],
                   );
                 });
-          }),)
+          }),
+      )
       )
 
     )
+    );
+  }
+
+  void scrollToEditedBarcode(int index) {
+    scrollController.animateTo(
+      index * (MediaQuery.of(context).size.height / 5.5),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 

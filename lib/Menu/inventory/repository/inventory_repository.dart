@@ -65,6 +65,7 @@ class InventoryRepository{
     final response = await _api.sendGet(urlApi);
     if(response.statusCode == 200){
       final List<dynamic> jsonData = jsonDecode(response.body);
+      debugPrint("El json como respuesta es $jsonData");
       List<ProductModel> data = jsonData.map((map) => ProductModel.fromJson(map)).toList();
       print("Data getAllProductsByCategoryId ${data.length}");
       return data;
