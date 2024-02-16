@@ -18,7 +18,7 @@ class CustomGomartName extends StatelessWidget {
           color: Color(getColorHexadecimal(primaryColor)),
           borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40) )
       ),
-      child: Text("${branchEntity!.description} - ${branchEntity!.branchNumber}",style: TextStyle(
+      child: Text(branchEntity!.branchNumber,style: TextStyle(
           color: Color(getColorHexadecimal(secondaryColor)),
           fontSize: 25,
           fontWeight: FontWeight.bold

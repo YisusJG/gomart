@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/ConnectionToGomart/models/branch_model.dart';
-import 'package:gomart/Menu/options/ui/screen/options_screen.dart';
+import 'package:gomart/Menu/home/ui/screen/home_screen.dart';
 import '../../../../ConnectionToGomart/ui/widgets/triangle_bottom.dart';
 import '../../../../Constants/app_colors.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         _onSavedEmployeeBranch(contextDB, stateLoginListener.employeeModel!);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const OptionsScreen()),
+                          MaterialPageRoute(builder: (context) => const HomeScreen()),
                         );
                         //messagesSnackBar("carga completa ${stateLoginListener.employeeModel?.toJson()}");
 

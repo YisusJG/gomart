@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/ConnectionToGomart/ui/screen/connection_to_gomart_screen.dart';
+import 'package:gomart/Menu/home/ui/screen/home_screen.dart';
 import 'package:gomart/Splahs/bloc/splahsDB/splahs_local_bloc.dart';
 import 'package:gomart/Splahs/bloc/splahsDB/splahs_local_state.dart';
-
-import '../../../Menu/options/ui/screen/options_screen.dart';
 
 class SplahsScreen extends StatefulWidget {
   const SplahsScreen({super.key});
@@ -25,9 +24,14 @@ class _SplahsScreenState extends State<SplahsScreen> {
             MaterialPageRoute(builder: (context) => const ConnectionToGomartScreen()),
           );
         }else{
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const OptionsScreen()),
+          // );
+
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const OptionsScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         }
     },
