@@ -284,6 +284,13 @@ class _$IpGomartDao extends IpGomartDao {
   }
 
   @override
+  Future<IpGomartEntity?> deleteIpGomart() async {
+    return _queryAdapter.query('DELETE FROM IpGomartEntity',
+        mapper: (Map<String, Object?> row) =>
+            IpGomartEntity(id: row['id'] as int, ip: row['ip'] as String));
+  }
+
+  @override
   Future<void> insertIpGomart(IpGomartEntity ipGomartEntity) async {
     await _ipGomartEntityInsertionAdapter.insert(
         ipGomartEntity, OnConflictStrategy.abort);

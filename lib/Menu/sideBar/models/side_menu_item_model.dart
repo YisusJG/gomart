@@ -19,6 +19,6 @@ class SideMenuItemModel{
   ];
 
   static List<SideMenuItemModel> sideMenuItems2 = [
-    SideMenuItemModel(id: 1, title: "Cerrar sesion",icon:  Icons.double_arrow_rounded),
+    SideMenuItemModel(id: 1, title: "Borrar datos",icon:  Icons.double_arrow_rounded),
   ];
 }

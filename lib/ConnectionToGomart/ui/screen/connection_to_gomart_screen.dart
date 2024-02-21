@@ -31,7 +31,14 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
             BlocProvider<ValidateIpGomartBloc>(create:(context)=> ValidateIpGomartBloc(RepositoryProvider.of<ConnectionToGomartRepository>(context)))
           ],
           child: BlocBuilder<IpInputsBloc, IpInputsState>(builder:(contextInput, stateInput){
-            return Scaffold(
+            return PopScope(
+                canPop: false,
+                onPopInvoked: (bool didPop){
+                  if (didPop) {
+                    return;
+                  }
+                },
+                child: Scaffold(
               backgroundColor: Color(getColorHexadecimal(secondaryColor)),
               body: Column(
                 children: [
@@ -137,7 +144,7 @@ class _ConnectionToGomartScreenState extends State<ConnectionToGomartScreen> {
                   ),
                 ],
               ),
-            );
+            ));
           })
       ),
     );

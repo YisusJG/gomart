@@ -36,6 +36,7 @@ class BranchInventoryBloc extends Bloc<BranchInventoryEvent, BranchInventoryStat
   }
 
   void _getEmployeeInfoEvent(GetEmployeeInfoEvent event, Emitter<BranchInventoryState> emit) async {
+    debugPrint("algo");
     final employee = await inventoryRepository.getEmployeeInventory();
     emit(GetEmployeeInfoState(employeeModel: employee));
 

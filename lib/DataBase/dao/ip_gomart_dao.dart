@@ -10,4 +10,7 @@ abstract class IpGomartDao {
   @Query('SELECT * FROM IpGomartEntity')
   Future<IpGomartEntity?>findIpGomart();
 
+  @Query('DELETE FROM IpGomartEntity')
+  Future<IpGomartEntity?>deleteIpGomart();
+
 }
