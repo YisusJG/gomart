@@ -62,9 +62,10 @@ class PurchaseOrderDetailRepository{
   Future<ErrorMessaje>saveReceptionDetails({required List<ReceptionDetailModel> receptionDetail}) async{
     final urlApi = "${Environment().apiGomart}Purchases/save/receptionDetails";
     var body = jsonEncode(receptionDetail);
+    debugPrint("enviar $body");
     final response = await _api.sendPost(urlApi,body);
 
-    debugPrint("estatus ${response.statusCode}");
+    debugPrint("estatus sss ${response.statusCode}");
       if (response.statusCode == 200){
         final data = ErrorMessaje.fromJson(json.decode(response.body));
         debugPrint("response save details $data");

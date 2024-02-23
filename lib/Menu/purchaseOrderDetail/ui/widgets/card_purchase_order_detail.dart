@@ -50,13 +50,13 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                             Text(formattedDate,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
                           ],
                         ),
-                        // InkWell(
-                        //   onTap: (){
-                        //     messageSnackBar("Aqui abre el catalogo");
-                        //     //showDialogInfoInput();
-                        //   },
-                        //   child: const Icon(Icons.note_add),
-                        // )
+                        InkWell(
+                          onTap: (){
+                            messageSnackBar("Aqui abre para poner el codigo de barras");
+                            //showDialogInfoInput();
+                          },
+                          child: const Icon(Icons.barcode_reader,size: 30,),
+                        )
 
                       ],
                     ),

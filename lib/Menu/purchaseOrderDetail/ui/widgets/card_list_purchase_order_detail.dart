@@ -81,14 +81,14 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
       }
       return BlocListener<OrderBarcodeBloc, OrderBarcodeState>(listener: (contextBarcodeListener,stateBarcodeListener){
-        var productName = widget.lstReceptionDetail.where((x) => x.barcode == stateBarcodeListener.barcode || (x.productBarCodes != null &&
+        var filterProduct = widget.lstReceptionDetail.where((x) => x.barcode == stateBarcodeListener.barcode || (x.productBarCodes != null &&
             x.productBarCodes!.any((barcode) => barcode.barcode == stateBarcodeListener.barcode)),);
 
-        if(productName.isNotEmpty){
-          if(productName.first.isReceived){
+        if(filterProduct.isNotEmpty){
+          if(filterProduct.first.isReceived){
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
-            showDialogInfoInput(productName.first);
+            showDialogInfoInput(filterProduct.first);
           }
 
 
@@ -120,6 +120,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
               context.read<ReceptionBloc>().add(SaveReceptionDetailsEvent(details: widget.lstReceptionDetail));
 
             }else if(stateReception is ErrorSaveReception){
+              debugPrint("Ocurrio un erro");
               // solo provar cuando noe stemo en la red
               messagesSnackBar(stateReception.errorApi);
               closingDialog();

@@ -22,6 +22,7 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
       //print("ReceptionId ${reception.receptionId}");
 
     }catch(e){
+      debugPrint("Error en el bloc ${e.toString()}");
       emit(ErrorSaveReception(errorApi: e.toString()));
     }
   }

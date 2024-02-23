@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:gomart/Menu/Login/models/error_messaje.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,9 +38,10 @@ class CommonApi {
         return response;
       } else {
         final response = await http.post(url, headers: {'Content-Type': 'application/json'}, body: body).timeout(_timeoutDuration);
-        try{
-          //revisar esta parte , para los mensajes y manejar dos, uno de succes y otro de error
+        try {
+          debugPrint("Response Entra");
           ErrorMessaje messageApi = ErrorMessaje.fromJson(json.decode(response.body));
+          debugPrint("Response ${messageApi.typeMessage}");
           if(messageApi.typeMessage == 1){
             return response;
           }else{

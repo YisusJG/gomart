@@ -15,9 +15,9 @@ class LoginRepository{
   final _api = CommonApi();
 
   Future<EmployeeModel> getUser({required String ip ,required String user, required String password}) async {
-      //final uriApi = "${Environment().apiGomart}Empleados/validaUsario";
+      final uriApi = "${Environment().apiGomart}Empleados/validaUsario";
         http://10.0.1.65:8080/G137/api/
-      final uriApi = "http://$ip:8080/G137/api/Empleados/validaUsario";
+      //final uriApi = "http://$ip:8080/G137/api/Empleados/validaUsario";
         debugPrint(uriApi);
       var body = jsonEncode(<String, String>{
         'User': user,
