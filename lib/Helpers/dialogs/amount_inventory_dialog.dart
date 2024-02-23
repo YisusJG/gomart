@@ -50,8 +50,37 @@ class AmountInventoryDialog {
                           fontStyle: FontStyle.italic,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: TColor.primaryText)),
+                          color: TColor.primaryText),
+                      textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10,),
+
+                  if (product.physicalInventory != 0)
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Color(getColorHexadecimal(primaryColor)),
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(35),
+                          bottomRight: Radius.circular(35),
+                          topLeft: Radius.circular(35),
+                          bottomLeft: Radius.circular(35)),
+                    ),
+                    child: Center(
+                      child: Text("${product.physicalInventory}",
+                        style: TextStyle(
+                          color: TColor.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+
                   const SizedBox(height: 15,),
+
                   TextField(
                     controller: productAmountController,
                     keyboardType: TextInputType.number,

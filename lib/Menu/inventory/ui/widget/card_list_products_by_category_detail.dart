@@ -1,3 +1,4 @@
+import 'package:floor_generator/misc/extension/iterable_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/inventory/bloc/api/branchInventory/branch_inventory_state.dart';
@@ -40,6 +41,7 @@ class _CardListProductsByCategoryDetailState
   var insertUserId = 0;
   late TypeDialog dialog;
   final ScrollController scrollController = ScrollController();
+  List<ProductModel> newList = [];
 
   @override
   void initState() {
@@ -49,14 +51,13 @@ class _CardListProductsByCategoryDetailState
 
   @override
   Widget build(BuildContext context) {
-
     return MultiBlocProvider(providers:[
     BlocProvider<BranchInventoryBloc>(create: (context) => BranchInventoryBloc(RepositoryProvider.of(context))),
 
     ],
       child: BlocListener<ClickButtonSaveInventoryBloc,ClickButtonSaveInventoryState>(
         listener: (contextButtonSaveInventory, stateButtonSaveInventoryState) {
-        debugPrint("El tamaño de lista es ${widget.lstProductsModel.length}");
+
         var amountInventoryProduct = widget.lstProductsModel.any((element) => element.physicalInventory != 0);
         if (amountInventoryProduct == false) {
           messagesSnackBar("No existe un inventario para guardar");
@@ -73,7 +74,6 @@ class _CardListProductsByCategoryDetailState
               });
         }
     }, child: BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextBranchId, stateBranchId){
-        debugPrint("el id es ${stateBranchId.branchInventoryId?.branchInventoryId}");
 
         if (stateBranchId is GetBranchInventoryState) {
           branchNumber = stateBranchId.branchModel!.branchNumber;
@@ -110,33 +110,38 @@ class _CardListProductsByCategoryDetailState
         }
       }, child: BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextSaveBranchInventory, stateSaveBranchInventory){
         if (stateSaveBranchInventory is SaveBranchInventoryProductState) {
-          debugPrint("Entro al 1");
             showDialogSucces("Guardado exitoso", stateSaveBranchInventory.message);
-            //showDialogSucces("Guardado exitoso", "Se guardo correctamente el inventario");
         } else if(stateSaveBranchInventory is ErrorSaveBranchProductInventoryState){
-          debugPrint("Entro al 2");
             showAlert("Error", stateSaveBranchInventory.errorApi);
-          //showDialogSucces("Guardado exitoso", "Se guardo el inventario correctamente");
         }
 
       }, child: BlocBuilder<InputAddAmountBloc, InputAddAmountState>(
           builder: (contextInputAmout, stateInputAmout) {
+            //widget.lstProductsModel.sortedByDescending((element) => element.physicalInventory);
             if (stateInputAmout.id > 0) {
+
               ProductModel targetProduct = widget.lstProductsModel
                   .firstWhere((product) => product.id == stateInputAmout.id);
 
-              var productIndex = widget.lstProductsModel.indexWhere((element) => element.id == stateInputAmout.id);
+              //var productIndex = widget.lstProductsModel.indexWhere((element) => element.id == stateInputAmout.id);
 
               targetProduct.physicalInventory = stateInputAmout.amount;
+
+              if (newList.isEmpty) {
+                newList = widget.lstProductsModel.sortedByDescending((element) => element.physicalInventory).toList();
+              } else {
+                newList = widget.lstProductsModel.sortedByDescending((element) => element.physicalInventory).toList();
+              }
+
               context.read<ProductsInventoryListBloc>().add(
-                  ListProductModelEvent(listProductModel: widget.lstProductsModel));
-              scrollToEditedBarcode(productIndex);
+                  ListProductModelEvent(listProductModel: newList.isEmpty ? widget.lstProductsModel : newList));
+
             }
             return ListView.builder(
                 controller: scrollController,
-                itemCount: widget.lstProductsModel.length,
+                itemCount: newList.isEmpty ? widget.lstProductsModel.length : newList.length,
                 itemBuilder: (context, index) {
-                  var currentProduct = widget.lstProductsModel[index];
+                  var currentProduct = newList.isEmpty ? widget.lstProductsModel[index] : newList[index];
                   return Stack(
                     children: [
                       Center(
@@ -248,13 +253,13 @@ class _CardListProductsByCategoryDetailState
     );
   }
 
-  void scrollToEditedBarcode(int index) {
+  /*void scrollToEditedBarcode(int index) {
     scrollController.animateTo(
       index * (MediaQuery.of(context).size.height / 5.5),
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-  }
+  }*/
 
   void showError(String title, String description) {
     dialog =
