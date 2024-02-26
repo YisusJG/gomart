@@ -88,7 +88,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
           if(filterProduct.first.isReceived){
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
-            showDialogInfoInput(filterProduct.first);
+            showDialogInfoInput(filterProduct.first, 1);
           }
 
 
@@ -158,9 +158,9 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
   }
 
-  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel){
+  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel, int  typeScanner){
     PurchaseDetailDialog dialog = PurchaseDetailDialog(context: context);
-    dialog.showDialogInfoInput(receptionDetailModel);
+    dialog.showDialogInfoInput(receptionDetailModel,typeScanner);
   }
 
   void showDialogUpluading(String description){

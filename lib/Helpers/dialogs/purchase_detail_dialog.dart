@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/models/note_model.dart';
 import '../../Menu/purchaseOrderDetail/bloc/dialogInputs/dialog_input_bloc.dart';
@@ -31,7 +32,7 @@ class PurchaseDetailDialog {
         //PurchaseOrderDetailModel? purchaseOrderDetail,
       }); //: purchaseOrderDetailModel = purchaseOrderDetail ?? PurchaseOrderDetailModel();
 
-  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel) {
+  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel,int  typeScanner) {
     TextEditingController productCostController = TextEditingController();
     TextEditingController amountReceivedController = TextEditingController();
     List<NoteModel> dropdownItems = NoteModel.notes;
@@ -51,7 +52,7 @@ class PurchaseDetailDialog {
               return Column(
                 children: [
                   Text(receptionDetailModel.productName,
-                      style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black26)),
+                      style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black26,),textAlign: TextAlign.center,),
                   TextField(
                     controller: productCostController,
                     keyboardType: TextInputType.number,
@@ -78,11 +79,13 @@ class PurchaseDetailDialog {
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  TextField(
+                  TextFormField(
+                    inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9 ]')),],
                     controller: amountReceivedController,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
+                      //label:  const Text("Cantidad recepcionada",textAlign: TextAlign.center,),
                       hintText: 'Cantidad recepcionada',
                       border:  OutlineInputBorder(borderRadius:BorderRadius.circular(15)),
                       contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -154,6 +157,7 @@ class PurchaseDetailDialog {
         var producstCost = productCostController.text;
         var amountReceived = amountReceivedController.text;
         //var discount = dicountController.text;
+        debugPrint("amount $amountReceived");
         if(producstCost.isEmpty){
           contextDialog.read<DialogInputBloc>().add(ValidateInputDialogEvent(isvalidateCost: true, isValidaAmount: false));
           return;

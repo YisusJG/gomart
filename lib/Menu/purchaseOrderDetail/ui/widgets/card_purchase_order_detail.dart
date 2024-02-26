@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../Helpers/dialogs/purchase_detail_dialog.dart';
 import '../../models/reception_detail_model.dart';
 
 class CardPurchaseOrderDetail extends StatefulWidget {
@@ -52,7 +53,8 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                         ),
                         InkWell(
                           onTap: (){
-                            messageSnackBar("Aqui abre para poner el codigo de barras");
+                            //messageSnackBar("Aqui abre para poner el codigo de barras");
+                            showDialogInfoInput(widget.lstReceptionDetail[widget.index], 1);
                             //showDialogInfoInput();
                           },
                           child: const Icon(Icons.barcode_reader,size: 30,),
@@ -110,5 +112,10 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel, int  typeScanner){
+    PurchaseDetailDialog dialog = PurchaseDetailDialog(context: context);
+    dialog.showDialogInfoInput(receptionDetailModel,typeScanner);
   }
 }
