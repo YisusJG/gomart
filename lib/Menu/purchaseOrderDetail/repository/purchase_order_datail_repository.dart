@@ -86,4 +86,29 @@ class PurchaseOrderDetailRepository{
       }
   }
 
+
+  Future<String> updateIsBusy({required int purchaseOrderId})async{
+    final urlApi = "${Environment().apiGomart}Purchases/update/purchaseOrderId/$purchaseOrderId/isBusy"; //30076     6767
+    final response = await _api.sendGet(urlApi);
+    if (response.statusCode == 200) {
+      final dynamic jsonData = json.decode(response.body);
+      //List<PurchaseOrderDetailModel> data = jsonData.map((map) => PurchaseOrderDetailModel.fromJson(map)).toList();
+      debugPrint("respuesta api $jsonData");
+      return jsonData;
+    }else if(response.statusCode == 500){
+      throw ("Error con el servidor");
+    }else if(response.statusCode == 204){
+      throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
+    }else if(response.statusCode == 1010){
+      throw (response.body);
+    }
+    else {
+      throw ("${response.reasonPhrase}");
+    }
+  }
+
 }

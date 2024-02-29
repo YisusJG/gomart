@@ -11,7 +11,7 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
   ReceptionBloc(this.orderDetailRepository): super (ReceptionState()){
     on<SaveReceptionEvent>(_saveReceptionEvent);
     on<SaveReceptionDetailsEvent>(_saveReceptionDetailsEvent);
-
+    on<UpdateIsBusyEvent>(_updateIsBusyEvent);
   }
 
   void _saveReceptionEvent(SaveReceptionEvent event, Emitter<ReceptionState> emit)async{
@@ -40,5 +40,23 @@ class ReceptionBloc extends Bloc<ReceptionEvent,ReceptionState>{
       debugPrint("entro en el catch por que?");
       emit(ErrorSaveReceptionDetails(errorApi: e.toString()));
     }
+  }
+
+  void _updateIsBusyEvent(UpdateIsBusyEvent event, Emitter<ReceptionState> emit) async{
+    try{
+      //print("Reception ${event.receptionModel.toJson()}");
+      final isBusy = await orderDetailRepository.updateIsBusy(purchaseOrderId: event.purchaseOrderId);
+      emit(UpdateIsBusyState(messagePurchaseOrder: isBusy));
+      //print("ReceptionId ${reception.receptionId}");
+
+    }catch(e){
+      debugPrint("Error en el bloc ${e.toString()}");
+      //emit(ErrorSaveReception(errorApi: e.toString()));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    return super.close();
   }
 }

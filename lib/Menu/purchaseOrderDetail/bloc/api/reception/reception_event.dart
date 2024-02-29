@@ -16,3 +16,9 @@ class SaveReceptionDetailsEvent extends ReceptionEvent{
   SaveReceptionDetailsEvent({required this.details});
 }
 
+class UpdateIsBusyEvent extends ReceptionEvent{
+  final purchaseOrderId;
+
+  UpdateIsBusyEvent({required this.purchaseOrderId});
+}
+

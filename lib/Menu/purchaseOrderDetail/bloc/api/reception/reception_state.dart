@@ -4,7 +4,9 @@ class ReceptionState{
   ReceptionObj? receptionObj;
   String errorApi;
   String message;
-  ReceptionState({this.receptionObj, this.errorApi = "", this.message = ""});
+  String messagePurchaseOrder;
+
+  ReceptionState({this.receptionObj, this.errorApi = "", this.message = "", this.messagePurchaseOrder = ""});
 }
 
 class SaveReceptionState extends ReceptionState{
@@ -21,5 +23,9 @@ class SaveReceptionDetailsState extends ReceptionState{
 
 class ErrorSaveReceptionDetails extends ReceptionState{
   ErrorSaveReceptionDetails({required super.errorApi});
+}
+
+class UpdateIsBusyState extends ReceptionState{
+  UpdateIsBusyState({required super.messagePurchaseOrder});
 }
 

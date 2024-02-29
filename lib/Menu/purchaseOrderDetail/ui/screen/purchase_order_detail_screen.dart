@@ -12,6 +12,7 @@ import '../../../../Helpers/dialogs/type_dialog.dart';
 import '../../../../Helpers/get_color_hexadecimal.dart';
 import '../../../purchaseOrder/models/reference_order_model.dart';
 import '../../bloc/api/reception/reception_bloc.dart';
+import '../../bloc/api/reception/reception_event.dart';
 import '../../bloc/inputs/purchase_order_detail_inputs_bloc.dart';
 import '../../bloc/reception/purchase_order_list_bloc.dart';
 import '../../bloc/reception/purchase_order_list_state.dart';
@@ -54,7 +55,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                         context))
                   ..add(LoadOrderDetailEvent(
                       purchaseOrderId: widget.referenceOrderModel.orderId))),
-            BlocProvider<ReceptionBloc>(create: (context) => ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context)))
+            BlocProvider<ReceptionBloc>(create: (context) =>
+            ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context))..add(UpdateIsBusyEvent(purchaseOrderId: widget.referenceOrderModel.orderId,)))
           ],
           child: BlocListener<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(listener: (contextOrderDetail, stateOrderDetail){
             if (stateOrderDetail is ErrorPurchaseOrderDetail){
@@ -72,7 +74,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                     if (didPop) {
                       return;
                     }
-                    showDialogQuestion("¿Estas seguro de regresar?","Perderas el avance de la recepcion");
+                    showDialogQuestion("¿Estas seguro de regresar?","Perderas el avance de la recepcion",contextOrderDetail);
                   },
                   child: Scaffold(
                       appBar: AppBar(
@@ -191,7 +193,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void showDialogQuestion(String title, String description){
+  void showDialogQuestion(String title, String description, BuildContext contextOrderDetail){
     dialog = TypeDialog(
         context: context,
         title: title,
@@ -200,6 +202,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
 
         },
         onOk: (){
+          contextOrderDetail.read<ReceptionBloc>().add(UpdateIsBusyEvent(purchaseOrderId: widget.referenceOrderModel.orderId,));
           closingDialog();
         }
     );
@@ -212,5 +215,14 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
   }
   void onBack(){
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    // const snackBar = SnackBar(
+    //   content: Text("La aplicación se está cerrando"),
+    // );
+    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    super.dispose();
   }
 }
