@@ -32,7 +32,7 @@ class PurchaseDetailDialog {
         //PurchaseOrderDetailModel? purchaseOrderDetail,
       }); //: purchaseOrderDetailModel = purchaseOrderDetail ?? PurchaseOrderDetailModel();
 
-  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel,int  typeScanner) {
+  void showDialogInfoInput(ReceptionDetailModel receptionDetailModel,int  typeScanner,BuildContext context) {
     TextEditingController productCostController = TextEditingController();
     TextEditingController amountReceivedController = TextEditingController();
     List<NoteModel> dropdownItems = NoteModel.notes;
@@ -157,6 +157,7 @@ class PurchaseDetailDialog {
         var producstCost = productCostController.text;
         var amountReceived = amountReceivedController.text;
         //var discount = dicountController.text;
+        debugPrint("psQuantity ${receptionDetailModel.poquantity}");
         debugPrint("amount $amountReceived");
         if(producstCost.isEmpty){
           contextDialog.read<DialogInputBloc>().add(ValidateInputDialogEvent(isvalidateCost: true, isValidaAmount: false));
@@ -165,8 +166,8 @@ class PurchaseDetailDialog {
           contextDialog.read<DialogInputBloc>().add(ValidateInputDialogEvent(isValidaAmount: true, isvalidateCost: false));
           return;
         }if(receptionDetailModel.poquantity < int.parse(amountReceived)){
-          Navigator.of(context).pop();
-          messageSnackBar("No puedes recibir más de la cantidad solicitada");
+          Navigator.of(contextDialog).pop();
+          messageSnackBar("No puedes recibir más de la cantidad solicitada",contextDialog);
           return;
         }
         else{
@@ -192,7 +193,7 @@ class PurchaseDetailDialog {
       btnCancelText: 'CANCELAR',
       //btnCancelIcon:Icons.close,
       btnCancelOnPress: (){
-        Navigator.of(context).pop();
+        Navigator.of(contextDialog).pop();
       },
       autoDismiss: false,
       onDismissCallback:(dismissType){
@@ -201,7 +202,16 @@ class PurchaseDetailDialog {
     ).show();
   }
 
-  void messageSnackBar(String mensaje) {
+  void messageSnackBar(String mensaje, BuildContext contextDialog) {
+    ScaffoldMessenger.of(contextDialog).showSnackBar(
+      SnackBar(
+        content: Text(mensaje),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void messageSnackBarReception(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(mensaje),

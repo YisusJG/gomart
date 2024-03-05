@@ -217,12 +217,12 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
     Navigator.pop(context);
   }
 
-  @override
-  void dispose() {
-    // const snackBar = SnackBar(
-    //   content: Text("La aplicación se está cerrando"),
-    // );
-    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // const snackBar = SnackBar(
+  //   //   content: Text("La aplicación se está cerrando"),
+  //   // );
+  //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //   super.dispose();
+  // }
 }

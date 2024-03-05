@@ -142,7 +142,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
                     itemBuilder: (context,index) {
                       return SizedBox(
                         height: MediaQuery.of(context).size.height/2.8,
-                        child: CardPurchaseOrderDetail(lstReceptionDetail: stateOrderList.receptionDetail!, index: index,),
+                        child: CardPurchaseOrderDetail(lstReceptionDetail: stateOrderList.receptionDetail!, index: index, contextDep: context,),
                       );
                     }
                 );
@@ -160,7 +160,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
 
   void showDialogInfoInput(ReceptionDetailModel receptionDetailModel, int  typeScanner){
     PurchaseDetailDialog dialog = PurchaseDetailDialog(context: context);
-    dialog.showDialogInfoInput(receptionDetailModel,typeScanner);
+    dialog.showDialogInfoInput(receptionDetailModel,typeScanner,context);
   }
 
   void showDialogUpluading(String description){
