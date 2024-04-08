@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/button/click_gift_bloc.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/button/click_gift_event.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/button/click_gift_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/repository/purchase_order_datail_repository.dart';
 import 'package:intl/intl.dart';
 import '../../../../Constants/app_colors.dart';
@@ -33,7 +37,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
   late double iva = 0;
   late double ieps = 0;
   late double total = 0;
-  //late double discount = 0;
+  late double discount = 0;
   late TypeDialog dialog;
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                   ..add(LoadOrderDetailEvent(
                       purchaseOrderId: widget.referenceOrderModel.orderId))),
             BlocProvider<ReceptionBloc>(create: (context) =>
-            ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context))..add(UpdateIsBusyEvent(purchaseOrderId: widget.referenceOrderModel.orderId,)))
+            ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context))..add(UpdateIsBusyEvent(purchaseOrderId: widget.referenceOrderModel.orderId,))),
+            BlocProvider<ClickGiftBloc>(create: (context) => ClickGiftBloc())
           ],
           child: BlocListener<PurchaseOrderDetailBloc, PurchaseOrderDetailState>(listener: (contextOrderDetail, stateOrderDetail){
             if (stateOrderDetail is ErrorPurchaseOrderDetail){
@@ -76,7 +81,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                     }
                     showDialogQuestion("¿Estas seguro de regresar?","Perderas el avance de la recepcion",contextOrderDetail);
                   },
-                  child: Scaffold(
+                  child: BlocBuilder<ClickGiftBloc,ClickGiftState>(builder: (contextClickAddGift, stateAddGift){
+                    return Scaffold(
                       appBar: AppBar(
                         title: Text(
                           "Recepción de orden",
@@ -86,6 +92,13 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                         iconTheme: IconThemeData(
                             color: Color(getColorHexadecimal(secondaryColor))),
                         backgroundColor: Color(getColorHexadecimal(primaryColor)),
+                        actions: <Widget>[IconButton(
+                            onPressed: (){
+                                debugPrint("Entr a regalos");
+                                contextClickAddGift.read<ClickGiftBloc>().add(AddGiftsEvent());
+                            },
+                            icon: const Icon(FontAwesomeIcons.gift)
+                        )],
                       ),
                       body: Column(
                         children: [
@@ -106,9 +119,10 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                                   totalQuantity += stateSumOrders.totalQuantity;
                                   subTotal += stateSumOrders.subTotal;
                                   iva += stateSumOrders.iva;
-                                  ieps += stateSumOrders.ieps;
-                                  //discount += stateSumOrders.discount;
-                                  total = subTotal + iva + ieps; //- discount;
+                                  ieps = stateSumOrders.ieps;
+                                  discount = stateSumOrders.discount;
+                                  debugPrint("descount: $discount");
+                                  total =  subTotal + iva + ieps - discount;
                                 }
 
                                 return Column(
@@ -118,7 +132,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                                       children: [
                                         Row(
                                             children:[
-                                              Container(width: 80, alignment: Alignment.centerRight,child: const Text('IEPS: ', style: TextStyle(color: Colors.white,),),),
+                                              Container(width: 40, alignment: Alignment.centerLeft,child: const Text('IEPS: ', style: TextStyle(color: Colors.white,),),),
                                               Text(formatCurrency(ieps),
                                                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
                                             ]
@@ -135,29 +149,29 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                                       children: [
                                         Row(
                                             children:[
-                                              Container(width: 80, alignment: Alignment.centerRight, child: const Text('IVA: ', style: TextStyle(color: Colors.white,),),),
+                                              Container(width: 40, alignment: Alignment.centerLeft, child: const Text('IVA: ', style: TextStyle(color: Colors.white,),),),
                                               Text(formatCurrency(iva), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),
                                             ]
                                         ),
                                         Row(children: [
-                                          const Text('TOTAL: ', style: TextStyle(color: Colors.white),),
+                                          const Text('DESCUENTO: ', style: TextStyle(color: Colors.white),),
                                           Container(width: 90, alignment: Alignment.centerRight,
-                                            child: Text(formatCurrency(total), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
+                                            child: Text(formatCurrency(discount), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
 
                                         ])
                                       ],
                                     ),
-                                    // Align(
-                                    //   alignment: Alignment.center,
-                                    //   child: Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.end,
-                                    //     children: [
-                                    //       const Text('TOTAL: ', style: TextStyle(color: Colors.white),),
-                                    //       Container(width: 90, alignment: Alignment.centerRight,
-                                    //         child: Text(formatCurrency(total), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
-                                    //     ],
-                                    //   ),
-                                    // ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          const Text('TOTAL: ', style: TextStyle(color: Colors.white),),
+                                          Container(width: 90, alignment: Alignment.centerRight,
+                                            child: Text(formatCurrency(total), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 );
                               },
@@ -165,7 +179,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                           ),
                         ],
                       ),
-                  )
+                    );
+                  })
               );
             }
             return const CircularProgressIndicator();

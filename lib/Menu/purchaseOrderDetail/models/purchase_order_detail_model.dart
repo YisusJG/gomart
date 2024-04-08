@@ -14,6 +14,7 @@ class PurchaseOrderDetailModel {
   String? description;
   double ieps;
   double iva;
+  double discount;
   double roundingValue;
   int expiration;
   List<ProductBarCodes>? productBarCodes;
@@ -33,6 +34,7 @@ class PurchaseOrderDetailModel {
         this.description,
         this.ieps = 0.0,
         this.iva = 0.0,
+        this.discount = 0.0,
         this.roundingValue = 0.0,
         this.expiration = 0,
         this.productBarCodes,
@@ -53,6 +55,7 @@ class PurchaseOrderDetailModel {
       description: json['description'],
       ieps: json['ieps'],
       iva: json['iva'],
+      discount: json['discount'],
       roundingValue: json['roundingValue'],
       expiration: json['expiration'],
       productBarCodes: json['productBarCodes'] != null
@@ -78,6 +81,7 @@ class PurchaseOrderDetailModel {
     data['description'] = description;
     data['ieps'] = ieps;
     data['iva'] = iva;
+    data['discount'] = discount;
     data['roundingValue'] = roundingValue;
     data['expiration'] = expiration;
     return data;

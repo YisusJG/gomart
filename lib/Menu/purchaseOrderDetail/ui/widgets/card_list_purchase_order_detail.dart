@@ -6,6 +6,8 @@ import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_blo
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_state.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/button/click_gift_bloc.dart';
+import 'package:gomart/Menu/purchaseOrderDetail/bloc/button/click_gift_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/inputs/purchase_order_detail_inputs_state.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/ui/widgets/card_purchase_order_detail.dart';
 import 'package:gomart/Menu/receptionGifts/ui/screen/gifts_screen.dart';
@@ -73,7 +75,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
         //targetProduct.insertUserId = 1; //Hacerlo dinamico aqui
 
 
-       // print("Mi orden de compra anterior ${widget.lstPurchaseOrderDetail.length}");
+        //print("Mi orden de compra anterior ${targetProduct.discount},${stateInputProduc.discount},");
         context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
         _scrollToEditedCard(stateInputProduc.id);
 
@@ -96,19 +98,22 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
           messagesSnackBar("El producto no se encuentra en la orden de compra");
         }
       },
-        child: BlocListener<PurchaseOrderListBloc,PurchaseOrderListState>(listener: (contextOrderListListener, stateOrderListListener){
-          final orderList = stateOrderListListener.receptionDetail;
-          if(orderList != null){
-            final completePurchaseOrder = orderList.where((element) => element.quantity == 0);
-            if(completePurchaseOrder.isEmpty){
-              countFinishOrder++;
-              if(countFinishOrder == 1){
-                showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
-                //showDialogConfirm();
-              }
-
-            }
-          }
+        child: BlocListener<ClickGiftBloc,ClickGiftState>(listener: (contextClickAddGift, stateClickAddGift){
+          debugPrint("llega a detectar ${stateClickAddGift.onClick}");
+          showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
+          // final orderList = stateOrderListListener.receptionDetail;
+          // if(orderList != null){
+          //   final completePurchaseOrder = orderList.where((element) => element.quantity == 0);
+          //   if(completePurchaseOrder.isEmpty){
+          //     countFinishOrder++;
+          //     if(countFinishOrder == 1){
+          //       //Cambiar esta parte que ahora sea bajo peticion
+          //      // showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
+          //       //showDialogConfirm();
+          //     }
+          //
+          //   }
+          //}
         },
           child: BlocListener<ReceptionBloc,ReceptionState>(listener: (contextReception, stateReception){
             if(stateReception is SaveReceptionState){

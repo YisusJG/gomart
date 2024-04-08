@@ -19,7 +19,7 @@ class PurchaseOrderDetailRepository{
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       List<PurchaseOrderDetailModel> data = jsonData.map((map) => PurchaseOrderDetailModel.fromJson(map)).toList();
-      //debugPrint("respuesta api ${data.first.productBarCodes?.map((e) => e.barcode)}");
+      //debugPrint("respuesta api ${data.map((e) => e.description)}");
       return data;
     }else if(response.statusCode == 500){
       throw ("Error con el servidor");

@@ -27,6 +27,7 @@ class PurchaseOrderDetailBloc extends Bloc<PurchaseOrderDetailEvent, PurchaseOrd
           pounitPrice: purchaseOrderDetail.unitPrice,
           iva: purchaseOrderDetail.iva,
           ieps: purchaseOrderDetail.ieps,
+          discount: purchaseOrderDetail.discount,
           productName: purchaseOrderDetail.name,
           barcode: purchaseOrderDetail.barcode,
           expiration: purchaseOrderDetail.expiration,
