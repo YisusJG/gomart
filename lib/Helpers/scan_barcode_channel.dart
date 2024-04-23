@@ -6,7 +6,6 @@ class ScanBarcodeChannel{
   Future<void> prueba() async {
     try {
       await _channel.invokeMethod('prueba').whenComplete(() {
-        print("si hizo algo");
       });
     } on PlatformException catch (e) {
       e.message;

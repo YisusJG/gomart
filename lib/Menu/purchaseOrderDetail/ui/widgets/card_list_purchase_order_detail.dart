@@ -34,6 +34,7 @@ class CardListPurchaseOrderDetail extends StatefulWidget {
 }
 
 class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetail> {
+  late bool busyScanner;
   ScanBarcodeChannel barcodeChannel = ScanBarcodeChannel();
   static const MethodChannel scannerChannel = MethodChannel('barcode_channel');
   String barcode = '';
@@ -44,6 +45,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   @override
   void initState() {
     super.initState();
+    busyScanner = false;
     context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
     scannerChannel.setMethodCallHandler((call) {
       if (call.method == 'scanBarcode') {
@@ -73,7 +75,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
         targetProduct.total = stateInputProduc.total;
         targetProduct.isReceived = stateInputProduc.isReceived;
         //targetProduct.insertUserId = 1; //Hacerlo dinamico aqui
-
+        busyScanner = false;
 
         //print("Mi orden de compra anterior ${targetProduct.discount},${stateInputProduc.discount},");
         context.read<PurchaseOrderListBloc>().add(OrderListEvent(receptionDetail: widget.lstReceptionDetail));
@@ -90,7 +92,12 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
           if(filterProduct.first.isReceived){
             messagesSnackBar("Este producto ya lo has recepcionado");
           }else{
-            showDialogInfoInput(filterProduct.first, 1);
+            debugPrint("Entra varias veces $busyScanner");
+            if(!busyScanner){
+              busyScanner = true;
+              showDialogInfoInput(filterProduct.first, 1);
+            }
+
           }
 
 
@@ -100,7 +107,14 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
       },
         child: BlocListener<ClickGiftBloc,ClickGiftState>(listener: (contextClickAddGift, stateClickAddGift){
           debugPrint("llega a detectar ${stateClickAddGift.onClick}");
-          showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
+          final completeReception = widget.lstReceptionDetail.where((element) => element.isReceived==false);
+          if(completeReception.isEmpty){
+            showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
+          }else{
+            messagesSnackBar("Tinees que recepcionar todos los productos para continuar");
+          }
+          //debugPrint("productos no recepcionados ${completeReception.length}");
+          //showDialogQuestion("¿Deseas agrega regalos?","Recuerda que despues no podras agregar los regalos");
           // final orderList = stateOrderListListener.receptionDetail;
           // if(orderList != null){
           //   final completePurchaseOrder = orderList.where((element) => element.quantity == 0);
@@ -164,7 +178,14 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
   }
 
   void showDialogInfoInput(ReceptionDetailModel receptionDetailModel, int  typeScanner){
-    PurchaseDetailDialog dialog = PurchaseDetailDialog(context: context);
+    PurchaseDetailDialog dialog = PurchaseDetailDialog(
+        context: context,
+      onCancel: (){
+          busyScanner = false;
+        debugPrint("Aqui cierra");
+        Navigator.of(context).pop();
+      }
+    );
     dialog.showDialogInfoInput(receptionDetailModel,typeScanner,context);
   }
 
@@ -201,10 +222,10 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
       receptionStatusId: 1,
       purchaseOrderId: widget.referenceOrderModel.orderId,
       subtotal: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal),
-      iva: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.iva),
+      iva: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.purchaseIva),
       ieps: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.ieps),
       discount: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.discount),
-      total: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.subtotal + x.iva + x.ieps - x.discount),
+      total: widget.lstReceptionDetail.fold(0, (double sum , ReceptionDetailModel x) => sum + x.total),
       totalQuantity: widget.lstReceptionDetail.fold(0, (int sum , ReceptionDetailModel x) => sum + x.quantity),
       notes: observationsController.text,
       branchId: widget.referenceOrderModel.branchId,

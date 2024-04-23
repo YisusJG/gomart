@@ -18,6 +18,12 @@ class PurchaseOrderDetailModel {
   double roundingValue;
   int expiration;
   List<ProductBarCodes>? productBarCodes;
+  double purchaseIva;
+  double purchaseIeps;
+  double discountCom1;
+  double discountCom2;
+  double discountCom3;
+
 
   PurchaseOrderDetailModel(
       {
@@ -38,6 +44,11 @@ class PurchaseOrderDetailModel {
         this.roundingValue = 0.0,
         this.expiration = 0,
         this.productBarCodes,
+        this.purchaseIva = 0,
+        this.purchaseIeps = 0,
+        this.discountCom1 = 0,
+        this.discountCom2 = 0,
+        this.discountCom3 = 0,
       });
 
   factory PurchaseOrderDetailModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +72,11 @@ class PurchaseOrderDetailModel {
       productBarCodes: json['productBarCodes'] != null
           ? (json['productBarCodes'] as List).map((i) => ProductBarCodes.fromJson(i)).toList()
           : null,
+      purchaseIva: json['purchaseIva'],
+      purchaseIeps: json['purchaseIeps'],
+      discountCom1: json['discountCom1'],
+      discountCom2: json['discountCom2'],
+      discountCom3: json['discountCom3'],
 
     );
   }
@@ -84,6 +100,11 @@ class PurchaseOrderDetailModel {
     data['discount'] = discount;
     data['roundingValue'] = roundingValue;
     data['expiration'] = expiration;
+    data['purchaseIva'] = purchaseIva;
+    data['purchaseIeps'] = purchaseIeps;
+    data['discountCom1'] = discountCom1;
+    data['discountCom2'] = discountCom2;
+    data['discountCom3'] = discountCom3;
     return data;
   }
 

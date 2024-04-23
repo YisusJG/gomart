@@ -171,30 +171,53 @@ class PurchaseDetailDialog {
           return;
         }
         else{
+          double total = 0;
+          double dicount = 0;
+          double dicount2 = 0;
+          double dicount3 = 0;
+          double iva = 0;
+          double ieps = 0;
+
           double subtotal = double.parse(producstCost) * int.parse(amountReceived);
           DateTime now = DateTime.now();
           String insertDate = now.toIso8601String();
-          //if(discount.isNotEmpty) discountProduct = double.parse(discount);
-          double total = subtotal + receptionDetailModel.iva + receptionDetailModel.ieps;   //- discountProduct;
-          // context.read<PurchaseOrderDatailInputsBloc>().add(
-          //   InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived),
-          //       note:typeNoteDescription,subTotal: subtotal,discount: discount.isEmpty ? 0.0: double.parse(discount),inserDate: insertDate,total: total),
-          // );
+
+          if(receptionDetailModel.purchaseIva > 0){
+            iva = subtotal * (receptionDetailModel.purchaseIva/100) ;
+            debugPrint("iva porduc: $iva");
+            //totalWithIva = subtotal + iva;
+          }
+
+          if(receptionDetailModel.ieps > 0){
+            ieps = subtotal * (receptionDetailModel.purchaseIeps/100);
+            debugPrint("ieps porduc: $ieps");
+          }
+
+          if(receptionDetailModel.discountCom1 > 0){
+            dicount = (subtotal + iva + ieps) * (receptionDetailModel.discountCom1/100);
+            debugPrint("descuento: $dicount");
+          }
+
+          total = subtotal + iva + ieps - dicount;
+
+
           context.read<PurchaseOrderDatailInputsBloc>().add(
             InputProductCostEvent(productCost: double.parse(producstCost),id: receptionDetailModel.productId,amountreceived: int.parse(amountReceived),
                 note:typeNoteDescription,subTotal: subtotal,discount: 0,inserDate: insertDate,total: total, isReceived: true),
           );
 
-          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: receptionDetailModel.ieps,
-              iva: receptionDetailModel.iva ,subTotal: subtotal,total: 0,discount: receptionDetailModel.discount));
+          context.read<PurchaseOrderListBloc>().add(SumOrderTotalsEvent(totalQuantity: int.parse(amountReceived), ieps: ieps,
+              iva: iva ,subTotal: subtotal,total: 0,discount: dicount));
           Navigator.of(context).pop();
         }
       },
       btnCancelText: 'CANCELAR',
       //btnCancelIcon:Icons.close,
-      btnCancelOnPress: (){
-        Navigator.of(contextDialog).pop();
-      },
+      btnCancelOnPress: onCancel,
+          //(){
+        //debugPrint("Aqui cierra");
+        //Navigator.of(contextDialog).pop();
+      //},
       autoDismiss: false,
       onDismissCallback:(dismissType){
 

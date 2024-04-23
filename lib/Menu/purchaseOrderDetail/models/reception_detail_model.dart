@@ -26,6 +26,11 @@ class ReceptionDetailModel {
   int expiration;
   bool isReceived;
   List<ProductBarCodes>? productBarCodes;
+  double purchaseIva;
+  double purchaseIeps;
+  double discountCom1;
+  double discountCom2;
+  double discountCom3;
 
   ReceptionDetailModel(
       {
@@ -52,6 +57,11 @@ class ReceptionDetailModel {
         this.expiration = 0,
         this.isReceived = false,
         this.productBarCodes,
+        this.purchaseIva = 0,
+        this.purchaseIeps = 0,
+        this.discountCom1 = 0,
+        this.discountCom2 = 0,
+        this.discountCom3 = 0,
       });
 
   factory ReceptionDetailModel.fromJson(Map<String, dynamic> map) {
@@ -74,6 +84,11 @@ class ReceptionDetailModel {
         pounitPrice: map['pounitPrice'],
         insertDate: map['insertDate'],
         visible: map['visible'],
+        purchaseIva: map['purchaseIva'],
+        purchaseIeps: map['purchaseIeps'],
+        discountCom1: map['discountCom1'],
+        discountCom2: map['discountCom2'],
+        discountCom3: map['discountCom3'],
     );
   }
 
@@ -97,6 +112,11 @@ class ReceptionDetailModel {
     data['pounitPrice'] = pounitPrice;
     data['insertDate'] = insertDate;
     data['visible'] = visible;
+    data['purchaseIva'] = purchaseIva;
+    data['purchaseIeps'] = purchaseIeps;
+    data['discountCom1'] = discountCom1;
+    data['discountCom2'] = discountCom2;
+    data['discountCom3'] = discountCom3;
     return data;
   }
 

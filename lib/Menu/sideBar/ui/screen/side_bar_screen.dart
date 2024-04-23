@@ -36,7 +36,6 @@ class _SideBarScreenState extends State<SideBarScreen> {
           child: BlocBuilder<BranchInventoryBloc, BranchInventoryState>(
               builder: (contextEmployee, stateEmployee) {
             if (stateEmployee is GetEmployeeInfoState) {
-              print("dddd");
               return Container(
                 padding:
                     EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -139,7 +138,7 @@ class _SideBarScreenState extends State<SideBarScreen> {
   void onMenuPress(SideMenuItemModel menu) {
     //setState(() {
     _selectedMenu = menu.title;
-    debugPrint("entra scree");
+
     //});
   }
 }

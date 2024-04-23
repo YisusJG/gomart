@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/purchase_order_detail_state.dart';
@@ -17,7 +18,7 @@ class PurchaseOrderDetailBloc extends Bloc<PurchaseOrderDetailEvent, PurchaseOrd
   void _loadOrderDetailEvent(LoadOrderDetailEvent event, Emitter<PurchaseOrderDetailState> emit) async{
     try{
       emit(StartingPurchaseOrderDetail(receptionDetail: purchaseOrderDetailModel));
-      List<PurchaseOrderDetailModel> orderDetail = await orderDetailRepository.getPurchaseOrderDetail(purchaseOrderId: event.purchaseOrderId);
+      List<PurchaseOrderDetailModel> orderDetail = await orderDetailRepository.getPurchaseOrderDetail(purchaseOrderId: event.purchaseOrderId, providerId: event.providerId);
       List<ReceptionDetailModel> receptionDetail = orderDetail.map((PurchaseOrderDetailModel purchaseOrderDetail) {
         return ReceptionDetailModel(
           productId: purchaseOrderDetail.productId,
@@ -31,7 +32,12 @@ class PurchaseOrderDetailBloc extends Bloc<PurchaseOrderDetailEvent, PurchaseOrd
           productName: purchaseOrderDetail.name,
           barcode: purchaseOrderDetail.barcode,
           expiration: purchaseOrderDetail.expiration,
-          productBarCodes: purchaseOrderDetail.productBarCodes
+          productBarCodes: purchaseOrderDetail.productBarCodes,
+          purchaseIva: purchaseOrderDetail.purchaseIva,
+          purchaseIeps: purchaseOrderDetail.purchaseIeps,
+          discountCom1: purchaseOrderDetail.discountCom1,
+          discountCom2: purchaseOrderDetail.discountCom2,
+          discountCom3: purchaseOrderDetail.discountCom3,
         );
       }).toList();
       emit(LoadPurchaseOrderDetail(receptionDetail: receptionDetail));

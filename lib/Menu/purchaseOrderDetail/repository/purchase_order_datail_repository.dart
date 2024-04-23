@@ -13,8 +13,8 @@ import '../models/reception_model.dart';
 class PurchaseOrderDetailRepository{
   final _api = CommonApi();
 
-  Future<List<PurchaseOrderDetailModel>> getPurchaseOrderDetail({required int purchaseOrderId})async{
-    final urlApi = "${Environment().apiGomart}Purchases/getPurchasesOrderDetail/purchaseOrderId/$purchaseOrderId"; //30076     6767
+  Future<List<PurchaseOrderDetailModel>> getPurchaseOrderDetail({required int purchaseOrderId, required int providerId})async{
+    final urlApi = "${Environment().apiGomart}Purchases/getPurchasesOrderDetail/purchaseOrderId/$purchaseOrderId/providerId/$providerId"; //30076     6767
     final response = await _api.sendGet(urlApi);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);

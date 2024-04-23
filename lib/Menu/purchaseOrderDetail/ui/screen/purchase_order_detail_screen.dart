@@ -57,8 +57,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                 create: (context) => PurchaseOrderDetailBloc(
                     RepositoryProvider.of<PurchaseOrderDetailRepository>(
                         context))
-                  ..add(LoadOrderDetailEvent(
-                      purchaseOrderId: widget.referenceOrderModel.orderId))),
+                  ..add(LoadOrderDetailEvent(purchaseOrderId: widget.referenceOrderModel.orderId, providerId: widget.referenceOrderModel.providerId))),
             BlocProvider<ReceptionBloc>(create: (context) =>
             ReceptionBloc(RepositoryProvider.of<PurchaseOrderDetailRepository>(context))..add(UpdateIsBusyEvent(purchaseOrderId: widget.referenceOrderModel.orderId,))),
             BlocProvider<ClickGiftBloc>(create: (context) => ClickGiftBloc())
@@ -94,7 +93,6 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                         backgroundColor: Color(getColorHexadecimal(primaryColor)),
                         actions: <Widget>[IconButton(
                             onPressed: (){
-                                debugPrint("Entr a regalos");
                                 contextClickAddGift.read<ClickGiftBloc>().add(AddGiftsEvent());
                             },
                             icon: const Icon(FontAwesomeIcons.gift)
@@ -119,8 +117,8 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                                   totalQuantity += stateSumOrders.totalQuantity;
                                   subTotal += stateSumOrders.subTotal;
                                   iva += stateSumOrders.iva;
-                                  ieps = stateSumOrders.ieps;
-                                  discount = stateSumOrders.discount;
+                                  ieps += stateSumOrders.ieps;
+                                  discount += stateSumOrders.discount;
                                   debugPrint("descount: $discount");
                                   total =  subTotal + iva + ieps - discount;
                                 }
@@ -156,7 +154,7 @@ class _PurchaseOrderDetailState extends State<PurchaseOrderDetailScreen> {
                                         Row(children: [
                                           const Text('DESCUENTO: ', style: TextStyle(color: Colors.white),),
                                           Container(width: 90, alignment: Alignment.centerRight,
-                                            child: Text(formatCurrency(discount), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
+                                            child: Text(formatCurrencyDiscount(discount), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),),),
 
                                         ])
                                       ],
