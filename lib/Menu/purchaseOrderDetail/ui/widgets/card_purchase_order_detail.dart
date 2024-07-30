@@ -18,6 +18,7 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
 
   @override
   Widget build(BuildContext context) {
+    //debugPrint("TypeId ${widget.lstReceptionDetail[widget.index].typeProducId}");
     DateTime currentDate = DateTime.now();
     DateTime futureDate = currentDate.add(Duration(days: widget.lstReceptionDetail[widget.index].expiration));
     String formattedDate = DateFormat('dd/MM/yyyy').format(futureDate);
@@ -54,8 +55,10 @@ class _CardPurchaseOrderDetailState extends State<CardPurchaseOrderDetail> {
                                 Text(formattedDate,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black26),),
                               ],
                             ),
+                            if(widget.lstReceptionDetail[widget.index].typeProducId == 34)
                             InkWell(
                               onTap: (){
+
                                 //messageSnackBar("Aqui abre para poner el codigo de barras");
                                 showDialogInfoInput(widget.lstReceptionDetail[widget.index], 1);
                                 //showDialogInfoInput();

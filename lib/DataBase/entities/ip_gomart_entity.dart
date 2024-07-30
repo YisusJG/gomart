@@ -20,8 +20,7 @@ class IpGomartEntity{
     );
   }
 
-  IpGomartEntity.fromMap(Map<String, dynamic> map)
-    :
+  IpGomartEntity.fromMap(Map<String, dynamic> map):
         id = map["id"],
         ip = map["ip"];
 

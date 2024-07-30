@@ -38,6 +38,8 @@ class PurchaseOrderDetailBloc extends Bloc<PurchaseOrderDetailEvent, PurchaseOrd
           discountCom1: purchaseOrderDetail.discountCom1,
           discountCom2: purchaseOrderDetail.discountCom2,
           discountCom3: purchaseOrderDetail.discountCom3,
+          typeProducId: purchaseOrderDetail.typeProducId,
+          typeProduc:   purchaseOrderDetail.typeProduc
         );
       }).toList();
       emit(LoadPurchaseOrderDetail(receptionDetail: receptionDetail));

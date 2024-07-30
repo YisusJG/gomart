@@ -23,6 +23,8 @@ class PurchaseOrderDetailModel {
   double discountCom1;
   double discountCom2;
   double discountCom3;
+  int typeProducId;
+  String typeProduc;
 
 
   PurchaseOrderDetailModel(
@@ -49,6 +51,8 @@ class PurchaseOrderDetailModel {
         this.discountCom1 = 0,
         this.discountCom2 = 0,
         this.discountCom3 = 0,
+        this.typeProducId = 0,
+        this.typeProduc = ""
       });
 
   factory PurchaseOrderDetailModel.fromJson(Map<String, dynamic> json) {
@@ -77,6 +81,8 @@ class PurchaseOrderDetailModel {
       discountCom1: json['discountCom1'],
       discountCom2: json['discountCom2'],
       discountCom3: json['discountCom3'],
+      typeProducId: json['typeProducId'],
+      typeProduc:   json['typeProduc'],
 
     );
   }
@@ -105,6 +111,8 @@ class PurchaseOrderDetailModel {
     data['discountCom1'] = discountCom1;
     data['discountCom2'] = discountCom2;
     data['discountCom3'] = discountCom3;
+    data['typeProducId'] = typeProducId;
+    data['typeProduc'] = typeProduc;
     return data;
   }
 

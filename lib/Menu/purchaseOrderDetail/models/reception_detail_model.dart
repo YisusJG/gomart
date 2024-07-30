@@ -31,6 +31,8 @@ class ReceptionDetailModel {
   double discountCom1;
   double discountCom2;
   double discountCom3;
+  int typeProducId;
+  String typeProduc;
 
   ReceptionDetailModel(
       {
@@ -62,6 +64,8 @@ class ReceptionDetailModel {
         this.discountCom1 = 0,
         this.discountCom2 = 0,
         this.discountCom3 = 0,
+        this.typeProducId = 0,
+        this.typeProduc = "",
       });
 
   factory ReceptionDetailModel.fromJson(Map<String, dynamic> map) {
@@ -89,6 +93,8 @@ class ReceptionDetailModel {
         discountCom1: map['discountCom1'],
         discountCom2: map['discountCom2'],
         discountCom3: map['discountCom3'],
+        typeProducId: map['typeProducId'],
+        typeProduc: map['typeProduc'],
     );
   }
 
@@ -117,6 +123,8 @@ class ReceptionDetailModel {
     data['discountCom1'] = discountCom1;
     data['discountCom2'] = discountCom2;
     data['discountCom3'] = discountCom3;
+    data['typeProducId'] = typeProducId;
+    data['typeProduc'] = typeProduc;
     return data;
   }
 
