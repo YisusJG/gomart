@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Helpers/dialogs/purchase_detail_dialog.dart';
+import 'package:gomart/Menu/home/ui/screen/home_screen.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_bloc.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/api/reception/reception_event.dart';
 import 'package:gomart/Menu/purchaseOrderDetail/bloc/barcode/order_barcode_bloc.dart';
@@ -245,7 +246,7 @@ class _CardListPurchaseOrderDetailState extends State<CardListPurchaseOrderDetai
       onOk: (){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OptionsScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       }
     );
