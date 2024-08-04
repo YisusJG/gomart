@@ -22,6 +22,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
   final List<Options> _options = Options.menu;
   @override
   Widget build(BuildContext context) {
+    debugPrint('Options: ${_options.length}');
     return RepositoryProvider(create: (context) => OptionsRepository(),
       child: MultiBlocProvider(providers: [
         BlocProvider<OptionLocalBloc>(create: (context)=> OptionLocalBloc(RepositoryProvider.of<OptionsRepository>(context))..add(GetBranchEvent(branchEntity: null)))
@@ -60,7 +61,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                           ),
                           const SizedBox(height: 25),
                           Row(
-                            //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: _options.skip(2).take(1).map((options) => CustomOvalButton(menu: options)).toList(),
                           ),
                         ],

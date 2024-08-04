@@ -13,6 +13,8 @@ import '../../../DataBase/entities/employee_entity.dart';
 import '../../../Environments/environment.dart';
 import '../../Login/models/error_messaje.dart';
 import '../model/branch_inventory_id.dart';
+import '../model/cyclical_inventory_model.dart';
+import '../model/cyclical_inventory_product_model.dart';
 
 class InventoryRepository{
   final _api = CommonApi();
@@ -23,6 +25,48 @@ class InventoryRepository{
     if(response.statusCode == 200){
       final List<dynamic> jsonData = jsonDecode(response.body);
       List<ProductCategoryModel> data = jsonData.map((map) => ProductCategoryModel.fromJson(map)).toList();
+      return data;
+    }else if(response.statusCode == 500){
+      throw ("Error con el servidor");
+    }else if(response.statusCode == 204){
+      throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
+    } else {
+      throw ("${response.reasonPhrase}");
+    }
+  }
+
+  Future<List<CyclicalInventoryModel>> getAllCyclicalInventories() async {
+    final urlApi = "${Environment().apiGomart}Inventories/getAllCyclicalInventories";
+    final response = await _api.sendGet(urlApi);
+    if(response.statusCode == 200){
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      List<CyclicalInventoryModel> data = jsonData.map((map) => CyclicalInventoryModel.fromJson(map)).toList();
+      return data;
+    }else if(response.statusCode == 500){
+      throw ("Error con el servidor");
+    }else if(response.statusCode == 204){
+      throw ("No existen datos");
+    }else if(response.statusCode == 1000){
+      throw (response.body);
+    }else if(response.statusCode == 1001){
+      throw (response.body);
+    } else {
+      throw ("${response.reasonPhrase}");
+    }
+  }
+
+  Future<List<CyclicalInventoryProductModel>> getAllProductsByCyclicalInventoryId({required int cyclicalInventoryId}) async {
+    final urlApi = "${Environment().apiGomart}Inventories/getAllCyclicalInventoryProducts/$cyclicalInventoryId";
+    print("urlApi $urlApi");
+    final response = await _api.sendGet(urlApi);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      print("jsonData $jsonData");
+      List<CyclicalInventoryProductModel> data = jsonData.map((map) => CyclicalInventoryProductModel.fromJson(map)).toList();
       return data;
     }else if(response.statusCode == 500){
       throw ("Error con el servidor");

@@ -1,6 +1,7 @@
 import 'package:floor_generator/misc/extension/iterable_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gomart/Menu/home/ui/screen/home_screen.dart';
 import 'package:gomart/Menu/inventory/bloc/api/branchInventory/branch_inventory_state.dart';
 import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_bloc.dart';
 import 'package:gomart/Menu/inventory/bloc/buttonSaveInventory/click_button_save_inventory_state.dart';
@@ -302,7 +303,7 @@ class _CardListProductsByCategoryDetailState
         onOk: (){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const OptionsScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         }
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gomart/Menu/inventory/ui/screen/cyclical_inventory_screen.dart';
 import 'package:gomart/Menu/inventory/ui/screen/inventory_screen.dart';
 import 'package:gomart/Menu/purchaseOrder/ui/screen/purchase_orders_screen.dart';
 import 'package:gomart/Menu/thermalPrint/ui/screen/thermal_print_screen.dart';
@@ -62,16 +63,21 @@ class _CustomOvalButtonState extends State<CustomOvalButton> {
         context,
         MaterialPageRoute(builder: (context) => const PurchaseOrdersScreen()),
       );
-    }if(option ==2){
+    }if(option == 2){
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const InventoryScreen()),
       );
-    }if(option ==3){
+    }if(option == 3){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ThermalPrintScreen()),
+        MaterialPageRoute(builder: (context) => const CyclicalInventoryScreen()),
       );
+    // }if(option == 4){
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const ThermalPrintScreen()),
+    //   );
     }
   }
 
