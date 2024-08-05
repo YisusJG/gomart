@@ -1,5 +1,6 @@
 class CyclicalInventoryModel {
   int id;
+  int categoryId;
   String nameCyclicalInventory;
   String inventoryTypeName;
   String category;
@@ -10,6 +11,7 @@ class CyclicalInventoryModel {
 
   CyclicalInventoryModel({
     this.id = 0,
+    this.categoryId = 0,
     this.nameCyclicalInventory = '',
     this.inventoryTypeName = '',
     this.category = '',
@@ -22,6 +24,7 @@ class CyclicalInventoryModel {
   factory CyclicalInventoryModel.fromJson(Map<String, dynamic> map) {
     return CyclicalInventoryModel(
       id: map['id'] as int,
+      categoryId: map['categoryId'] as int,
       nameCyclicalInventory: map['nameCyclicalInventory'] as String,
       inventoryTypeName: map['inventoryTypeName'] as String,
       category: map['category'] as String,
@@ -35,6 +38,7 @@ class CyclicalInventoryModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['categoryId'] = categoryId;
     data['nameCyclicalInventory'] = nameCyclicalInventory;
     data['inventoryTypeName'] = inventoryTypeName;
     data['category'] = category;

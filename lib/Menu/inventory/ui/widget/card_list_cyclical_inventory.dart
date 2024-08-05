@@ -15,7 +15,7 @@ class _CardListCyclicalInventoryState extends State<CardListCyclicalInventory> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10,),
+        const SizedBox(height: 10,),
         Expanded(
             child: ListView.builder(
               padding: EdgeInsets.zero,

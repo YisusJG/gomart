@@ -15,7 +15,11 @@ import 'package:gomart/Menu/inventory/ui/widget/card_list_products_cyclical_inve
 
 class ProductCyclicalInventoryScreen extends StatefulWidget {
   final int cyclicalInventoryId;
-  const ProductCyclicalInventoryScreen({super.key, required this.cyclicalInventoryId});
+  final int categoryId;
+  const ProductCyclicalInventoryScreen({
+    super.key,
+    required this.cyclicalInventoryId,
+    required this.categoryId});
 
   @override
   State<ProductCyclicalInventoryScreen> createState() => _ProductCyclicalInventoryScreenState();
@@ -93,9 +97,6 @@ class _ProductCyclicalInventoryScreenState extends State<ProductCyclicalInventor
                                       "No podras modificar el inventario",
                                       onOK: () {
                                         contextProductsCyclicalInventory.read<BranchInventoryBloc>().add(GetBranchInventoryEvent(branchModel: null));
-
-                                        //showDialogSucces("Guardado exitoso", stateSaveBranchInventory.message);
-                                        //showDialogSucces("Guardado exitoso", "Prueba");
                                       },
                                       onCancel: () {
 
@@ -131,6 +132,7 @@ class _ProductCyclicalInventoryScreenState extends State<ProductCyclicalInventor
         return Center(
           child: CardListProductsCyclicalInventory(
             listCyclicalInventoryModel: stateProductsCyclicalInventory.cyclicalInventoryProductModel!,
+            categoryId: widget.categoryId,
           ),
         );
       } else {

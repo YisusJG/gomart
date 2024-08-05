@@ -6,7 +6,12 @@ import 'package:gomart/Menu/inventory/ui/widget/card_list_products_cyclical_inve
 
 class CardListProductsCyclicalInventory extends StatefulWidget {
   final List<CyclicalInventoryProductModel> listCyclicalInventoryModel;
-  const CardListProductsCyclicalInventory({super.key, required this.listCyclicalInventoryModel});
+  final int categoryId;
+  const CardListProductsCyclicalInventory({
+    super.key,
+    required this.listCyclicalInventoryModel,
+    required this.categoryId,
+   });
 
   @override
   State<CardListProductsCyclicalInventory> createState() => _CardListProductsCyclicalInventoryState();
@@ -35,6 +40,7 @@ class _CardListProductsCyclicalInventoryState extends State<CardListProductsCycl
               ),
               CardListProductsCyclicalInventoryDetail(
                 listCyclicalInventoryProductModel: widget.listCyclicalInventoryModel,
+                categoryId: widget.categoryId,
               ),
             ],
           ),

@@ -2,7 +2,7 @@ import '../../purchaseOrderDetail/models/ProductBarCodes.dart';
 
 class CyclicalInventoryProductModel {
   int id;
-  String productId;
+  int productId;
   String product;
   String barcode;
   int count;
@@ -20,7 +20,7 @@ class CyclicalInventoryProductModel {
   factory CyclicalInventoryProductModel.fromJson(Map<String, dynamic> json) {
     return CyclicalInventoryProductModel(
       id: json['id'] as int,
-      productId: json['productId'] as String, // SE TIENE QUE CAMBIAR A INT
+      productId: json['productId'] as int, // SE TIENE QUE CAMBIAR A INT
       product: json['product'] as String,
       barcode: json['barcode'] as String,
       productBarCodes: json['productBarCodes'] != null

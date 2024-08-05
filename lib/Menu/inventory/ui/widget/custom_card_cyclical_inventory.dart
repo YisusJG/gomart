@@ -62,7 +62,10 @@ class _CustomCardCyclicalInventoryState extends State<CustomCardCyclicalInventor
                     debugPrint("Se le dio click a ${widget.listCyclicalInventoryModel![widget.index].id}");
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProductCyclicalInventoryScreen(cyclicalInventoryId: widget.listCyclicalInventoryModel![widget.index].id)),
+                      MaterialPageRoute(builder: (context) => ProductCyclicalInventoryScreen(
+                          cyclicalInventoryId: widget.listCyclicalInventoryModel![widget.index].id,
+                          categoryId: widget.listCyclicalInventoryModel![widget.index].categoryId,)
+                      ),
                     );
                   },
                   child: const Icon(

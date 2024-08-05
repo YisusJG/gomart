@@ -3,21 +3,30 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gomart/Constants/app_colors.dart';
 import 'package:gomart/Helpers/dialogs/amount_inventory_dialog.dart';
+import 'package:gomart/Helpers/dialogs/type_dialog.dart';
 import 'package:gomart/Helpers/get_color_hexadecimal.dart';
 import 'package:gomart/Helpers/scan_barcode_channel.dart';
+import 'package:gomart/Menu/home/ui/screen/home_screen.dart';
+import 'package:gomart/Menu/inventory/bloc/api/branchInventory/branch_inventory_bloc.dart';
+import 'package:gomart/Menu/inventory/bloc/api/branchInventory/branch_inventory_event.dart';
+import 'package:gomart/Menu/inventory/bloc/api/branchInventory/branch_inventory_state.dart';
 import 'package:gomart/Menu/inventory/bloc/barcode/inventory_barcode_bloc.dart';
 import 'package:gomart/Menu/inventory/bloc/barcode/inventory_barcode_event.dart';
 import 'package:gomart/Menu/inventory/bloc/barcode/inventory_barcode_state.dart';
 import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_bloc.dart';
+import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_event.dart';
 import 'package:gomart/Menu/inventory/bloc/input/input_add_amount_state.dart';
+import 'package:gomart/Menu/inventory/model/branch_inventory_model.dart';
+import 'package:gomart/Menu/inventory/model/branch_inventory_product_model.dart';
 import 'package:gomart/Menu/inventory/model/cyclical_inventory_product_model.dart';
 
 class CardListProductsCyclicalInventoryDetail extends StatefulWidget {
   final List<CyclicalInventoryProductModel> listCyclicalInventoryProductModel;
-
+  final int categoryId;
   const CardListProductsCyclicalInventoryDetail({
     super.key,
-    required this.listCyclicalInventoryProductModel
+    required this.listCyclicalInventoryProductModel,
+    required this.categoryId
   });
 
   @override
@@ -28,8 +37,13 @@ class _CardListProductsCyclicalInventoryDetailState extends State<CardListProduc
   final ScanBarcodeChannel barcodeChannel = ScanBarcodeChannel();
   static const MethodChannel scannerChannel = MethodChannel('barcode_channel');
   final ScrollController scrollController = ScrollController();
+  late TypeDialog dialog;
 
   late final InventoryBarcodeBloc inventoryBarcodeBloc;
+
+  var branchNumber = "";
+  var branchId = 0;
+  var insertUserId = 0;
 
   @override
   void initState() {
@@ -68,6 +82,48 @@ class _CardListProductsCyclicalInventoryDetailState extends State<CardListProduc
               }
             },
           ),
+          BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextBranchId, stateBranchId){
+            if (stateBranchId is GetBranchInventoryState) {
+              branchNumber = stateBranchId.branchModel!.branchNumber;
+              contextBranchId.read<BranchInventoryBloc>().add(GetEmployeeInfoEvent(employeeModel: null));
+            }
+
+            if (stateBranchId is GetEmployeeInfoState) {
+              branchId = stateBranchId.employeeModel!.branchId;
+              insertUserId = stateBranchId.employeeModel!.id;
+              BranchInventoryModel branchInventoryModel = BranchInventoryModel(name: branchNumber, productCategoryId: widget.categoryId, branchId:  branchId, insertUserId: insertUserId );
+              contextBranchId.read<BranchInventoryBloc>().add(SaveBranchInventoryEvent(branchInventoryModel: branchInventoryModel));
+            }
+
+            if (stateBranchId is SaveBranchInventoryState) {
+              List<BranchInventoryProductModel> branchInventoryProductModelList = [];
+              for (var element in widget.listCyclicalInventoryProductModel) {
+                if (element.count != 0){
+                  BranchInventoryProductModel branchInventoryProductModel = BranchInventoryProductModel(
+                      branchInventoriesId: stateBranchId.branchInventoryId!.branchInventoryId,
+                      branchId: branchId,
+                      productId: element.productId,
+                      count: element.count,
+                      visible: true,
+                      insertUserId: insertUserId
+                  );
+                  branchInventoryProductModelList.add(branchInventoryProductModel);
+                }
+              }
+              contextBranchId.read<BranchInventoryBloc>().add(SaveBranchInventoryProductEvent(branchInventoryProductModel: branchInventoryProductModelList));
+              contextBranchId.read<InputAddAmountBloc>().add(InputAmountEvent(amount: 0, id: 0));
+            } else if (stateBranchId is ErrorSaveBranchInventory) {
+              messagesSnackBar(stateBranchId.errorApi);
+            }
+          }),
+          BlocListener<BranchInventoryBloc, BranchInventoryState>(listener: (contextSaveBranchInventory, stateSaveBranchInventory){
+            if (stateSaveBranchInventory is SaveBranchInventoryProductState) {
+              showDialogSucces("Guardado exitoso", stateSaveBranchInventory.message);
+              widget.listCyclicalInventoryProductModel.clear();
+            } else if(stateSaveBranchInventory is ErrorSaveBranchProductInventoryState){
+              showAlert("Error", stateSaveBranchInventory.errorApi);
+            }
+          }),
         ],
         child: BlocBuilder<InputAddAmountBloc, InputAddAmountState>(
           builder: (contextInputAmout, stateInputAmout) {
@@ -203,5 +259,26 @@ class _CardListProductsCyclicalInventoryDetailState extends State<CardListProduc
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showDialogSucces(String title, String description) {
+    dialog = TypeDialog(
+        context: context,
+        title: title,
+        description: description,
+        onOk: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
+    );
+    dialog.showDialogSucces();
+  }
+
+  void showAlert(String title, String description) {
+    dialog =
+        TypeDialog(context: context, title: title, description: description);
+    dialog.showDialogWarning();
   }
 }
